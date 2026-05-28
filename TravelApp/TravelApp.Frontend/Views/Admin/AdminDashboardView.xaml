@@ -1,0 +1,36 @@
+<UserControl x:Class="TravelApp.Frontend.Views.Admin.AdminDashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{DynamicResource MaterialDesignPaper}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="{DynamicResource PrimaryHueDarkBrush}">
+            <StackPanel Margin="0,20,0,0">
+                <TextBlock Text="ADMIN PANEL" FontSize="20" FontWeight="Bold" Foreground="White" 
+                           HorizontalAlignment="Center" Margin="0,0,0,30"/>
+
+                <Button Content="Account Management" 
+                        Command="{Binding NavigateToAccountsCommand}"
+                        Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
+                        Height="50" HorizontalContentAlignment="Left" Padding="20,0,0,0"/>
+
+                <Button Content="Content Management" 
+                        Command="{Binding NavigateToContentCommand}"
+                        Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
+                        Height="50" HorizontalContentAlignment="Left" Padding="20,0,0,0"/>
+
+                <Button Content="Logout" 
+                        Command="{Binding LogoutCommand}"
+                        Style="{StaticResource MaterialDesignFlatButton}" Foreground="#FFCDD2"
+                        Height="50" HorizontalContentAlignment="Left" Padding="20,0,0,0" Margin="0,50,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <ContentControl Grid.Column="1" Content="{Binding CurrentAdminContent}" Margin="20" />
+    </Grid>
+</UserControl>

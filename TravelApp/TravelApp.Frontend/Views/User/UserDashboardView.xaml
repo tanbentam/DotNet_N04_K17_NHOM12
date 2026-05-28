@@ -1,0 +1,44 @@
+<UserControl x:Class="TravelApp.Frontend.Views.User.UserDashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{DynamicResource MaterialDesignPaper}">
+    <Grid>
+        <TabControl Style="{StaticResource MaterialDesignTabControl}">
+
+            <TabItem Header="KHÁM PHÁ &amp; ĐẶT TOUR">
+                <Grid Margin="16">
+                    <StackPanel>
+                        <TextBlock Text="Tìm kiếm điểm đến và khách sạn" FontWeight="Bold" FontSize="18"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,20">
+                            <TextBox materialDesign:HintAssist.Hint="Tỉnh/Thành phố" Width="150" Margin="0,0,10,0"/>
+                            <TextBox materialDesign:HintAssist.Hint="Giá tối đa" Width="100" Margin="0,0,10,0"/>
+                            <Button Content="Tìm kiếm" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        </StackPanel>
+
+                        <Separator Margin="0,10,0,20"/>
+
+                        <TextBlock Text="Thanh Toán Mô Phỏng" FontWeight="Bold" FontSize="18"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <Button Content="Quét QR (Fake)" Style="{StaticResource MaterialDesignOutlinedButton}" Margin="0,0,10,0"/>
+                            <Button Content="Chuyển khoản (Simulated)" Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="YÊU THÍCH &amp; ĐÁNH GIÁ">
+                <Grid Margin="16">
+                    <TextBlock Text="Quản lý danh sách Yêu thích và Đánh giá Guide/Khách sạn" FontSize="16"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="HỒ SƠ CỦA TÔI">
+                <Grid Margin="16">
+                    <TextBlock Text="Chỉnh sửa thông tin cá nhân" FontSize="16"/>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</UserControl>

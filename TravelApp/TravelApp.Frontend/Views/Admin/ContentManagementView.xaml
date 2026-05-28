@@ -1,0 +1,32 @@
+<UserControl x:Class="TravelApp.Frontend.Views.Admin.ContentManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Grid>
+        <TabControl Style="{StaticResource MaterialDesignNavigationRailTabControl}">
+            <TabItem Header="Điểm Đến">
+                <Grid Margin="16">
+                    <TextBlock Text="Khu vực quản lý Điểm đến Du lịch (Đang cập nhật...)" FontSize="16"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Khách Sạn">
+                <Grid Margin="16">
+                    <TextBlock Text="Khu vực quản lý và phê duyệt Khách sạn (Đang cập nhật...)" FontSize="16"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Lịch Trình Guide">
+                <Grid Margin="16">
+                    <TextBlock Text="Quản lý lịch rảnh hàng tuần (Thứ 2 - Chủ Nhật) của Guides (Đang cập nhật...)" FontSize="16"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Đơn Đặt Tour">
+                <Grid Margin="16">
+                    <TextBlock Text="Theo dõi toàn bộ đơn Booking của Users (Đang cập nhật...)" FontSize="16"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

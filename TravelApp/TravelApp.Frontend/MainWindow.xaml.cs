@@ -1,0 +1,17 @@
+﻿using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using TravelApp.Frontend.ViewModels;
+
+namespace TravelApp.Frontend
+{
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            // Gán DataContext từ Dependency Injection Container
+            DataContext = App.Current.Services.GetService<MainViewModel>();
+        }
+    }
+}
