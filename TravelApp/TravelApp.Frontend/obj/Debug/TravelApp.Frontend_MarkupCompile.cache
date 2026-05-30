@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\Mr_Lee\Desktop\project\DotNet_N04_K17_NHOM12\TravelApp\TravelApp.Frontend\obj\Debug\
+D:\BTL_DotNet\TravelApp\TravelApp.Frontend\obj\Debug\
 TravelApp.Frontend
 none
 false
 DEBUG;TRACE
-C:\Users\Mr_Lee\Desktop\project\DotNet_N04_K17_NHOM12\TravelApp\TravelApp.Frontend\App.xaml
-7-749152513
+D:\BTL_DotNet\TravelApp\TravelApp.Frontend\App.xaml
+91656338045
 
-22-116941224
-29430526452
-MainWindow.xaml;Views\Admin\AccountManagementView.xaml;Views\Admin\AdminDashboardView.xaml;Views\Admin\ContentManagementView.xaml;Views\Authentication\LoginView.xaml;Views\Authentication\RegisterView.xaml;Views\Components\PopupNotification.xaml;
+33-1065459147
+29299952868
+MainWindow.xaml;Views\Admin\AccountManagementView.xaml;Views\Admin\AdminDashboardView.xaml;Views\Admin\ContentManagementView.xaml;Views\Authentication\LoginView.xaml;Views\Authentication\RegisterView.xaml;Views\Components\PopupNotification.xaml;Views\TourGuide\GuideDashboardView.xaml;Views\User\UserDashboardView.xaml;
 
 False
 

@@ -43,7 +43,7 @@ namespace TravelApp.Frontend.ViewModels.Authentication
             [cite_start]// Validation chuyên nghiệp [cite: 130-131]
             if (!ValidationHelper.IsValidEmail(Email))
             {
-                ErrorMessage = "Email không hợp lệ.";
+                ErrorMessage = "Email không hợp lệ."; 
                 return;
             }
             if (!ValidationHelper.IsValidPhoneNumber(PhoneNumber))
@@ -56,7 +56,7 @@ namespace TravelApp.Frontend.ViewModels.Authentication
                 ErrorMessage = "Vui lòng điền đầy đủ mật khẩu và tỉnh/thành phố.";
                 return;
             }
-
+            
             IsBusy = true;
             ErrorMessage = string.Empty;
 
