@@ -10,9 +10,9 @@ namespace TravelApp.Frontend.ViewModels.User
     {
         private readonly NotificationManager _notificationManager;
 
-        [ObservableProperty] private DestinationModel _selectedDestination; // [cite: 111]
-        [ObservableProperty] private UserModel _selectedGuide;              // [cite: 112]
-        [ObservableProperty] private HotelModel _selectedHotel;             // [cite: 113]
+        [ObservableProperty] private DestinationModel _selectedDestination; //
+        [ObservableProperty] private UserModel _selectedGuide;              //
+        [ObservableProperty] private HotelModel _selectedHotel;             //
 
         [ObservableProperty] private int _tripDurationDays = 1;
 
@@ -21,34 +21,30 @@ namespace TravelApp.Frontend.ViewModels.User
             _notificationManager = notificationManager;
         }
 
-        partial void OnTripDurationDaysChanged(int value)
-        {
-            [cite_start]// Business Logic Rule 
-            [cite_start]// Chọn khách sạn nếu chuyến đi từ 2 ngày trở lên [cite: 113]
-            if (value >= 2)
-            {
-                _notificationManager.ShowNotification("Gợi ý", "Chuyến đi từ 2 ngày trở lên, vui lòng chọn thêm Khách sạn.", false);
-            }
-        }
-
         [RelayCommand]
         private async Task SubmitBookingAsync()
         {
+            if (TripDurationDays >= 2 && SelectedHotel == null)
+            {
+                _notificationManager.ShowNotification("Hotel required", "Trips of 2 days or longer require a hotel selection.", true);
+                return;
+            }
+
             // [BACKEND DEVELOPER NOTE] 
             // Endpoint: Constants.User_BookTour_Endpoint
             // Payload phải bao gồm DestinationId, GuideId, HotelId (nếu có), PaymentStatus.
-            [cite_start]// Nếu thời gian User chọn khớp với lịch Guide đăng ký, hệ thống phải trả về thông báo[cite: 96].
+            // Nếu thời gian User chọn khớp với lịch Guide đăng ký, hệ thống phải trả về thông báo.
 
-            await Task.Delay(500); // Bất đồng bộ [cite: 156-157]
+            await Task.Delay(500); // Bất đồng bộ
 
-            [cite_start]// Hiển thị Popup ở góc trên [cite: 118, 126-127]
+            // Hiển thị Popup ở góc trên
             _notificationManager.ShowNotification("Thành công", "Yêu cầu đặt tour đã được gửi tới Guide.", false);
         }
 
         [RelayCommand]
         private async Task CancelBookingAsync(string bookingId)
         {
-            [cite_start]// Logic Hủy tour đã đặt [cite: 119-120]
+            // Logic Hủy tour đã đặt
             await Task.Delay(500);
             _notificationManager.ShowNotification("Đã hủy", $"Đã hủy tour {bookingId}.", true);
         }

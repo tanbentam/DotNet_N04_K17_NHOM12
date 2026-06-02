@@ -10,13 +10,26 @@ namespace TravelApp.Frontend.Services.AuthenticationStrategy
 
         public void SetStrategy(string role)
         {
-            _authStrategy = role switch
+            if (string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase))
             {
-                "Admin" => new AdminAuthStrategy(),
-                "Guide" => new GuideAuthStrategy(),
-                "User" => new UserAuthStrategy(),
-                _ => throw new ArgumentException("Vai trò không hợp lệ.")
-            };
+                _authStrategy = new AdminAuthStrategy();
+                return;
+            }
+
+            if (string.Equals(role, "Guide", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(role, "TourGuide", StringComparison.OrdinalIgnoreCase))
+            {
+                _authStrategy = new GuideAuthStrategy();
+                return;
+            }
+
+            if (string.Equals(role, "User", StringComparison.OrdinalIgnoreCase))
+            {
+                _authStrategy = new UserAuthStrategy();
+                return;
+            }
+
+            throw new ArgumentException("Invalid role.");
         }
 
         public void ExecuteNavigation(MainViewModel mainViewModel, UserModel currentUser)

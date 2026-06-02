@@ -25,14 +25,14 @@ namespace TravelApp.Frontend.ViewModels.Admin
         [RelayCommand]
         private void NavigateToAccounts()
         {
-            [cite_start]// Điều hướng sang màn hình quản lý Guide/User 
+            // Điều hướng sang màn hình quản lý Guide/User 
             CurrentAdminContent = _accountManagementVM;
         }
 
         [RelayCommand]
         private void NavigateToContent()
         {
-            [cite_start]// Điều hướng sang màn hình quản lý Destination/Hotel/Booking 
+            // Điều hướng sang màn hình quản lý Destination/Hotel/Booking 
             CurrentAdminContent = _contentManagementVM;
         }
 

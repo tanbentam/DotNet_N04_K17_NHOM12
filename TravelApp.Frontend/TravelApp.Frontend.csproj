@@ -9,6 +9,7 @@
     <RootNamespace>TravelApp.Frontend</RootNamespace>
     <AssemblyName>TravelApp.Frontend</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -99,9 +100,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Contracts\IAuthService.cs" />
+    <Compile Include="Contracts\INavigationService.cs" />
     <Compile Include="Models\BookingModel.cs" />
+    <Compile Include="Models\DestinationModel.cs" />
     <Compile Include="Models\Enums\BookingStatus.cs" />
+    <Compile Include="Models\HotelModel.cs" />
     <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Services\Api\MockAuthService.cs" />
     <Compile Include="Services\AuthenticationStrategy\AdminAuthStrategy.cs" />
     <Compile Include="Services\AuthenticationStrategy\AuthContext.cs" />
     <Compile Include="Services\AuthenticationStrategy\GuideAuthStrategy.cs" />
@@ -109,9 +114,13 @@
     <Compile Include="Services\AuthenticationStrategy\UserAuthStrategy.cs" />
     <Compile Include="Services\ImageManagement\ImageUploadService.cs" />
     <Compile Include="Services\Logging\LoggerService.cs" />
+    <Compile Include="Services\Navigation\NavigationService.cs" />
     <Compile Include="Services\NotificationQueue\NotificationManager.cs" />
     <Compile Include="Services\NotificationQueue\NotificationMessage.cs" />
+    <Compile Include="Utils\BooleanToVisibilityConverter.cs" />
     <Compile Include="Utils\Constants.cs" />
+    <Compile Include="Utils\InverseBooleanConverter.cs" />
+    <Compile Include="Utils\StringToVisibilityConverter.cs" />
     <Compile Include="Utils\ValidationHelper.cs" />
     <Compile Include="ViewModels\Admin\AccountManagementViewModel.cs" />
     <Compile Include="ViewModels\Admin\AdminDashboardViewModel.cs" />
@@ -211,6 +220,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\CommunityToolkit.Mvvm.8.4.2\analyzers\dotnet\roslyn4.12\cs\CommunityToolkit.Mvvm.SourceGenerators.dll" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

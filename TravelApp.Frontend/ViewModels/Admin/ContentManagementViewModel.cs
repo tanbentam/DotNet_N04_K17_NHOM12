@@ -28,10 +28,10 @@ namespace TravelApp.Frontend.ViewModels.Admin
         {
             // [BACKEND DEVELOPER NOTE] 
             // Cần tạo các API GET endpoints để Admin có thể lấy:
-            [cite_start]// 1. Toàn bộ danh sách điểm đến 
-            [cite_start]// 2. Toàn bộ thông tin khách sạn cần phê duyệt/quản lý 
-            [cite_start]// 3. Toàn bộ đơn booking của hệ thống 
-            [cite_start]// 4. Lịch trình khả dụng của các Guide (Thứ 2 - Chủ Nhật) 
+            // 1. Toàn bộ danh sách điểm đến 
+            // 2. Toàn bộ thông tin khách sạn cần phê duyệt/quản lý 
+            // 3. Toàn bộ đơn booking của hệ thống 
+            // 4. Lịch trình khả dụng của các Guide (Thứ 2 - Chủ Nhật) 
         }
     }
 }

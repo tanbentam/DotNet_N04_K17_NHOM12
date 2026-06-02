@@ -1,7 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Data;
 using System.Threading.Tasks;
 using TravelApp.Frontend.Contracts;
 using TravelApp.Frontend.Models;
@@ -12,6 +11,7 @@ namespace TravelApp.Frontend.ViewModels.Authentication
     public partial class RegisterViewModel : ObservableObject
     {
         private readonly IAuthService _authService;
+        private readonly INavigationService _navigationService;
 
         [ObservableProperty]
         private string _email;
@@ -31,29 +31,31 @@ namespace TravelApp.Frontend.ViewModels.Authentication
         [ObservableProperty]
         private bool _isBusy;
 
-        public RegisterViewModel(IAuthService authService)
+        public RegisterViewModel(IAuthService authService, INavigationService navigationService)
         {
             _authService = authService;
+            _navigationService = navigationService;
         }
 
         [RelayCommand]
-        [cite_start]
-        private async Task RegisterAsync() // Xử lý bất đồng bộ [cite: 156-157]
+        private async Task RegisterAsync()
         {
-            [cite_start]// Validation chuyên nghiệp [cite: 130-131]
+            // API INTEGRATION POINT: keep these client-side checks before POST /api/auth/register.
             if (!ValidationHelper.IsValidEmail(Email))
             {
-                ErrorMessage = "Email không hợp lệ.";
+                ErrorMessage = "Email is invalid.";
                 return;
             }
+
             if (!ValidationHelper.IsValidPhoneNumber(PhoneNumber))
             {
-                ErrorMessage = "Số điện thoại phải bao gồm chính xác 10 chữ số."; // [cite: 46]
+                ErrorMessage = "Phone number must contain exactly 10 digits.";
                 return;
             }
+
             if (string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(Province))
             {
-                ErrorMessage = "Vui lòng điền đầy đủ mật khẩu và tỉnh/thành phố.";
+                ErrorMessage = "Please enter password and current province/city.";
                 return;
             }
 
@@ -65,31 +67,35 @@ namespace TravelApp.Frontend.ViewModels.Authentication
                 var newUser = new UserModel
                 {
                     Email = Email,
-                    [cite_start]PhoneNumber = PhoneNumber, // [cite: 44-46]
-                    [cite_start]Province = Province,       // [cite: 47]
-                    [cite_start]Role = "User"              // Mặc định tự đăng ký là User 
+                    PhoneNumber = PhoneNumber,
+                    Province = Province,
+                    Role = "User"
                 };
 
                 var success = await _authService.RegisterAsync(newUser, Password);
                 if (success)
                 {
-                    // Chuyển hướng sang trang Đăng nhập sau khi đăng ký thành công
-                    // Logic Navigation sẽ được xử lý ở MainViewModel
+                    _navigationService.NavigateToLogin();
+                    return;
                 }
-                else
-                {
-                    ErrorMessage = "Đăng ký thất bại. Email hoặc Số điện thoại có thể đã tồn tại.";
-                }
+
+                ErrorMessage = "Registration failed. Email or phone number may already exist.";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ErrorMessage = "Lỗi kết nối đến máy chủ.";
-                [cite_start]// [BACKEND DEVELOPER NOTE] Ghi log lỗi API [cite: 168-170]
+                ErrorMessage = "Unable to connect to the server.";
+                // BACKEND DEVELOPER NOTE: log API errors after Auth API integration.
             }
             finally
             {
                 IsBusy = false;
             }
+        }
+
+        [RelayCommand]
+        private void GoToLogin()
+        {
+            _navigationService.NavigateToLogin();
         }
     }
 }

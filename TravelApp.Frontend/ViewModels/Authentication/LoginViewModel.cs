@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Threading.Tasks;
@@ -9,12 +9,13 @@ namespace TravelApp.Frontend.ViewModels.Authentication
     public partial class LoginViewModel : ObservableObject
     {
         private readonly IAuthService _authService;
+        private readonly INavigationService _navigationService;
 
         [ObservableProperty]
-        private string _identifier; // Có thể là Email hoặc Phone [cite: 50]
+        private string _identifier;
 
         [ObservableProperty]
-        private string _password; // [cite: 51]
+        private string _password;
 
         [ObservableProperty]
         private string _errorMessage;
@@ -22,18 +23,18 @@ namespace TravelApp.Frontend.ViewModels.Authentication
         [ObservableProperty]
         private bool _isBusy;
 
-        public LoginViewModel(IAuthService authService)
+        public LoginViewModel(IAuthService authService, INavigationService navigationService)
         {
             _authService = authService;
+            _navigationService = navigationService;
         }
 
         [RelayCommand]
-        [cite_start]
-        private async Task LoginAsync() // Bất đồng bộ [cite: 157]
+        private async Task LoginAsync()
         {
             if (string.IsNullOrWhiteSpace(Identifier) || string.IsNullOrWhiteSpace(Password))
             {
-                ErrorMessage = "Vui lòng nhập Email/Số điện thoại và Mật khẩu.";
+                ErrorMessage = "Please enter your email/phone and password.";
                 return;
             }
 
@@ -45,24 +46,28 @@ namespace TravelApp.Frontend.ViewModels.Authentication
                 var user = await _authService.LoginAsync(Identifier, Password);
                 if (user != null)
                 {
-                    // Logic điều hướng (Navigation) sẽ được triển khai thông qua Strategy Pattern sau
-                    // Điều hướng sang Dashboard tương ứng dựa trên user.Role
+                    _navigationService.NavigateToRoleDashboard(user);
+                    return;
                 }
-                else
-                {
-                    ErrorMessage = "Thông tin đăng nhập không chính xác.";
-                    [cite_start]// [BACKEND DEVELOPER NOTE] Ghi log lỗi đăng nhập (Login failures) vào file cục bộ 
-                }
+
+                ErrorMessage = "The login information is incorrect.";
+                // BACKEND DEVELOPER NOTE: log failed login attempts after Auth API integration.
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ErrorMessage = "Không thể kết nối đến máy chủ.";
-                [cite_start]// [BACKEND DEVELOPER NOTE] Ghi log API errors [cite: 168-170]
+                ErrorMessage = "Unable to connect to the server.";
+                // BACKEND DEVELOPER NOTE: log API errors after Auth API integration.
             }
             finally
             {
                 IsBusy = false;
             }
+        }
+
+        [RelayCommand]
+        private void GoToRegister()
+        {
+            _navigationService.NavigateToRegister();
         }
     }
 }

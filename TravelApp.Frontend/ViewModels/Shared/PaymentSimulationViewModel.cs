@@ -15,32 +15,32 @@ namespace TravelApp.Frontend.ViewModels.Shared
         [RelayCommand]
         private async Task ProcessFakeQRPaymentAsync()
         {
-            PaymentMethod = "Fake QR"; // [cite: 160]
+            PaymentMethod = "Fake QR"; //
             await SimulatePaymentProcessing();
         }
 
         [RelayCommand]
         private async Task ProcessBankTransferAsync()
         {
-            PaymentMethod = "Simulated Bank Transfer"; // [cite: 161]
+            PaymentMethod = "Simulated Bank Transfer"; //
             await SimulatePaymentProcessing();
         }
 
         private async Task SimulatePaymentProcessing()
         {
             // Giả lập xử lý thanh toán
-            await Task.Delay(2000); // Async Processing [cite: 156-157]
+            await Task.Delay(2000); // Async Processing
 
-            [cite_start]// Random mô phỏng thành công hoặc thất bại 
+            // Random mô phỏng thành công hoặc thất bại 
             IsPaymentSuccess = new System.Random().Next(0, 2) == 1;
 
             if (IsPaymentSuccess)
             {
-                [cite_start]// Gọi tới TourBookingViewModel để xác nhận hoàn tất thanh toán [cite: 114]
+                // Gọi tới TourBookingViewModel để xác nhận hoàn tất thanh toán
             }
             else
             {
-                [cite_start]// [BACKEND DEVELOPER NOTE] Ghi log lỗi Booking/Payment Failures [cite: 168-171]
+                // [BACKEND DEVELOPER NOTE] Ghi log lỗi Booking/Payment Failures
             }
         }
     }

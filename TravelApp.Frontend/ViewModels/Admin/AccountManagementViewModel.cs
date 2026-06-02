@@ -36,20 +36,20 @@ namespace TravelApp.Frontend.ViewModels.Admin
         [RelayCommand]
         private void CreateGuideAccount()
         {
-            [cite_start]// Mở Dialog/Popup form để tạo tài khoản Tour Guide [cite: 68]
-            [cite_start]// Chỉ Admin mới được quyền tạo tài khoản này 
+            // Mở Dialog/Popup form để tạo tài khoản Tour Guide
+            // Chỉ Admin mới được quyền tạo tài khoản này 
         }
 
         [RelayCommand]
         private void CreateUserAccount()
         {
-            [cite_start]// Mở Dialog/Popup form để tạo tài khoản User [cite: 69]
+            // Mở Dialog/Popup form để tạo tài khoản User
         }
 
         [RelayCommand]
         private void DeleteAccount(UserModel user)
         {
-            [cite_start]// [BACKEND DEVELOPER NOTE] Gọi API DELETE để xóa tài khoản [cite: 71]
+            // [BACKEND DEVELOPER NOTE] Gọi API DELETE để xóa tài khoản
             if (user != null)
             {
                 UsersList.Remove(user);

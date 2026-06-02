@@ -1,7 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
+using TravelApp.Frontend.Contracts;
+using TravelApp.Frontend.Services.Api;
+using TravelApp.Frontend.Services.Navigation;
+using TravelApp.Frontend.Services.NotificationQueue;
 using TravelApp.Frontend.ViewModels;
+using TravelApp.Frontend.ViewModels.Admin;
+using TravelApp.Frontend.ViewModels.Authentication;
+using TravelApp.Frontend.ViewModels.TourGuide;
+using TravelApp.Frontend.ViewModels.User;
 
 namespace TravelApp.Frontend
 {
@@ -19,18 +27,28 @@ namespace TravelApp.Frontend
         {
             var services = new ServiceCollection();
 
-            // Đăng ký ViewModels
-            services.AddTransient<MainViewModel>();
+            services.AddSingleton<IAuthService, MockAuthService>();
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<NotificationManager>();
 
-            // Đăng ký Services (Sẽ thêm vào ở các phần sau)
-            // services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<MainViewModel>();
+            services.AddTransient<LoginViewModel>();
+            services.AddTransient<RegisterViewModel>();
+            services.AddTransient<AdminDashboardViewModel>();
+            services.AddTransient<AccountManagementViewModel>();
+            services.AddTransient<ContentManagementViewModel>();
+            services.AddTransient<GuideDashboardViewModel>();
+            services.AddTransient<UserDashboardViewModel>();
+            services.AddTransient<BookingRequestsViewModel>();
+            services.AddTransient<ScheduleManagementViewModel>();
+            services.AddTransient<AdvancedSearchViewModel>();
+            services.AddTransient<TourBookingViewModel>();
 
             return services.BuildServiceProvider();
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            // Khởi chạy MainWindow
             var mainWindow = new MainWindow();
             mainWindow.Show();
         }

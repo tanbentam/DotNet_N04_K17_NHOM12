@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace TravelApp.Frontend.ViewModels.TourGuide
 {
-    public class AvailableDay : ObservableObject
+    public partial class AvailableDay : ObservableObject
     {
-        public string DayOfWeek { get; set; } // Thứ 2 đến Chủ Nhật [cite: 94-95]
+        public string DayOfWeek { get; set; } // Thứ 2 đến Chủ Nhật
 
         [ObservableProperty]
         private bool _isAvailable;
@@ -41,7 +41,7 @@ namespace TravelApp.Frontend.ViewModels.TourGuide
             // [BACKEND DEVELOPER NOTE]
             // Payload sẽ gửi mảng WeeklySchedule chứa các ngày IsAvailable = true.
             // Endpoint gợi ý: Constants.Guide_ManageSchedule_Endpoint
-            [cite_start]// Logic Backend: Khi User chọn thời gian khớp với lịch rảnh này, hệ thống phải thông báo cho User[cite: 96].
+            // Logic Backend: Khi User chọn thời gian khớp với lịch rảnh này, hệ thống phải thông báo cho User.
 
             await Task.Delay(500); // Giả lập API call
 

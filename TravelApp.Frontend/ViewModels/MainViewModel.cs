@@ -1,23 +1,23 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using TravelApp.Frontend.Contracts;
 
 namespace TravelApp.Frontend.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
+        private readonly INavigationService _navigationService;
+
         [ObservableProperty]
         private string _windowTitle = "Digital Travel Application";
 
         [ObservableProperty]
         private ObservableObject _currentViewModel;
 
-        public MainViewModel()
+        public MainViewModel(INavigationService navigationService)
         {
-            // Khởi tạo mặc định: Sẽ điều hướng đến LoginViewModel trong các bước tới
+            _navigationService = navigationService;
+            _navigationService.CurrentViewModelChanged += viewModel => CurrentViewModel = viewModel;
+            _navigationService.NavigateToLogin();
         }
-
-        // [BACKEND DEVELOPER NOTE]
-        // Các phương thức thay đổi CurrentViewModel ở đây sẽ được gọi sau khi Auth API 
-        // trả về Role của User để quyết định xem hiển thị Dashboard của Admin, Guide hay User.
     }
 }

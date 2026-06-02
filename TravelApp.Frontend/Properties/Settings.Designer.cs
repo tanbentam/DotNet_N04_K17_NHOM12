@@ -28,3 +28,4 @@ namespace TravelApp.Frontend.Properties
         }
     }
 }
+

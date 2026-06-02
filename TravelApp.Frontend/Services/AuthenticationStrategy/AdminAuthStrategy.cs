@@ -9,7 +9,7 @@ namespace TravelApp.Frontend.Services.AuthenticationStrategy
     {
         public void NavigateToDashboard(MainViewModel mainViewModel, UserModel currentUser)
         {
-            [cite_start]// Điều hướng đến Admin Dashboard (Có toàn quyền) [cite: 24-30]
+            // Điều hướng đến Admin Dashboard (Có toàn quyền)
             var adminDashboardVM = App.Current.Services.GetService<AdminDashboardViewModel>();
             mainViewModel.CurrentViewModel = adminDashboardVM;
         }
