@@ -104,6 +104,7 @@
     <Compile Include="Models\BookingModel.cs" />
     <Compile Include="Models\DestinationModel.cs" />
     <Compile Include="Models\Enums\BookingStatus.cs" />
+    <Compile Include="Models\GuideAvailabilityModel.cs" />
     <Compile Include="Models\HotelModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Services\Api\MockAuthService.cs" />

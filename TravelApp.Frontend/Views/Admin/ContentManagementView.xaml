@@ -1,32 +1,105 @@
-﻿<UserControl x:Class="TravelApp.Frontend.Views.Admin.ContentManagementView"
+<UserControl x:Class="TravelApp.Frontend.Views.Admin.ContentManagementView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <Grid>
-        <TabControl Style="{StaticResource MaterialDesignNavigationRailTabControl}">
-            <TabItem Header="Äiá»ƒm Äáº¿n">
-                <Grid Margin="16">
-                    <TextBlock Text="Khu vá»±c quáº£n lÃ½ Äiá»ƒm Ä‘áº¿n Du lá»‹ch (Äang cáº­p nháº­t...)" FontSize="16"/>
-                </Grid>
-            </TabItem>
+    <TabControl Style="{StaticResource MaterialDesignTabControl}">
+        <TabItem Header="Destinations">
+            <Grid Margin="18">
+                <DataGrid ItemsSource="{Binding Destinations}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="2*" />
+                        <DataGridTextColumn Header="Province" Binding="{Binding Province}" Width="*" />
+                        <DataGridTextColumn Header="Rating" Binding="{Binding Rating}" Width="*" />
+                        <DataGridTextColumn Header="Guide price from" Binding="{Binding GuidePriceFrom}" Width="*" />
+                        <DataGridTemplateColumn Header="Actions" Width="130">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Delete"
+                                            Command="{Binding DataContext.DeleteDestinationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Foreground="#B91C1C"
+                                            Style="{StaticResource MaterialDesignFlatButton}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </TabItem>
 
-            <TabItem Header="KhÃ¡ch Sáº¡n">
-                <Grid Margin="16">
-                    <TextBlock Text="Khu vá»±c quáº£n lÃ½ vÃ  phÃª duyá»‡t KhÃ¡ch sáº¡n (Äang cáº­p nháº­t...)" FontSize="16"/>
-                </Grid>
-            </TabItem>
+        <TabItem Header="Hotels">
+            <Grid Margin="18">
+                <DataGrid ItemsSource="{Binding Hotels}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="2*" />
+                        <DataGridTextColumn Header="Province" Binding="{Binding Province}" Width="*" />
+                        <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="2*" />
+                        <DataGridTextColumn Header="Price/night" Binding="{Binding PricePerNight}" Width="*" />
+                        <DataGridTextColumn Header="Rating" Binding="{Binding Rating}" Width="*" />
+                        <DataGridCheckBoxColumn Header="Approved" Binding="{Binding IsApproved}" Width="*" />
+                        <DataGridTemplateColumn Header="Actions" Width="130">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Approve"
+                                            Command="{Binding DataContext.ApproveHotelCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignFlatButton}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </TabItem>
 
-            <TabItem Header="Lá»‹ch TrÃ¬nh Guide">
-                <Grid Margin="16">
-                    <TextBlock Text="Quáº£n lÃ½ lá»‹ch ráº£nh hÃ ng tuáº§n (Thá»© 2 - Chá»§ Nháº­t) cá»§a Guides (Äang cáº­p nháº­t...)" FontSize="16"/>
-                </Grid>
-            </TabItem>
+        <TabItem Header="Guide Schedules">
+            <Grid Margin="18">
+                <DataGrid ItemsSource="{Binding GuideSchedules}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Guide" Binding="{Binding GuideEmail}" Width="2*" />
+                        <DataGridTextColumn Header="Day" Binding="{Binding DayOfWeek}" Width="*" />
+                        <DataGridTextColumn Header="Time slot" Binding="{Binding TimeSlot}" Width="*" />
+                        <DataGridCheckBoxColumn Header="Available" Binding="{Binding IsAvailable}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </TabItem>
 
-            <TabItem Header="ÄÆ¡n Äáº·t Tour">
-                <Grid Margin="16">
-                    <TextBlock Text="Theo dÃµi toÃ n bá»™ Ä‘Æ¡n Booking cá»§a Users (Äang cáº­p nháº­t...)" FontSize="16"/>
-                </Grid>
-            </TabItem>
-        </TabControl>
-    </Grid>
+        <TabItem Header="Bookings">
+            <Grid Margin="18">
+                <DataGrid ItemsSource="{Binding Bookings}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Booking" Binding="{Binding BookingId}" Width="*" />
+                        <DataGridTextColumn Header="Customer" Binding="{Binding UserName}" Width="*" />
+                        <DataGridTextColumn Header="Destination" Binding="{Binding DestinationName}" Width="*" />
+                        <DataGridTextColumn Header="Hotel" Binding="{Binding HotelName}" Width="*" />
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
+                        <DataGridTemplateColumn Header="Actions" Width="130">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Cancel"
+                                            Command="{Binding DataContext.CancelBookingCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Foreground="#B91C1C"
+                                            Style="{StaticResource MaterialDesignFlatButton}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </UserControl>
