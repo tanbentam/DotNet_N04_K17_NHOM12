@@ -1,5 +1,5 @@
-﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 using TravelApp.Frontend.ViewModels;
 
 namespace TravelApp.Frontend
@@ -9,9 +9,7 @@ namespace TravelApp.Frontend
         public MainWindow()
         {
             InitializeComponent();
-
-            // Gán DataContext từ Dependency Injection Container
-            DataContext = App.Current.Services.GetService<MainViewModel>();
+            DataContext = App.Current.Services.GetRequiredService<MainViewModel>();
         }
     }
 }

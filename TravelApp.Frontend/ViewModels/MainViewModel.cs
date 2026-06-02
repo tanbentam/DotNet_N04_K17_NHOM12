@@ -4,17 +4,25 @@ using TravelApp.Frontend.Services.NotificationQueue;
 
 namespace TravelApp.Frontend.ViewModels
 {
-    public partial class MainViewModel : ObservableObject
+    public class MainViewModel : ObservableObject
     {
         private readonly INavigationService _navigationService;
+        private ObservableObject _currentViewModel;
+        private string _windowTitle = "Digital Travel Application";
 
         public NotificationManager NotificationManager { get; }
 
-        [ObservableProperty]
-        private string _windowTitle = "Digital Travel Application";
+        public string WindowTitle
+        {
+            get => _windowTitle;
+            set => SetProperty(ref _windowTitle, value);
+        }
 
-        [ObservableProperty]
-        private ObservableObject _currentViewModel;
+        public ObservableObject CurrentViewModel
+        {
+            get => _currentViewModel;
+            set => SetProperty(ref _currentViewModel, value);
+        }
 
         public MainViewModel(INavigationService navigationService, NotificationManager notificationManager)
         {
