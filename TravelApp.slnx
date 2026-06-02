@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="TravelApp.Backend/TravelApp.Backend.csproj" />
+  <Project Path="TravelApp.Backend/TravelApp.Backend.csproj" Id="4ab71ca8-84db-426b-9878-c182fee7fce3" />
   <Project Path="TravelApp.Frontend/TravelApp.Frontend.csproj" Id="6121f280-8dd7-41e4-888a-fd80b59853ba" />
 </Solution>

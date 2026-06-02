@@ -1,0 +1,32 @@
+<UserControl x:Class="TravelApp.Frontend.Views.Shared.PaymentSimulationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Grid Margin="24">
+        <StackPanel MaxWidth="520" HorizontalAlignment="Left">
+            <TextBlock Text="Simulated Payment"
+                       FontSize="22"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,12" />
+            <TextBlock Text="Mock payment flow for fake QR and simulated bank transfer. Backend can replace this with payment status APIs later."
+                       TextWrapping="Wrap"
+                       Foreground="{DynamicResource MaterialDesignBodyLight}"
+                       Margin="0,0,0,20" />
+
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Fake QR"
+                        Command="{Binding ProcessFakeQRPaymentCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Margin="0,0,12,0" />
+                <Button Content="Bank Transfer"
+                        Command="{Binding ProcessBankTransferCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}" />
+            </StackPanel>
+
+            <TextBlock Text="{Binding PaymentMethod, StringFormat=Method: {0}}"
+                       Margin="0,24,0,6"
+                       FontWeight="SemiBold" />
+            <TextBlock Text="{Binding IsPaymentSuccess, StringFormat=Payment success: {0}}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

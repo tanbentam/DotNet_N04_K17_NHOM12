@@ -1,0 +1,71 @@
+<UserControl x:Class="TravelApp.Frontend.Views.User.TourBookingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Step-by-step Booking"
+                   FontSize="22"
+                   FontWeight="SemiBold"
+                   Margin="0,0,0,16" />
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <ComboBox Grid.Column="0"
+                      Margin="0,0,12,16"
+                      ItemsSource="{Binding AvailableDestinations}"
+                      SelectedItem="{Binding SelectedDestination}"
+                      DisplayMemberPath="Name"
+                      materialDesign:HintAssist.Hint="1. Select destination"
+                      Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+
+            <ComboBox Grid.Column="1"
+                      Margin="12,0,0,16"
+                      ItemsSource="{Binding AvailableGuides}"
+                      SelectedItem="{Binding SelectedGuide}"
+                      DisplayMemberPath="Email"
+                      materialDesign:HintAssist.Hint="2. Select tour guide"
+                      Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+
+            <TextBox Grid.Row="1"
+                     Grid.Column="0"
+                     Margin="0,0,12,16"
+                     Text="{Binding TripDurationDays, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="3. Trip duration in days"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+            <ComboBox Grid.Row="1"
+                      Grid.Column="1"
+                      Margin="12,0,0,16"
+                      ItemsSource="{Binding AvailableHotels}"
+                      SelectedItem="{Binding SelectedHotel}"
+                      DisplayMemberPath="Name"
+                      materialDesign:HintAssist.Hint="4. Hotel if trip is 2+ days"
+                      Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button Content="Submit Booking"
+                    Command="{Binding SubmitBookingCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Margin="0,0,12,0" />
+            <Button Content="Cancel Sample Booking"
+                    Command="{Binding CancelBookingCommand}"
+                    CommandParameter="BK001"
+                    Style="{StaticResource MaterialDesignOutlinedButton}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

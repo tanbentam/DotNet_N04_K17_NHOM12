@@ -165,7 +165,22 @@
     <Page Include="Views\Components\PopupNotification.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Shared\PaymentSimulationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TourGuide\BookingRequestsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TourGuide\GuideDashboardView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TourGuide\ScheduleManagementView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\User\AdvancedSearchView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\User\TourBookingView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\User\UserDashboardView.xaml">

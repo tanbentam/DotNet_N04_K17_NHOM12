@@ -1,45 +1,45 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TravelApp.Frontend.Contracts;
 
 namespace TravelApp.Frontend.ViewModels.Admin
 {
     public partial class AdminDashboardViewModel : ObservableObject
     {
+        private readonly INavigationService _navigationService;
+        private readonly AccountManagementViewModel _accountManagementViewModel;
+        private readonly ContentManagementViewModel _contentManagementViewModel;
+
         [ObservableProperty]
         private ObservableObject _currentAdminContent;
 
-        private readonly AccountManagementViewModel _accountManagementVM;
-        private readonly ContentManagementViewModel _contentManagementVM;
-
         public AdminDashboardViewModel(
-            AccountManagementViewModel accountManagementVM,
-            ContentManagementViewModel contentManagementVM)
+            INavigationService navigationService,
+            AccountManagementViewModel accountManagementViewModel,
+            ContentManagementViewModel contentManagementViewModel)
         {
-            _accountManagementVM = accountManagementVM;
-            _contentManagementVM = contentManagementVM;
-
-            // Mặc định hiển thị màn hình Quản lý tài khoản
-            CurrentAdminContent = _accountManagementVM;
+            _navigationService = navigationService;
+            _accountManagementViewModel = accountManagementViewModel;
+            _contentManagementViewModel = contentManagementViewModel;
+            CurrentAdminContent = _accountManagementViewModel;
         }
 
         [RelayCommand]
         private void NavigateToAccounts()
         {
-            // Điều hướng sang màn hình quản lý Guide/User 
-            CurrentAdminContent = _accountManagementVM;
+            CurrentAdminContent = _accountManagementViewModel;
         }
 
         [RelayCommand]
         private void NavigateToContent()
         {
-            // Điều hướng sang màn hình quản lý Destination/Hotel/Booking 
-            CurrentAdminContent = _contentManagementVM;
+            CurrentAdminContent = _contentManagementViewModel;
         }
 
         [RelayCommand]
         private void Logout()
         {
-            // Logic đăng xuất và quay về LoginView
+            _navigationService.NavigateToLogin();
         }
     }
 }

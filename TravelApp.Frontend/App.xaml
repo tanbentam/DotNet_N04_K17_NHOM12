@@ -10,6 +10,8 @@
              xmlns:guideViewModels="clr-namespace:TravelApp.Frontend.ViewModels.TourGuide"
              xmlns:userViews="clr-namespace:TravelApp.Frontend.Views.User"
              xmlns:userViewModels="clr-namespace:TravelApp.Frontend.ViewModels.User"
+             xmlns:sharedViews="clr-namespace:TravelApp.Frontend.Views.Shared"
+             xmlns:sharedViewModels="clr-namespace:TravelApp.Frontend.ViewModels.Shared"
              xmlns:utils="clr-namespace:TravelApp.Frontend.Utils"
              Startup="Application_Startup">
 
@@ -52,8 +54,28 @@
                 <guideViews:GuideDashboardView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type guideViewModels:ScheduleManagementViewModel}">
+                <guideViews:ScheduleManagementView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type guideViewModels:BookingRequestsViewModel}">
+                <guideViews:BookingRequestsView />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type userViewModels:UserDashboardViewModel}">
                 <userViews:UserDashboardView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type userViewModels:AdvancedSearchViewModel}">
+                <userViews:AdvancedSearchView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type userViewModels:TourBookingViewModel}">
+                <userViews:TourBookingView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type sharedViewModels:PaymentSimulationViewModel}">
+                <sharedViews:PaymentSimulationView />
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

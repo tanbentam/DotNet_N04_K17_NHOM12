@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -8,12 +8,11 @@ namespace TravelApp.Frontend.ViewModels.User
 {
     public partial class AdvancedSearchViewModel : ObservableObject
     {
-        // Các bộ lọc tìm kiếm
-        [ObservableProperty] private string _searchProvince;     // Province
-        [ObservableProperty] private decimal _searchMaxPrice;    // Price
-        [ObservableProperty] private double _searchMinRating;    // Rating
-        [ObservableProperty] private string _searchGuideName;    // Guide
-        [ObservableProperty] private string _searchTime;         // Time
+        [ObservableProperty] private string _searchProvince;
+        [ObservableProperty] private decimal _searchMaxPrice;
+        [ObservableProperty] private double _searchMinRating;
+        [ObservableProperty] private string _searchGuideName;
+        [ObservableProperty] private string _searchTime;
 
         [ObservableProperty] private ObservableCollection<DestinationModel> _searchResults;
         [ObservableProperty] private bool _isSearching;
@@ -21,6 +20,7 @@ namespace TravelApp.Frontend.ViewModels.User
         public AdvancedSearchViewModel()
         {
             SearchResults = new ObservableCollection<DestinationModel>();
+            SeedSearchResults();
         }
 
         [RelayCommand]
@@ -28,14 +28,40 @@ namespace TravelApp.Frontend.ViewModels.User
         {
             IsSearching = true;
 
-            // [BACKEND DEVELOPER NOTE] 
-            // Cần xây dựng API GET search: vd: Constants.User_SearchHotels_Endpoint
-            // Endpoint này phải nhận các query parameters: Province, Price, Rating, Guide, Time.
-            // Kết quả trả về phải gộp Điểm đến và Khách sạn.
+            // API INTEGRATION POINT:
+            // Replace this mock with GET /api/search?province=&maxPrice=&rating=&guide=&time=.
+            // Expected response should combine destinations, hotel hints, and available guide slots.
+            await Task.Delay(1000);
 
-            await Task.Delay(1000); // Bất đồng bộ - Giả lập call API
+            if (SearchResults.Count == 0)
+            {
+                SeedSearchResults();
+            }
 
             IsSearching = false;
+        }
+
+        private void SeedSearchResults()
+        {
+            SearchResults.Add(new DestinationModel
+            {
+                Id = 1,
+                Name = "Da Nang Beach",
+                Province = "Da Nang",
+                Description = "Coastal destination with hotels, food tours, and flexible guide schedules.",
+                Rating = 4.7,
+                GuidePriceFrom = 450000
+            });
+
+            SearchResults.Add(new DestinationModel
+            {
+                Id = 2,
+                Name = "Hoi An Ancient Town",
+                Province = "Quang Nam",
+                Description = "Walking tours, lantern streets, local food, and heritage hotels.",
+                Rating = 4.8,
+                GuidePriceFrom = 520000
+            });
         }
     }
 }

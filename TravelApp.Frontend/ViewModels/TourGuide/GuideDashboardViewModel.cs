@@ -1,18 +1,30 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using TravelApp.Frontend.Contracts;
 
 namespace TravelApp.Frontend.ViewModels.TourGuide
 {
     public partial class GuideDashboardViewModel : ObservableObject
     {
-        // View này sẽ được bind với một TabControl trong XAML để quản lý các tab:
-        // 1. Destination Management
-        // 2. Hotel Management 
-        // 3. Schedule Management 
-        // 4. Booking Requests 
+        private readonly INavigationService _navigationService;
 
-        public GuideDashboardViewModel()
+        public ScheduleManagementViewModel ScheduleManagementViewModel { get; }
+        public BookingRequestsViewModel BookingRequestsViewModel { get; }
+
+        public GuideDashboardViewModel(
+            INavigationService navigationService,
+            ScheduleManagementViewModel scheduleManagementViewModel,
+            BookingRequestsViewModel bookingRequestsViewModel)
         {
-            // Khởi tạo các ViewModel con nếu cần thiết lập DI chuyên sâu
+            _navigationService = navigationService;
+            ScheduleManagementViewModel = scheduleManagementViewModel;
+            BookingRequestsViewModel = bookingRequestsViewModel;
+        }
+
+        [RelayCommand]
+        private void Logout()
+        {
+            _navigationService.NavigateToLogin();
         }
     }
 }

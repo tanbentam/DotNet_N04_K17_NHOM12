@@ -43,6 +43,7 @@ namespace TravelApp.Frontend
             services.AddTransient<ScheduleManagementViewModel>();
             services.AddTransient<AdvancedSearchViewModel>();
             services.AddTransient<TourBookingViewModel>();
+            services.AddTransient<ViewModels.Shared.PaymentSimulationViewModel>();
 
             return services.BuildServiceProvider();
         }

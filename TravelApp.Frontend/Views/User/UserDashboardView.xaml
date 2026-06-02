@@ -1,44 +1,60 @@
-﻿<UserControl x:Class="TravelApp.Frontend.Views.User.UserDashboardView"
+<UserControl x:Class="TravelApp.Frontend.Views.User.UserDashboardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              Background="{DynamicResource MaterialDesignPaper}">
-    <Grid>
+    <DockPanel>
+        <Border DockPanel.Dock="Top"
+                Background="#0F766E"
+                Padding="24,14">
+            <DockPanel>
+                <StackPanel>
+                    <TextBlock Text="Customer Workspace"
+                               Foreground="White"
+                               FontSize="22"
+                               FontWeight="SemiBold" />
+                    <TextBlock Text="Search destinations, book guides, choose hotels, and simulate payment."
+                               Foreground="#D9FFF9" />
+                </StackPanel>
+
+                <Button Content="Logout"
+                        Command="{Binding LogoutCommand}"
+                        DockPanel.Dock="Right"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Foreground="White"
+                        BorderBrush="White" />
+            </DockPanel>
+        </Border>
+
         <TabControl Style="{StaticResource MaterialDesignTabControl}">
+            <TabItem Header="Search">
+                <ContentControl Content="{Binding AdvancedSearchViewModel}" />
+            </TabItem>
 
-            <TabItem Header="KHÃM PHÃ &amp; Äáº¶T TOUR">
-                <Grid Margin="16">
-                    <StackPanel>
-                        <TextBlock Text="TÃ¬m kiáº¿m Ä‘iá»ƒm Ä‘áº¿n vÃ  khÃ¡ch sáº¡n" FontWeight="Bold" FontSize="18"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,20">
-                            <TextBox materialDesign:HintAssist.Hint="Tá»‰nh/ThÃ nh phá»‘" Width="150" Margin="0,0,10,0"/>
-                            <TextBox materialDesign:HintAssist.Hint="GiÃ¡ tá»‘i Ä‘a" Width="100" Margin="0,0,10,0"/>
-                            <Button Content="TÃ¬m kiáº¿m" Style="{StaticResource MaterialDesignRaisedButton}"/>
-                        </StackPanel>
+            <TabItem Header="Book Tour">
+                <ContentControl Content="{Binding TourBookingViewModel}" />
+            </TabItem>
 
-                        <Separator Margin="0,10,0,20"/>
+            <TabItem Header="Payment">
+                <ContentControl Content="{Binding PaymentSimulationViewModel}" />
+            </TabItem>
 
-                        <TextBlock Text="Thanh ToÃ¡n MÃ´ Phá»ng" FontWeight="Bold" FontSize="18"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                            <Button Content="QuÃ©t QR (Fake)" Style="{StaticResource MaterialDesignOutlinedButton}" Margin="0,0,10,0"/>
-                            <Button Content="Chuyá»ƒn khoáº£n (Simulated)" Style="{StaticResource MaterialDesignOutlinedButton}"/>
-                        </StackPanel>
-                    </StackPanel>
+            <TabItem Header="Wishlist &amp; Reviews">
+                <Grid Margin="24">
+                    <TextBlock Text="Wishlist and rating/review screens will connect to favorites, guide ratings, hotel reviews, and destination ratings APIs."
+                               TextWrapping="Wrap"
+                               FontSize="16" />
                 </Grid>
             </TabItem>
 
-            <TabItem Header="YÃŠU THÃCH &amp; ÄÃNH GIÃ">
-                <Grid Margin="16">
-                    <TextBlock Text="Quáº£n lÃ½ danh sÃ¡ch YÃªu thÃ­ch vÃ  ÄÃ¡nh giÃ¡ Guide/KhÃ¡ch sáº¡n" FontSize="16"/>
+            <TabItem Header="Profile">
+                <Grid Margin="24">
+                    <TextBlock Text="Profile management will bind to the authenticated user's editable email, phone number, and province/city."
+                               TextWrapping="Wrap"
+                               FontSize="16" />
                 </Grid>
             </TabItem>
-
-            <TabItem Header="Há»’ SÆ  Cá»¦A TÃ”I">
-                <Grid Margin="16">
-                    <TextBlock Text="Chá»‰nh sá»­a thÃ´ng tin cÃ¡ nhÃ¢n" FontSize="16"/>
-                </Grid>
-            </TabItem>
-
         </TabControl>
-    </Grid>
+    </DockPanel>
 </UserControl>
