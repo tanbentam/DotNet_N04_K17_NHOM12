@@ -29,26 +29,7 @@
 
         <TabControl Style="{StaticResource MaterialDesignTabControl}">
             <TabItem Header="Destinations &amp; Hotels">
-                <Grid Margin="24">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Add Destination"
-                                Style="{StaticResource MaterialDesignRaisedButton}"
-                                Margin="0,0,12,0" />
-                        <Button Content="Add Hotel"
-                                Style="{StaticResource MaterialDesignOutlinedButton}" />
-                    </StackPanel>
-
-                    <TextBlock Grid.Row="1"
-                               Text="API INTEGRATION POINT: guide content CRUD will connect to destination and hotel endpoints. New hotels require admin approval before public listing."
-                               Margin="0,20,0,0"
-                               TextWrapping="Wrap"
-                               Foreground="{DynamicResource MaterialDesignBodyLight}" />
-                </Grid>
+                <ContentControl Content="{Binding GuideContentManagementViewModel}" />
             </TabItem>
 
             <TabItem Header="Availability">

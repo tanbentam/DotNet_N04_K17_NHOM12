@@ -8,15 +8,18 @@ namespace TravelApp.Frontend.ViewModels.TourGuide
     {
         private readonly INavigationService _navigationService;
 
+        public GuideContentManagementViewModel GuideContentManagementViewModel { get; }
         public ScheduleManagementViewModel ScheduleManagementViewModel { get; }
         public BookingRequestsViewModel BookingRequestsViewModel { get; }
 
         public GuideDashboardViewModel(
             INavigationService navigationService,
+            GuideContentManagementViewModel guideContentManagementViewModel,
             ScheduleManagementViewModel scheduleManagementViewModel,
             BookingRequestsViewModel bookingRequestsViewModel)
         {
             _navigationService = navigationService;
+            GuideContentManagementViewModel = guideContentManagementViewModel;
             ScheduleManagementViewModel = scheduleManagementViewModel;
             BookingRequestsViewModel = bookingRequestsViewModel;
         }

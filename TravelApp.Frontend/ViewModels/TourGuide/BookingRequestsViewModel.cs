@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -18,39 +18,45 @@ namespace TravelApp.Frontend.ViewModels.TourGuide
         {
             _notificationManager = notificationManager;
             PendingBookings = new ObservableCollection<BookingModel>();
-
             LoadPendingBookings();
         }
 
         private void LoadPendingBookings()
         {
-            // [BACKEND DEVELOPER NOTE] Gọi API để lấy danh sách các đơn đặt tour đang chờ xác nhận
-            // Giả lập dữ liệu
-            PendingBookings.Add(new BookingModel { BookingId = "BK001", DestinationName = "Đà Nẵng", UserName = "Nguyễn Văn A" });
+            // API INTEGRATION POINT:
+            // GET /api/guide/bookings?status=Pending.
+            PendingBookings.Add(new BookingModel { BookingId = "BK001", DestinationName = "Da Nang Beach", UserName = "Nguyen Van A", HotelName = "Seaside Hotel" });
+            PendingBookings.Add(new BookingModel { BookingId = "BK003", DestinationName = "Hoi An Lantern Walk", UserName = "Tran Thi B", HotelName = "Lantern Stay" });
         }
 
         [RelayCommand]
         private async Task AcceptBookingAsync(BookingModel booking)
         {
-            // [BACKEND DEVELOPER NOTE] Gọi API xác nhận đơn
-            await Task.Delay(500); // Giả lập API
+            if (booking == null)
+            {
+                return;
+            }
+
+            // API INTEGRATION POINT: PATCH /api/guide/bookings/{bookingId}/accept.
+            await Task.Delay(500);
 
             PendingBookings.Remove(booking);
-
-            // Hiển thị Popup Notification góc trên 
-            _notificationManager.ShowNotification("Thành công", $"Đã CHẤP NHẬN đơn đặt tour {booking.BookingId}.", false);
+            _notificationManager.ShowNotification("Booking accepted", $"Accepted booking {booking.BookingId}.", false);
         }
 
         [RelayCommand]
         private async Task RejectBookingAsync(BookingModel booking)
         {
-            // [BACKEND DEVELOPER NOTE] Gọi API từ chối đơn
-            await Task.Delay(500); // Giả lập API
+            if (booking == null)
+            {
+                return;
+            }
+
+            // API INTEGRATION POINT: PATCH /api/guide/bookings/{bookingId}/reject.
+            await Task.Delay(500);
 
             PendingBookings.Remove(booking);
-
-            // Hiển thị Popup Notification góc trên (màu đỏ báo lỗi/từ chối) 
-            _notificationManager.ShowNotification("Đã hủy", $"Đã TỪ CHỐI đơn đặt tour {booking.BookingId}.", true);
+            _notificationManager.ShowNotification("Booking rejected", $"Rejected booking {booking.BookingId}.", true);
         }
     }
 }

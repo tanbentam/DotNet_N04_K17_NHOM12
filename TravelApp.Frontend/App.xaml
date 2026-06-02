@@ -54,6 +54,10 @@
                 <guideViews:GuideDashboardView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type guideViewModels:GuideContentManagementViewModel}">
+                <guideViews:GuideContentManagementView />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type guideViewModels:ScheduleManagementViewModel}">
                 <guideViews:ScheduleManagementView />
             </DataTemplate>
