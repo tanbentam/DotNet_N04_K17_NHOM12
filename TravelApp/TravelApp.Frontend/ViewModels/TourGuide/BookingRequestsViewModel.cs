@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using TravelApp.Frontend.Models;
+using TravelApp.Common.Models;
 using TravelApp.Frontend.Services.NotificationQueue;
 
 namespace TravelApp.Frontend.ViewModels.TourGuide

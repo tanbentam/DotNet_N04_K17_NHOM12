@@ -20,9 +20,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\IAuthService.cs" />
-    <Compile Include="Models\UserModel.cs" />
-    <Compile Include="Models\BookingModel.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Threading.Tasks;
-using TravelApp.Frontend.Contracts;
+using TravelApp.Common.Contracts;
 
 namespace TravelApp.Frontend.ViewModels.Authentication
 {

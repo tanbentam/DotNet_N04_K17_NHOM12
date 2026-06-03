@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TravelApp.Frontend.Models;
+using TravelApp.Common.Models;
 using TravelApp.Frontend.ViewModels;
 using TravelApp.Frontend.ViewModels.User;
 

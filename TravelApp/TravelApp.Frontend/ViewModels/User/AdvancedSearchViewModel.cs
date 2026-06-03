@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using TravelApp.Frontend.Models;
+using TravelApp.Common.Models;
 
 namespace TravelApp.Frontend.ViewModels.User
 {

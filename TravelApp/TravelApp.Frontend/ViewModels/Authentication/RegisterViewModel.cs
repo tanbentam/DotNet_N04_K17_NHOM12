@@ -3,8 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Data;
 using System.Threading.Tasks;
-using TravelApp.Frontend.Contracts;
-using TravelApp.Frontend.Models;
+using TravelApp.Common.Contracts;
+using TravelApp.Common.Models;
 using TravelApp.Frontend.Utils;
 
 namespace TravelApp.Frontend.ViewModels.Authentication

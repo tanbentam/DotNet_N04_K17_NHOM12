@@ -1,6 +1,6 @@
 using System;
-using TravelApp.Backend.Contracts;
-using TravelApp.Backend.Models;
+using TravelApp.Common.Contracts;
+using TravelApp.Common.Models;
 
 namespace TravelApp.Backend.Services
 {

@@ -1,5 +1,5 @@
 using System.Data.Entity;
-using TravelApp.Backend.Models;
+using TravelApp.Common.Models;
 
 namespace TravelApp.Backend.Data
 {

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
-using TravelApp.Frontend.Models;
+using TravelApp.Common.Models;
 using TravelApp.Frontend.Services.NotificationQueue;
 
 namespace TravelApp.Frontend.ViewModels.User

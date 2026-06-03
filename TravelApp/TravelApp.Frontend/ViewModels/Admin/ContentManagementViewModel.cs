@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
-using TravelApp.Frontend.Models;
+using TravelApp.Common.Models;
 
 namespace TravelApp.Frontend.ViewModels.Admin
 {

@@ -1,4 +1,4 @@
-﻿using TravelApp.Frontend.Models;
+﻿using TravelApp.Common.Models;
 using TravelApp.Frontend.ViewModels;
 
 namespace TravelApp.Frontend.Services.AuthenticationStrategy
