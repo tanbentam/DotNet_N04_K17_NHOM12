@@ -1,4 +1,5 @@
 using System.Data.Entity.Migrations;
+using TravelApp.Common.Models;
 
 namespace TravelApp.Backend.Migrations
 {
@@ -7,12 +8,22 @@ namespace TravelApp.Backend.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            MigrationsDirectory = "Migrations";
+            AutomaticMigrationDataLossAllowed = false;
+            ContextKey = "TravelApp.Backend.Data.ApplicationDbContext";
         }
 
         protected override void Seed(TravelApp.Backend.Data.ApplicationDbContext context)
         {
-            // Seed initial data if required. This method is called after migrating to the latest version.
+            context.Users.AddOrUpdate(
+                u => u.Email,
+                new UserModel
+                {
+                    Id = 1,
+                    Email = "admin@travelapp.local",
+                    Phone = "0000000000",
+                    PasswordHash = "CHANGE_ME",
+                    FullName = "Administrator"
+                });
         }
     }
 }

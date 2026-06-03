@@ -1,3 +1,5 @@
 <Solution>
   <Project Path="TravelApp.Frontend/TravelApp.Frontend.csproj" Id="6121f280-8dd7-41e4-888a-fd80b59853ba" />
+  <Project Path="TravelApp.Common/TravelApp.Common.csproj" Id="11111111-1111-1111-1111-111111111111" />
+  <Project Path="TravelApp.Backend/TravelApp.Backend.csproj" Id="00000000-0000-0000-0000-000000000000" />
 </Solution>

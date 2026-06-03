@@ -5,7 +5,12 @@ namespace TravelApp.Backend.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext() : base("DefaultConnection")
+        static ApplicationDbContext()
+        {
+            Database.SetInitializer(new System.Data.Entity.Migrations.MigrateDatabaseToLatestVersion<ApplicationDbContext, Migrations.Configuration>());
+        }
+
+        public ApplicationDbContext() : base("name=DefaultConnection")
         {
         }
 
