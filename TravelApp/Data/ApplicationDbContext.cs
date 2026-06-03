@@ -1,7 +1,7 @@
 using System.Data.Entity;
-using TravelApp.Frontend.Models;
+using TravelApp.Models;
 
-namespace TravelApp.Frontend.Data
+namespace TravelApp.Data
 {
     public class ApplicationDbContext : DbContext
     {

@@ -1,4 +1,4 @@
-﻿namespace TravelApp.Frontend.Services.NotificationQueue
+﻿namespace TravelApp.Services.NotificationQueue
 {
     public class NotificationMessage
     {

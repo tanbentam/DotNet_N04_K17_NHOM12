@@ -1,4 +1,4 @@
-namespace TravelApp.Frontend.Models
+namespace TravelApp.Models
 {
     public class UserModel
     {

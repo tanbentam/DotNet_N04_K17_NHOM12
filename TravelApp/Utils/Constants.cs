@@ -1,4 +1,4 @@
-﻿namespace TravelApp.Frontend.Utils
+﻿namespace TravelApp.Utils
 {
     public static class Constants
     {

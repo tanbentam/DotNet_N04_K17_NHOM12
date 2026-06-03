@@ -2,9 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
 using TravelApp.Common.Models;
-using TravelApp.Frontend.Services.NotificationQueue;
+using TravelApp.Services.NotificationQueue;
 
-namespace TravelApp.Frontend.ViewModels.User
+namespace TravelApp.ViewModels.User
 {
     public partial class TourBookingViewModel : ObservableObject
     {

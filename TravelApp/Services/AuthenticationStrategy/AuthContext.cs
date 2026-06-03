@@ -1,8 +1,8 @@
 ﻿using System;
-using TravelApp.Common.Models;
-using TravelApp.Frontend.ViewModels;
+using TravelApp.Models;
+using TravelApp.ViewModels;
 
-namespace TravelApp.Frontend.Services.AuthenticationStrategy
+namespace TravelApp.Services.AuthenticationStrategy
 {
     public class AuthContext
     {

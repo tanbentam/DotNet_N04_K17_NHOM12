@@ -1,5 +1,5 @@
 ## Visual Studio / .NET common ignores
-
+./cautruc.txt
 # Build Folders
 **/bin/
 **/obj/

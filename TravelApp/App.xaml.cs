@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
-using TravelApp.Frontend.ViewModels;
+using TravelApp.ViewModels;
 
-namespace TravelApp.Frontend
+namespace TravelApp
 {
     public partial class App : Application
     {

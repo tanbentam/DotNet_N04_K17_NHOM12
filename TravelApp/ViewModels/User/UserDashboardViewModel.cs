@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace TravelApp.Frontend.ViewModels.User
+namespace TravelApp.ViewModels.User
 {
     public partial class UserDashboardViewModel : ObservableObject
     {

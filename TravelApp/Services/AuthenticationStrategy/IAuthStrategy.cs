@@ -1,7 +1,7 @@
 ﻿using TravelApp.Common.Models;
 using TravelApp.Frontend.ViewModels;
 
-namespace TravelApp.Frontend.Services.AuthenticationStrategy
+namespace TravelApp.Services.AuthenticationStrategy
 {
     [cite_start]// Interface định nghĩa Strategy 
     public interface IAuthStrategy

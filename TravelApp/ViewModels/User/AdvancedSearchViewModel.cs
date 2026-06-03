@@ -2,9 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using TravelApp.Common.Models;
+using TravelApp.Models;
 
-namespace TravelApp.Frontend.ViewModels.User
+namespace TravelApp.ViewModels.User
 {
     public partial class AdvancedSearchViewModel : ObservableObject
     {

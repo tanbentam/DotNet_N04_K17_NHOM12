@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using TravelApp.Frontend.ViewModels;
+using TravelApp.ViewModels;
 
-namespace TravelApp.Frontend
+namespace TravelApp
 {
     public partial class MainWindow : Window
     {

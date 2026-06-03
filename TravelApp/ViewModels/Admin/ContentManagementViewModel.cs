@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
-using TravelApp.Frontend.Models;
+using TravelApp.Models;
 
-namespace TravelApp.Frontend.ViewModels.Admin
+namespace TravelApp.ViewModels.Admin
 {
     public partial class ContentManagementViewModel : ObservableObject
     {

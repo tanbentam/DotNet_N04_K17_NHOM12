@@ -2,11 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Threading.Tasks;
-using TravelApp.Frontend.Models;
-using TravelApp.Frontend.Services.Contracts;
-using TravelApp.Frontend.Utils;
+using TravelApp.Models;
+using TravelApp.Services.Contracts;
+using TravelApp.Utils;
 
-namespace TravelApp.Frontend.ViewModels.Authentication
+namespace TravelApp.ViewModels.Authentication
 {
     public partial class RegisterViewModel : ObservableObject
     {

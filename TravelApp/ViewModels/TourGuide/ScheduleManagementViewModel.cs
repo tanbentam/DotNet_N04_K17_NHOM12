@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace TravelApp.Frontend.ViewModels.TourGuide
+namespace TravelApp.ViewModels.TourGuide
 {
     public class AvailableDay : ObservableObject
     {

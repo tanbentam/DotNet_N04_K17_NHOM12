@@ -2,7 +2,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace TravelApp.Frontend.Utils
+namespace TravelApp.Utils
 {
     public static class PasswordHelper
     {

@@ -1,4 +1,4 @@
-namespace TravelApp.Frontend.Models.Enums
+namespace TravelApp.Models.Enums
 {
     public enum RoleType
     {

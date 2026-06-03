@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Threading.Tasks;
 
-namespace TravelApp.Frontend.ViewModels.Shared
+namespace TravelApp.ViewModels.Shared
 {
     public partial class PaymentSimulationViewModel : ObservableObject
     {

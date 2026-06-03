@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace TravelApp.Frontend.Services.NotificationQueue
+namespace TravelApp.Services.NotificationQueue
 {
     // Cần đăng ký class này dưới dạng Singleton trong App.xaml.cs
     public partial class NotificationManager : ObservableObject

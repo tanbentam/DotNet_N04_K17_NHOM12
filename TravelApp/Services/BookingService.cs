@@ -1,6 +1,6 @@
-using TravelApp.Frontend.Models;
+using TravelApp.Models;
 
-namespace TravelApp.Frontend.Services
+namespace TravelApp.Services
 {
     public class BookingService
     {

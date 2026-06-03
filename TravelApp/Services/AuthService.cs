@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using TravelApp.Frontend.Models;
-using TravelApp.Frontend.Services.Contracts;
+using TravelApp.Models;
+using TravelApp.Services.Contracts;
 
-namespace TravelApp.Frontend.Services
+namespace TravelApp.Services
 {
     public class AuthService : IAuthService
     {

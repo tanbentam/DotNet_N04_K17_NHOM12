@@ -1,4 +1,4 @@
-﻿namespace TravelApp.Frontend.Models.Enums
+﻿namespace TravelApp.Models.Enums
 {
     // Quản lý trạng thái Booking
     public enum BookingStatus

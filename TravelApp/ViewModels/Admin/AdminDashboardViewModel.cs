@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace TravelApp.Frontend.ViewModels.Admin
+namespace TravelApp.ViewModels.Admin
 {
     public partial class AdminDashboardViewModel : ObservableObject
     {

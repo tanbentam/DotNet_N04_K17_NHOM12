@@ -2,9 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Threading.Tasks;
-using TravelApp.Frontend.Services.Contracts;
+using TravelApp.Services.Contracts;
 
-namespace TravelApp.Frontend.ViewModels.Authentication
+namespace TravelApp.ViewModels.Authentication
 {
     public partial class LoginViewModel : ObservableObject
     {

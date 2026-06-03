@@ -2,10 +2,10 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using TravelApp.Common.Models;
-using TravelApp.Frontend.Services.NotificationQueue;
+using TravelApp.Models;
+using TravelApp.Services.NotificationQueue;
 
-namespace TravelApp.Frontend.ViewModels.TourGuide
+namespace TravelApp.ViewModels.TourGuide
 {
     public partial class BookingRequestsViewModel : ObservableObject
     {

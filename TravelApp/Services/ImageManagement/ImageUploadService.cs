@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace TravelApp.Frontend.Services.ImageManagement
+namespace TravelApp.Services.ImageManagement
 {
     public class ImageUploadService
     {

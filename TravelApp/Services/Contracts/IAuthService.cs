@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using TravelApp.Frontend.Models;
 
-namespace TravelApp.Frontend.Services.Contracts
+namespace TravelApp.Services.Contracts
 {
     public interface IAuthService
     {

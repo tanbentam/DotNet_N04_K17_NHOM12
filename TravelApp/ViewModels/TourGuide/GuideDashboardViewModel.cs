@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace TravelApp.Frontend.ViewModels.TourGuide
+namespace TravelApp.ViewModels.TourGuide
 {
     public partial class GuideDashboardViewModel : ObservableObject
     {

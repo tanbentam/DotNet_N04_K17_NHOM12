@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace TravelApp.Frontend.Utils
+namespace TravelApp.Utils
 {
     public static class ValidationHelper
     {

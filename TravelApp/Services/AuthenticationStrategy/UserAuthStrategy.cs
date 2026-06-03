@@ -3,7 +3,7 @@ using TravelApp.Common.Models;
 using TravelApp.Frontend.ViewModels;
 using TravelApp.Frontend.ViewModels.User;
 
-namespace TravelApp.Frontend.Services.AuthenticationStrategy
+namespace TravelApp.Services.AuthenticationStrategy
 {
     public class UserAuthStrategy : IAuthStrategy
     {

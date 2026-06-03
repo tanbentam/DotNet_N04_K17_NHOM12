@@ -2,9 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using TravelApp.Frontend.Models;
+using TravelApp.Models;
 
-namespace TravelApp.Frontend.ViewModels.Admin
+namespace TravelApp.ViewModels.Admin
 {
     public partial class AccountManagementViewModel : ObservableObject
     {
