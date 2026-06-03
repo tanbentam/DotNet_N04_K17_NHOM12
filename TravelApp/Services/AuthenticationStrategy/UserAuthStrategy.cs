@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TravelApp.Common.Models;
-using TravelApp.Frontend.ViewModels;
-using TravelApp.Frontend.ViewModels.User;
+using TravelApp.Models;
+using TravelApp.ViewModels;
+using TravelApp.ViewModels.User;
 
 namespace TravelApp.Services.AuthenticationStrategy
 {

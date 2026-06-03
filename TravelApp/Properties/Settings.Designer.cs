@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TravelApp.Frontend.Properties
+namespace TravelApp.Properties
 {
 
 

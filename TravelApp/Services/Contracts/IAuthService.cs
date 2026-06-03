@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using TravelApp.Frontend.Models;
+using TravelApp.Models;
 
 namespace TravelApp.Services.Contracts
 {
