@@ -16,7 +16,7 @@ namespace TravelApp.Services.NotificationQueue
         [ObservableProperty]
         private bool _isOpen;
 
-        [cite_start]// Phương thức để thêm thông báo vào hàng đợi 
+     //   [cite_start]// Phương thức để thêm thông báo vào hàng đợi 
         public void ShowNotification(string title, string message, bool isError = false)
         {
             _queue.Enqueue(new NotificationMessage { Title = title, Message = message, IsError = isError });

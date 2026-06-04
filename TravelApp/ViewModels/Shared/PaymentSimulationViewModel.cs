@@ -29,7 +29,6 @@ namespace TravelApp.ViewModels.Shared
 
         private async Task SimulatePaymentProcessing()
         {
-            // Giả lập xử lý thanh toán
             await Task.Delay(2000);
 
             // Random mô phỏng thành công hoặc thất bại 

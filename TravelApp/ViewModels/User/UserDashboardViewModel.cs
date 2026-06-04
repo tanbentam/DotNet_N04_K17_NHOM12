@@ -5,10 +5,10 @@ namespace TravelApp.ViewModels.User
     public partial class UserDashboardViewModel : ObservableObject
     {
         // Container cho các ViewModels con:
-        [cite_start]// - AdvancedSearchViewModel 
-        [cite_start]// - TourBookingViewModel [cite: 109-115]
-        [cite_start]// - FavoriteListViewModel 
-        [cite_start]// - UserProfileViewModel 
+        // - AdvancedSearchViewModel
+        // - TourBookingViewModel
+        // - FavoriteListViewModel
+        // - UserProfileViewModel
 
         public UserDashboardViewModel()
         {

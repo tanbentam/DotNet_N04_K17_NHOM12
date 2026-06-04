@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using TravelApp.Services.Logging;
 
 namespace TravelApp.Services.ImageManagement
 {

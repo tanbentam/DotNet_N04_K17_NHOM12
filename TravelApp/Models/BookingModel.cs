@@ -12,5 +12,8 @@ namespace TravelApp.Models
         public int Nights { get; set; }
         public decimal Price { get; set; }
         public string Status { get; set; }
+        public string BookingId { get; set; }
+        public string DestinationName { get; set; }
+        public string UserName { get; set; }
     }
 }

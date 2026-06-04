@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TravelApp.ViewModels.TourGuide
 {
-    public class AvailableDay : ObservableObject
+    public partial class AvailableDay : ObservableObject
     {
         public string DayOfWeek { get; set; } // Thứ 2 đến Chủ Nhật [cite: 94-95]
 
@@ -41,7 +41,6 @@ namespace TravelApp.ViewModels.TourGuide
             // [BACKEND DEVELOPER NOTE]
             // Payload sẽ gửi mảng WeeklySchedule chứa các ngày IsAvailable = true.
             // Endpoint gợi ý: Constants.Guide_ManageSchedule_Endpoint
-            [cite_start]// Logic Backend: Khi User chọn thời gian khớp với lịch rảnh này, hệ thống phải thông báo cho User[cite: 96].
 
             await Task.Delay(500); // Giả lập API call
 

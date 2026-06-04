@@ -4,7 +4,7 @@ namespace TravelApp.Utils
 {
     public static class ValidationHelper
     {
-        [cite_start]// Yêu cầu số điện thoại phải đúng 10 chữ số 
+        // Yêu cầu số điện thoại phải đúng 10 chữ số 
         public static bool IsValidPhoneNumber(string phoneNumber)
         {
             if (string.IsNullOrWhiteSpace(phoneNumber)) return false;

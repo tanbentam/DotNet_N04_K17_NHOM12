@@ -9,7 +9,7 @@ namespace TravelApp.Services.AuthenticationStrategy
     {
         public void NavigateToDashboard(MainViewModel mainViewModel, UserModel currentUser)
         {
-            [cite_start]// Điều hướng đến Guide Dashboard [cite: 83-103]
+            //[cite_start]// Điều hướng đến Guide Dashboard [cite: 83-103]
             var guideDashboardVM = App.Current.Services.GetService<GuideDashboardViewModel>();
             mainViewModel.CurrentViewModel = guideDashboardVM;
         }

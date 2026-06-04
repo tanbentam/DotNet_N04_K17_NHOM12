@@ -8,12 +8,12 @@ namespace TravelApp.ViewModels.User
 {
     public partial class AdvancedSearchViewModel : ObservableObject
     {
-        [cite_start]// Các bộ lọc tìm kiếm [cite: 146-150]
-        [ObservableProperty] private string _searchProvince;     // Province [cite: 146]
-        [ObservableProperty] private decimal _searchMaxPrice;    // Price [cite: 147]
-        [ObservableProperty] private double _searchMinRating;    // Rating [cite: 148]
-        [ObservableProperty] private string _searchGuideName;    // Guide [cite: 149]
-        [ObservableProperty] private string _searchTime;         // Time [cite: 150]
+        // Các bộ lọc tìm kiếm
+        [ObservableProperty] private string _searchProvince;     // Province
+        [ObservableProperty] private decimal _searchMaxPrice;    // Price
+        [ObservableProperty] private double _searchMinRating;    // Rating
+        [ObservableProperty] private string _searchGuideName;    // Guide
+        [ObservableProperty] private string _searchTime;         // Time
 
         [ObservableProperty] private ObservableCollection<DestinationModel> _searchResults;
         [ObservableProperty] private bool _isSearching;
@@ -29,11 +29,11 @@ namespace TravelApp.ViewModels.User
             IsSearching = true;
 
             // [BACKEND DEVELOPER NOTE] 
-            [cite_start]// Cần xây dựng API GET search: vd: Constants.User_SearchHotels_Endpoint [cite: 55, 189]
+            // Cần xây dựng API GET search: vd: Constants.User_SearchHotels_Endpoint
             // Endpoint này phải nhận các query parameters: Province, Price, Rating, Guide, Time.
-            [cite_start]// Kết quả trả về phải gộp Điểm đến [cite: 61-63] và Khách sạn [cite: 55-57].
+            // Kết quả trả về phải gộp Điểm đến và Khách sạn.
 
-            await Task.Delay(1000); // Bất đồng bộ - Giả lập call API [cite: 156-157]
+            await Task.Delay(1000); // Bất đồng bộ - Giả lập call API
 
             IsSearching = false;
         }

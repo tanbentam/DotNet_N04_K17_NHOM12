@@ -37,7 +37,7 @@ namespace TravelApp.ViewModels.TourGuide
 
             PendingBookings.Remove(booking);
 
-            [cite_start]// Hiển thị Popup Notification góc trên 
+            //[cite_start]// Hiển thị Popup Notification góc trên 
             _notificationManager.ShowNotification("Thành công", $"Đã CHẤP NHẬN đơn đặt tour {booking.BookingId}.", false);
         }
 
@@ -49,7 +49,7 @@ namespace TravelApp.ViewModels.TourGuide
 
             PendingBookings.Remove(booking);
 
-            [cite_start]// Hiển thị Popup Notification góc trên (màu đỏ báo lỗi/từ chối) 
+            //[cite_start]// Hiển thị Popup Notification góc trên (màu đỏ báo lỗi/từ chối) 
             _notificationManager.ShowNotification("Đã hủy", $"Đã TỪ CHỐI đơn đặt tour {booking.BookingId}.", true);
         }
     }
