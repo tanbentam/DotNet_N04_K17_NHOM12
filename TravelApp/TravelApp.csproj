@@ -71,6 +71,7 @@
     <Compile Include="Services\Contracts\IAuthService.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\BookingService.cs" />
+    <Compile Include="Services\DatabaseConnectionService.cs" />
     <Compile Include="Utils\PasswordHelper.cs" />
     <Compile Include="Services\AuthenticationStrategy\AdminAuthStrategy.cs" />
     <Compile Include="Services\AuthenticationStrategy\AuthContext.cs" />
@@ -200,7 +201,10 @@
       <Version>10.0.8</Version>
     </PackageReference>
     <PackageReference Include="MySql.Data.EntityFramework">
-      <Version>9.7.0</Version>
+      <Version>8.0.35</Version>
+    </PackageReference>
+        <PackageReference Include="MySql.Data">
+      <Version>8.0.35</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

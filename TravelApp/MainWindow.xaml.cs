@@ -1,5 +1,9 @@
+using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using TravelApp.Services;
+using TravelApp.Services.Logging;
 using TravelApp.Views.Admin;
 using TravelApp.Views.Authentication;
 using TravelApp.Views.TourGuide;
@@ -9,10 +13,32 @@ namespace TravelApp
 {
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private readonly DatabaseConnectionService _databaseConnectionService;
+
+        public MainWindow(DatabaseConnectionService databaseConnectionService)
         {
+            _databaseConnectionService = databaseConnectionService;
             InitializeComponent();
             ShowHome();
+            Loaded += MainWindow_Loaded;
+        }
+
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= MainWindow_Loaded;
+
+            var result = await _databaseConnectionService.CheckConnectionAsync();
+            if (result.IsConnected)
+            {
+                DatabaseStatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(76, 175, 80));
+                DatabaseStatusText.Text = result.Message;
+                return;
+            }
+
+            DatabaseStatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(244, 67, 54));
+            DatabaseStatusText.Text = "Database unavailable";
+            DatabaseStatusText.ToolTip = result.Message;
+            LoggerService.LogDatabaseConnectionFailure(result.Message);
         }
 
         private void NavigationButton_Click(object sender, RoutedEventArgs e)

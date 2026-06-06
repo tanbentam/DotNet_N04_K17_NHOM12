@@ -38,5 +38,10 @@ namespace TravelApp.Services.Logging
         {
             WriteLog("BOOKING_FAILURE", userId, reason);
         }
+
+        public static void LogDatabaseConnectionFailure(string reason)
+        {
+            WriteLog("DATABASE_CONNECTION", "ApplicationStartup", reason);
+        }
     }
 }

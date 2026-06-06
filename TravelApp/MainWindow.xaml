@@ -60,8 +60,22 @@
                             HorizontalContentAlignment="Left" Height="44"/>
                 </StackPanel>
 
-                <TextBlock Grid.Row="2" Text="Digital Travel Application" Foreground="#D1C4E9"
-                           FontSize="12" HorizontalAlignment="Center"/>
+                <StackPanel Grid.Row="2">
+                    <Border Background="#352080" CornerRadius="4" Padding="10,8" Margin="0,0,0,12">
+                        <StackPanel>
+                            <TextBlock Text="DATABASE" Foreground="#B39DDB" FontSize="10"
+                                       FontWeight="SemiBold"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <Ellipse x:Name="DatabaseStatusIndicator" Width="9" Height="9"
+                                         Fill="#FFC107" Margin="0,0,8,0"/>
+                                <TextBlock x:Name="DatabaseStatusText" Text="Checking connection..."
+                                           Foreground="White" FontSize="12"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="Digital Travel Application" Foreground="#D1C4E9"
+                               FontSize="12" HorizontalAlignment="Center"/>
+                </StackPanel>
             </Grid>
         </Border>
 
