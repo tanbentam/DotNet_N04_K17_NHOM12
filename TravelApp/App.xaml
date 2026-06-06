@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+             xmlns:local="clr-namespace:TravelApp"
              Startup="Application_Startup">
 
     <Application.Resources>
@@ -19,6 +20,8 @@
             </ResourceDictionary.MergedDictionaries>
 
             <controls:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         </ResourceDictionary>
     </Application.Resources>
 
