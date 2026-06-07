@@ -10,6 +10,7 @@ namespace TravelApp.ViewModels.Authentication
     {
         private readonly IAuthService _authService;
         private readonly IRoleNavigationService _navigationService;
+        private readonly IUserSessionService _sessionService;
 
         [ObservableProperty]
         private string _identifier;
@@ -25,10 +26,12 @@ namespace TravelApp.ViewModels.Authentication
 
         public LoginViewModel(
             IAuthService authService,
-            IRoleNavigationService navigationService)
+            IRoleNavigationService navigationService,
+            IUserSessionService sessionService)
         {
             _authService = authService;
             _navigationService = navigationService;
+            _sessionService = sessionService;
         }
 
         [RelayCommand]
@@ -49,6 +52,7 @@ namespace TravelApp.ViewModels.Authentication
                 if (user != null)
                 {
                     Password = string.Empty;
+                    _sessionService.SignIn(user);
                     _navigationService.NavigateToDashboard(user);
                 }
                 else

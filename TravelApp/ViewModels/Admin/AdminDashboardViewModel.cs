@@ -1,5 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TravelApp.Services.Contracts;
 
 namespace TravelApp.ViewModels.Admin
 {
@@ -10,36 +11,35 @@ namespace TravelApp.ViewModels.Admin
 
         private readonly AccountManagementViewModel _accountManagementVM;
         private readonly ContentManagementViewModel _contentManagementVM;
+        private readonly IUserSessionService _sessionService;
 
         public AdminDashboardViewModel(
             AccountManagementViewModel accountManagementVM,
-            ContentManagementViewModel contentManagementVM)
+            ContentManagementViewModel contentManagementVM,
+            IUserSessionService sessionService)
         {
             _accountManagementVM = accountManagementVM;
             _contentManagementVM = contentManagementVM;
-
-            // Mặc định hiển thị màn hình Quản lý tài khoản
+            _sessionService = sessionService;
             CurrentAdminContent = _accountManagementVM;
         }
 
         [RelayCommand]
         private void NavigateToAccounts()
         {
-            //[cite_start]// Điều hướng sang màn hình quản lý Guide/User 
             CurrentAdminContent = _accountManagementVM;
         }
 
         [RelayCommand]
         private void NavigateToContent()
         {
-            //[cite_start]// Điều hướng sang màn hình quản lý Destination/Hotel/Booking 
             CurrentAdminContent = _contentManagementVM;
         }
 
         [RelayCommand]
         private void Logout()
         {
-            // Logic đăng xuất và quay về LoginView
+            _sessionService.SignOut();
         }
     }
 }

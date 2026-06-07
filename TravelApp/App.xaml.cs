@@ -41,6 +41,7 @@ namespace TravelApp
             services.AddTransient<ContentManagementView>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddSingleton<IRoleNavigationService, RoleNavigationService>();
+            services.AddSingleton<IUserSessionService, UserSessionService>();
             services.AddTransient<LoginViewModel>();
             services.AddTransient<RegisterViewModel>();
             services.AddTransient<LoginView>();

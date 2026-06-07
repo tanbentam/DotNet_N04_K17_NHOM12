@@ -75,7 +75,7 @@ Ký hiệu:
 - [x] Lưu tài khoản đăng ký vào database
 - [x] Thay SHA-256 bằng password hashing có salt như PBKDF2, bcrypt hoặc Argon2
 - [x] Điều hướng tự động theo role sau khi đăng nhập
-- [ ] Quản lý phiên đăng nhập và logout
+- [x] Quản lý phiên đăng nhập và logout
 
 ## 6. Admin Features
 

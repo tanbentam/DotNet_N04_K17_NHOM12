@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using TravelApp.Models;
+using TravelApp.Models.Enums;
 using TravelApp.Services;
 using TravelApp.Services.Contracts;
 using TravelApp.Services.Logging;
@@ -18,20 +20,25 @@ namespace TravelApp
         private readonly DatabaseConnectionService _databaseConnectionService;
         private readonly IServiceProvider _services;
         private readonly IRoleNavigationService _roleNavigationService;
+        private readonly IUserSessionService _sessionService;
 
         public MainWindow(
             DatabaseConnectionService databaseConnectionService,
             IServiceProvider services,
-            IRoleNavigationService roleNavigationService)
+            IRoleNavigationService roleNavigationService,
+            IUserSessionService sessionService)
         {
             _databaseConnectionService = databaseConnectionService;
             _services = services;
             _roleNavigationService = roleNavigationService;
+            _sessionService = sessionService;
             InitializeComponent();
             ShowHome();
+            UpdateSessionDisplay();
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
             _roleNavigationService.DashboardRequested += ShowDashboardForUser;
+            _sessionService.SessionChanged += HandleSessionChanged;
         }
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -64,40 +71,75 @@ namespace TravelApp
                 case "register": ShowView(
                     "Register",
                     _services.GetRequiredService<RegisterView>()); break;
-                case "user": ShowView(
-                    "User Dashboard",
-                    _services.GetRequiredService<UserDashboardView>()); break;
-                case "guide": ShowView(
-                    "Tour Guide Dashboard",
-                    _services.GetRequiredService<GuideDashboardView>()); break;
-                case "admin": ShowView(
-                    "Admin Dashboard",
-                    _services.GetRequiredService<AdminDashboardView>()); break;
-                case "accounts": ShowView(
-                    "Account Management",
-                    _services.GetRequiredService<AccountManagementView>()); break;
-                case "content": ShowView(
-                    "Content Management",
-                    _services.GetRequiredService<ContentManagementView>()); break;
+                case "user":
+                    ShowRoleView(
+                        RoleType.User,
+                        "User Dashboard",
+                        () => _services.GetRequiredService<UserDashboardView>());
+                    break;
+                case "guide":
+                    ShowRoleView(
+                        RoleType.TourGuide,
+                        "Tour Guide Dashboard",
+                        () => _services.GetRequiredService<GuideDashboardView>());
+                    break;
+                case "admin":
+                    ShowRoleView(
+                        RoleType.Admin,
+                        "Admin Dashboard",
+                        () => _services.GetRequiredService<AdminDashboardView>());
+                    break;
+                case "accounts":
+                    ShowRoleView(
+                        RoleType.Admin,
+                        "Account Management",
+                        () => _services.GetRequiredService<AccountManagementView>());
+                    break;
+                case "content":
+                    ShowRoleView(
+                        RoleType.Admin,
+                        "Content Management",
+                        () => _services.GetRequiredService<ContentManagementView>());
+                    break;
                 default: ShowHome(); break;
             }
         }
 
-        private void ShowDashboardForUser(Models.UserModel user)
+        private void ShowRoleView(
+            RoleType requiredRole,
+            string title,
+            Func<UserControl> viewFactory)
+        {
+            if (!_sessionService.IsAuthenticated)
+            {
+                ShowLogin();
+                return;
+            }
+
+            if (!_sessionService.HasRole(requiredRole))
+            {
+                ShowAccessDenied(requiredRole);
+                return;
+            }
+
+            ShowView(title, viewFactory());
+        }
+
+        private void ShowDashboardForUser(UserModel user)
         {
             switch (user.Role)
             {
-                case Models.Enums.RoleType.Admin:
+                case RoleType.Admin:
                     ShowView(
                         "Admin Dashboard",
                         _services.GetRequiredService<AdminDashboardView>());
                     break;
-                case Models.Enums.RoleType.TourGuide:
+                case RoleType.TourGuide:
                     ShowView(
                         "Tour Guide Dashboard",
                         _services.GetRequiredService<GuideDashboardView>());
                     break;
-                case Models.Enums.RoleType.User:
+                case RoleType.User:
                     ShowView(
                         "User Dashboard",
                         _services.GetRequiredService<UserDashboardView>());
@@ -111,6 +153,51 @@ namespace TravelApp
         private void MainWindow_Closed(object sender, EventArgs e)
         {
             _roleNavigationService.DashboardRequested -= ShowDashboardForUser;
+            _sessionService.SessionChanged -= HandleSessionChanged;
+        }
+
+        private void HandleSessionChanged(UserModel user)
+        {
+            UpdateSessionDisplay();
+
+            if (user == null)
+            {
+                ShowLogin();
+            }
+        }
+
+        private void UpdateSessionDisplay()
+        {
+            var user = _sessionService.CurrentUser;
+            var isAuthenticated = user != null;
+
+            CurrentUserText.Text = isAuthenticated
+                ? $"{user.FullName} ({user.Role})"
+                : string.Empty;
+            CurrentUserText.Visibility = isAuthenticated
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+            LogoutButton.Visibility = isAuthenticated
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
+
+        private void ShowLogin()
+        {
+            ShowView("Login", _services.GetRequiredService<LoginView>());
+        }
+
+        private void ShowAccessDenied(RoleType requiredRole)
+        {
+            PageTitle.Text = "Access Denied";
+            MainContent.Content = new TextBlock
+            {
+                Text = $"Tài khoản hiện tại không có quyền {requiredRole}.",
+                FontSize = 20,
+                Foreground = Brushes.Red,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
         }
 
         private void ShowView(string title, UserControl view)
@@ -156,6 +243,11 @@ namespace TravelApp
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            _sessionService.SignOut();
         }
     }
 }

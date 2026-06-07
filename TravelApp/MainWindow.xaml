@@ -89,9 +89,22 @@
                 <Grid>
                     <TextBlock x:Name="PageTitle" Text="Home" FontSize="24" FontWeight="SemiBold"
                                VerticalAlignment="Center" Foreground="#212121"/>
-                    <Button Content="Exit" Click="ExitButton_Click"
-                            Style="{StaticResource MaterialDesignOutlinedButton}"
-                            HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+                        <TextBlock x:Name="CurrentUserText"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,16,0"
+                                   Visibility="Collapsed"/>
+                        <Button x:Name="LogoutButton"
+                                Content="Logout"
+                                Click="LogoutButton_Click"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Margin="0,0,10,0"
+                                Visibility="Collapsed"/>
+                        <Button Content="Exit" Click="ExitButton_Click"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                    </StackPanel>
                 </Grid>
             </Border>
             <ContentControl x:Name="MainContent" Grid.Row="1"/>
