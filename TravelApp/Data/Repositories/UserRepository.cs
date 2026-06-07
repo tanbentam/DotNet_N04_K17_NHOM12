@@ -71,6 +71,54 @@ namespace TravelApp.Data.Repositories
             }
         }
 
+        public async Task<bool> UpdateAsync(
+            UserModel user,
+            string passwordHash)
+        {
+            if (user == null || user.Id <= 0)
+            {
+                return false;
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                var duplicateExists = await context.Users.AnyAsync(existingUser =>
+                    existingUser.Id != user.Id &&
+                    (existingUser.Email == user.Email ||
+                     existingUser.Phone == user.Phone));
+                if (duplicateExists)
+                {
+                    return false;
+                }
+
+                var existing = await context.Users.FindAsync(user.Id);
+                if (existing == null)
+                {
+                    return false;
+                }
+
+                existing.Email = user.Email;
+                existing.Phone = user.Phone;
+                existing.FullName = user.FullName;
+                existing.Role = user.Role;
+
+                if (!string.IsNullOrWhiteSpace(passwordHash))
+                {
+                    existing.PasswordHash = passwordHash;
+                }
+
+                try
+                {
+                    await context.SaveChangesAsync();
+                    return true;
+                }
+                catch (DbUpdateException)
+                {
+                    return false;
+                }
+            }
+        }
+
         public async Task<bool> DeleteAsync(int userId)
         {
             using (var context = new ApplicationDbContext())
@@ -82,8 +130,16 @@ namespace TravelApp.Data.Repositories
                 }
 
                 context.Users.Remove(user);
-                await context.SaveChangesAsync();
-                return true;
+
+                try
+                {
+                    await context.SaveChangesAsync();
+                    return true;
+                }
+                catch (DbUpdateException)
+                {
+                    return false;
+                }
             }
         }
     }

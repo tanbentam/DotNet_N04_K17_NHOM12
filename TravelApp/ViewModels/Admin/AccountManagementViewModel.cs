@@ -5,34 +5,44 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using TravelApp.Data.Repositories;
 using TravelApp.Models;
+using TravelApp.Models.Enums;
+using TravelApp.Services.Contracts;
+using TravelApp.Utils;
 
 namespace TravelApp.ViewModels.Admin
 {
     public partial class AccountManagementViewModel : ObservableObject
     {
         private readonly IUserRepository _userRepository;
+        private readonly IAuthService _authService;
+        private readonly IUserSessionService _sessionService;
 
-        [ObservableProperty]
-        private ObservableCollection<UserModel> _usersList;
+        [ObservableProperty] private ObservableCollection<UserModel> _usersList;
+        [ObservableProperty] private bool _isLoading;
+        [ObservableProperty] private string _errorMessage;
+        [ObservableProperty] private string _successMessage;
+        [ObservableProperty] private int _userCount;
+        [ObservableProperty] private bool _isEmpty;
+        [ObservableProperty] private bool _hasUsers;
 
-        [ObservableProperty]
-        private bool _isLoading;
+        [ObservableProperty] private bool _isEditorOpen;
+        [ObservableProperty] private bool _isEditing;
+        [ObservableProperty] private int _editingUserId;
+        [ObservableProperty] private string _formTitle;
+        [ObservableProperty] private string _formFullName;
+        [ObservableProperty] private string _formEmail;
+        [ObservableProperty] private string _formPhone;
+        [ObservableProperty] private string _formPassword;
+        [ObservableProperty] private RoleType _formRole;
 
-        [ObservableProperty]
-        private string _errorMessage;
-
-        [ObservableProperty]
-        private int _userCount;
-
-        [ObservableProperty]
-        private bool _isEmpty;
-
-        [ObservableProperty]
-        private bool _hasUsers;
-
-        public AccountManagementViewModel(IUserRepository userRepository)
+        public AccountManagementViewModel(
+            IUserRepository userRepository,
+            IAuthService authService,
+            IUserSessionService sessionService)
         {
             _userRepository = userRepository;
+            _authService = authService;
+            _sessionService = sessionService;
             UsersList = new ObservableCollection<UserModel>();
             _ = LoadAccountsAsync();
         }
@@ -41,7 +51,7 @@ namespace TravelApp.ViewModels.Admin
         private async Task LoadAccountsAsync()
         {
             IsLoading = true;
-            ErrorMessage = string.Empty;
+            ClearMessages();
 
             try
             {
@@ -65,13 +75,107 @@ namespace TravelApp.ViewModels.Admin
         [RelayCommand]
         private void CreateGuideAccount()
         {
-            // Account creation is implemented in the next checklist item.
+            OpenCreateEditor(RoleType.TourGuide);
         }
 
         [RelayCommand]
         private void CreateUserAccount()
         {
-            // Account creation is implemented in the next checklist item.
+            OpenCreateEditor(RoleType.User);
+        }
+
+        [RelayCommand]
+        private void EditAccount(UserModel user)
+        {
+            if (user == null)
+            {
+                return;
+            }
+
+            ClearMessages();
+            if (user.Role == RoleType.Admin)
+            {
+                ErrorMessage = "Không thể chỉnh sửa tài khoản Admin tại màn hình này.";
+                return;
+            }
+
+            IsEditing = true;
+            IsEditorOpen = true;
+            EditingUserId = user.Id;
+            FormTitle = "Edit Account";
+            FormFullName = user.FullName;
+            FormEmail = user.Email;
+            FormPhone = user.Phone;
+            FormPassword = string.Empty;
+            FormRole = user.Role;
+        }
+
+        [RelayCommand]
+        private async Task SaveAccountAsync()
+        {
+            ClearMessages();
+
+            if (!ValidateForm())
+            {
+                return;
+            }
+
+            IsLoading = true;
+            var user = new UserModel
+            {
+                Id = EditingUserId,
+                FullName = FormFullName.Trim(),
+                Email = FormEmail.Trim().ToLowerInvariant(),
+                Phone = FormPhone.Trim(),
+                Role = FormRole
+            };
+
+            try
+            {
+                bool saved;
+                if (IsEditing)
+                {
+                    var passwordHash = string.IsNullOrWhiteSpace(FormPassword)
+                        ? null
+                        : PasswordHelper.HashPassword(FormPassword);
+                    saved = await _userRepository.UpdateAsync(user, passwordHash);
+                }
+                else
+                {
+                    saved = await _authService.RegisterAsync(user, FormPassword);
+                }
+
+                if (!saved)
+                {
+                    ErrorMessage =
+                        "Không thể lưu tài khoản. Email hoặc số điện thoại có thể đã tồn tại.";
+                    return;
+                }
+
+                SuccessMessage = IsEditing
+                    ? "Cập nhật tài khoản thành công."
+                    : "Tạo tài khoản thành công.";
+                CloseEditor();
+                await LoadAccountsAsync();
+                SuccessMessage = IsEditing
+                    ? "Cập nhật tài khoản thành công."
+                    : "Tạo tài khoản thành công.";
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.GetBaseException().Message;
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        private void CancelEdit()
+        {
+            CloseEditor();
+            ClearMessages();
         }
 
         [RelayCommand]
@@ -82,23 +186,101 @@ namespace TravelApp.ViewModels.Admin
                 return;
             }
 
-            ErrorMessage = string.Empty;
+            ClearMessages();
+
+            if (_sessionService.CurrentUser?.Id == user.Id)
+            {
+                ErrorMessage = "Không thể xóa tài khoản đang đăng nhập.";
+                return;
+            }
+
+            if (user.Role == RoleType.Admin)
+            {
+                ErrorMessage = "Không thể xóa tài khoản Admin tại màn hình này.";
+                return;
+            }
 
             try
             {
                 if (!await _userRepository.DeleteAsync(user.Id))
                 {
-                    ErrorMessage = "Không tìm thấy tài khoản cần xóa.";
+                    ErrorMessage =
+                        "Không thể xóa tài khoản. Tài khoản có thể đang được sử dụng.";
                     return;
                 }
 
                 UsersList.Remove(user);
                 UpdateSummary();
+                SuccessMessage = "Xóa tài khoản thành công.";
             }
             catch (Exception ex)
             {
                 ErrorMessage = ex.GetBaseException().Message;
             }
+        }
+
+        private void OpenCreateEditor(RoleType role)
+        {
+            ClearMessages();
+            IsEditing = false;
+            IsEditorOpen = true;
+            EditingUserId = 0;
+            FormTitle = role == RoleType.TourGuide
+                ? "Create Guide Account"
+                : "Create User Account";
+            FormFullName = string.Empty;
+            FormEmail = string.Empty;
+            FormPhone = string.Empty;
+            FormPassword = string.Empty;
+            FormRole = role;
+        }
+
+        private bool ValidateForm()
+        {
+            if (string.IsNullOrWhiteSpace(FormFullName))
+            {
+                ErrorMessage = "Vui lòng nhập họ tên.";
+                return false;
+            }
+
+            if (!ValidationHelper.IsValidEmail(FormEmail))
+            {
+                ErrorMessage = "Email không hợp lệ.";
+                return false;
+            }
+
+            if (!ValidationHelper.IsValidPhoneNumber(FormPhone))
+            {
+                ErrorMessage = "Số điện thoại phải có đúng 10 chữ số.";
+                return false;
+            }
+
+            if (!IsEditing && string.IsNullOrWhiteSpace(FormPassword))
+            {
+                ErrorMessage = "Vui lòng nhập mật khẩu.";
+                return false;
+            }
+
+            if (FormRole != RoleType.User && FormRole != RoleType.TourGuide)
+            {
+                ErrorMessage = "Admin chỉ có thể quản lý tài khoản User hoặc TourGuide.";
+                return false;
+            }
+
+            return true;
+        }
+
+        private void CloseEditor()
+        {
+            IsEditorOpen = false;
+            EditingUserId = 0;
+            FormPassword = string.Empty;
+        }
+
+        private void ClearMessages()
+        {
+            ErrorMessage = string.Empty;
+            SuccessMessage = string.Empty;
         }
 
         private void UpdateSummary()
