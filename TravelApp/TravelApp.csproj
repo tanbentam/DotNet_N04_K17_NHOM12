@@ -63,6 +63,11 @@
     <!-- Moved shared Contracts/Models into TravelApp.Common project -->
     <Compile Include="Models\Enums\BookingStatus.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
+    <Compile Include="Data\Migrations\Configuration.cs" />
+    <Compile Include="Data\Migrations\202606070341212_InitialCreate.cs" />
+    <Compile Include="Data\Migrations\202606070341212_InitialCreate.Designer.cs">
+      <DependentUpon>202606070341212_InitialCreate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\BookingModel.cs" />
     <Compile Include="Models\HotelModel.cs" />
@@ -181,6 +186,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EmbeddedResource Include="Data\Migrations\202606070341212_InitialCreate.resx">
+      <DependentUpon>202606070341212_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\" />
