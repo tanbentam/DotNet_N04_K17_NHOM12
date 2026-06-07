@@ -73,7 +73,7 @@ Ký hiệu:
 - [x] Kết nối form Login/Register với DI và `AuthService`
 - [x] Thay mock `admin/admin` bằng truy vấn database
 - [x] Lưu tài khoản đăng ký vào database
-- [ ] Thay SHA-256 bằng password hashing có salt như PBKDF2, bcrypt hoặc Argon2
+- [x] Thay SHA-256 bằng password hashing có salt như PBKDF2, bcrypt hoặc Argon2
 - [ ] Điều hướng tự động theo role sau khi đăng nhập
 - [ ] Quản lý phiên đăng nhập và logout
 

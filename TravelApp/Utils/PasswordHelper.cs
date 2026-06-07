@@ -1,30 +1,97 @@
 using System;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace TravelApp.Utils
 {
     public static class PasswordHelper
     {
+        private const int Iterations = 10000;
+        private const int SaltSize = 16;
+        private const int HashSize = 32;
+        private const string Algorithm = "PBKDF2";
+
         public static string HashPassword(string password)
         {
             if (string.IsNullOrEmpty(password))
-                throw new ArgumentException("Password cannot be empty");
-
-            using (var sha256 = SHA256.Create())
             {
-                var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashBytes);
+                throw new ArgumentException("Password cannot be empty");
+            }
+
+            var salt = new byte[SaltSize];
+            using (var random = RandomNumberGenerator.Create())
+            {
+                random.GetBytes(salt);
+            }
+
+            var hash = DeriveHash(password, salt, Iterations);
+            return string.Join(
+                "$",
+                Algorithm,
+                Iterations,
+                Convert.ToBase64String(salt),
+                Convert.ToBase64String(hash));
+        }
+
+        public static bool VerifyPassword(string password, string storedHash)
+        {
+            if (string.IsNullOrEmpty(password) ||
+                string.IsNullOrEmpty(storedHash))
+            {
+                return false;
+            }
+
+            var parts = storedHash.Split('$');
+            if (parts.Length != 4 ||
+                !string.Equals(parts[0], Algorithm, StringComparison.Ordinal) ||
+                !int.TryParse(parts[1], out var iterations) ||
+                iterations <= 0)
+            {
+                return false;
+            }
+
+            try
+            {
+                var salt = Convert.FromBase64String(parts[2]);
+                var expectedHash = Convert.FromBase64String(parts[3]);
+                var actualHash = DeriveHash(password, salt, iterations);
+
+                return FixedTimeEquals(actualHash, expectedHash);
+            }
+            catch (FormatException)
+            {
+                return false;
             }
         }
 
-        public static bool VerifyPassword(string password, string hash)
+        private static byte[] DeriveHash(
+            string password,
+            byte[] salt,
+            int iterations)
         {
-            if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(hash))
-                return false;
+            using (var pbkdf2 = new Rfc2898DeriveBytes(
+                password,
+                salt,
+                iterations,
+                HashAlgorithmName.SHA256))
+            {
+                return pbkdf2.GetBytes(HashSize);
+            }
+        }
 
-            var hashOfInput = HashPassword(password);
-            return hashOfInput.Equals(hash);
+        private static bool FixedTimeEquals(byte[] left, byte[] right)
+        {
+            if (left == null || right == null || left.Length != right.Length)
+            {
+                return false;
+            }
+
+            var difference = 0;
+            for (var index = 0; index < left.Length; index++)
+            {
+                difference |= left[index] ^ right[index];
+            }
+
+            return difference == 0;
         }
     }
 }
