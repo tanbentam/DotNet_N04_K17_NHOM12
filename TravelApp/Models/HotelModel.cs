@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TravelApp.Models.Enums;
 
 namespace TravelApp.Models
 {
@@ -17,8 +18,11 @@ namespace TravelApp.Models
         public decimal PricePerNight { get; set; }
         public int Rating { get; set; }
         public string ImageUrl { get; set; }
+        public int? CreatedByGuideId { get; set; }
+        public ContentApprovalStatus ApprovalStatus { get; set; }
 
         public virtual DestinationModel Destination { get; set; }
+        public virtual UserModel CreatedByGuide { get; set; }
         public virtual ICollection<BookingModel> Bookings { get; set; }
     }
 }

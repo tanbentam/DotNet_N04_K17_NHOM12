@@ -62,6 +62,7 @@
     </ApplicationDefinition>
     <!-- Moved shared Contracts/Models into TravelApp.Common project -->
     <Compile Include="Models\Enums\BookingStatus.cs" />
+    <Compile Include="Models\Enums\ContentApprovalStatus.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
     <Compile Include="Data\Repositories\ITravelContentRepository.cs" />
     <Compile Include="Data\Repositories\IUserRepository.cs" />
@@ -71,6 +72,10 @@
     <Compile Include="Data\Migrations\202606070341212_InitialCreate.cs" />
     <Compile Include="Data\Migrations\202606070341212_InitialCreate.Designer.cs">
       <DependentUpon>202606070341212_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Migrations\202606070835419_AddContentApproval.cs" />
+    <Compile Include="Data\Migrations\202606070835419_AddContentApproval.Designer.cs">
+      <DependentUpon>202606070835419_AddContentApproval.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\BookingModel.cs" />
@@ -196,6 +201,9 @@
     <None Include="App.config" />
     <EmbeddedResource Include="Data\Migrations\202606070341212_InitialCreate.resx">
       <DependentUpon>202606070341212_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Migrations\202606070835419_AddContentApproval.resx">
+      <DependentUpon>202606070835419_AddContentApproval.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

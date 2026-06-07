@@ -59,6 +59,10 @@ namespace TravelApp.Data
             destination.Property(x => x.Description).IsOptional().HasMaxLength(2000);
             destination.Property(x => x.ImageUrl).IsOptional().HasMaxLength(500);
             destination.Property(x => x.AverageRating).HasPrecision(3, 2);
+            destination.HasOptional(x => x.CreatedByGuide)
+                .WithMany(x => x.CreatedDestinations)
+                .HasForeignKey(x => x.CreatedByGuideId)
+                .WillCascadeOnDelete(false);
         }
 
         private static void ConfigureHotels(DbModelBuilder modelBuilder)
@@ -75,6 +79,10 @@ namespace TravelApp.Data
             hotel.HasRequired(x => x.Destination)
                 .WithMany(x => x.Hotels)
                 .HasForeignKey(x => x.DestinationId)
+                .WillCascadeOnDelete(false);
+            hotel.HasOptional(x => x.CreatedByGuide)
+                .WithMany(x => x.CreatedHotels)
+                .HasForeignKey(x => x.CreatedByGuideId)
                 .WillCascadeOnDelete(false);
         }
 

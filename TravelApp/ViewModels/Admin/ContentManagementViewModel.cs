@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using TravelApp.Data.Repositories;
 using TravelApp.Models;
+using TravelApp.Models.Enums;
 
 namespace TravelApp.ViewModels.Admin
 {
@@ -110,7 +111,8 @@ namespace TravelApp.ViewModels.Admin
                 Country = DestinationCountry.Trim(),
                 Description = DestinationDescription?.Trim(),
                 ImageUrl = DestinationImageUrl?.Trim(),
-                AverageRating = DestinationRating
+                AverageRating = DestinationRating,
+                ApprovalStatus = ContentApprovalStatus.Approved
             };
 
             IsLoading = true;
@@ -159,6 +161,22 @@ namespace TravelApp.ViewModels.Admin
 
             await RefreshDataAsync();
             SuccessMessage = "Xóa điểm đến thành công.";
+        }
+
+        [RelayCommand]
+        private Task ApproveDestinationAsync(DestinationModel destination)
+        {
+            return SetDestinationApprovalAsync(
+                destination,
+                ContentApprovalStatus.Approved);
+        }
+
+        [RelayCommand]
+        private Task RejectDestinationAsync(DestinationModel destination)
+        {
+            return SetDestinationApprovalAsync(
+                destination,
+                ContentApprovalStatus.Rejected);
         }
 
         [RelayCommand]
@@ -232,7 +250,8 @@ namespace TravelApp.ViewModels.Admin
                 Description = HotelDescription?.Trim(),
                 PricePerNight = HotelPricePerNight,
                 Rating = HotelRating,
-                ImageUrl = HotelImageUrl?.Trim()
+                ImageUrl = HotelImageUrl?.Trim(),
+                ApprovalStatus = ContentApprovalStatus.Approved
             };
 
             IsLoading = true;
@@ -283,6 +302,18 @@ namespace TravelApp.ViewModels.Admin
         }
 
         [RelayCommand]
+        private Task ApproveHotelAsync(HotelModel hotel)
+        {
+            return SetHotelApprovalAsync(hotel, ContentApprovalStatus.Approved);
+        }
+
+        [RelayCommand]
+        private Task RejectHotelAsync(HotelModel hotel)
+        {
+            return SetHotelApprovalAsync(hotel, ContentApprovalStatus.Rejected);
+        }
+
+        [RelayCommand]
         private void CancelHotelEdit()
         {
             IsHotelEditorOpen = false;
@@ -310,6 +341,78 @@ namespace TravelApp.ViewModels.Admin
             {
                 ErrorMessage = "Không thể tải dữ liệu nội dung: " +
                     ex.GetBaseException().Message;
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private async Task SetDestinationApprovalAsync(
+            DestinationModel destination,
+            ContentApprovalStatus status)
+        {
+            if (destination == null)
+            {
+                return;
+            }
+
+            ClearMessages();
+            IsLoading = true;
+            try
+            {
+                var updated = await _contentRepository
+                    .UpdateDestinationApprovalAsync(destination.Id, status);
+                if (!updated)
+                {
+                    ErrorMessage = "Không thể cập nhật trạng thái duyệt.";
+                    return;
+                }
+
+                await RefreshDataAsync();
+                SuccessMessage = status == ContentApprovalStatus.Approved
+                    ? "Đã duyệt điểm đến."
+                    : "Đã từ chối điểm đến.";
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.GetBaseException().Message;
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private async Task SetHotelApprovalAsync(
+            HotelModel hotel,
+            ContentApprovalStatus status)
+        {
+            if (hotel == null)
+            {
+                return;
+            }
+
+            ClearMessages();
+            IsLoading = true;
+            try
+            {
+                var updated = await _contentRepository
+                    .UpdateHotelApprovalAsync(hotel.Id, status);
+                if (!updated)
+                {
+                    ErrorMessage = "Không thể cập nhật trạng thái duyệt.";
+                    return;
+                }
+
+                await RefreshDataAsync();
+                SuccessMessage = status == ContentApprovalStatus.Approved
+                    ? "Đã duyệt khách sạn."
+                    : "Đã từ chối khách sạn.";
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.GetBaseException().Message;
             }
             finally
             {

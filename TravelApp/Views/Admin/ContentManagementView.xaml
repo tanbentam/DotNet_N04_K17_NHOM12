@@ -46,7 +46,9 @@
                                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                                 <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="150"/>
                                 <DataGridTextColumn Header="Rating" Binding="{Binding AverageRating}" Width="80"/>
-                                <DataGridTemplateColumn Header="Actions" Width="135">
+                                <DataGridTextColumn Header="Created by" Binding="{Binding CreatedByGuide.FullName}" Width="130"/>
+                                <DataGridTextColumn Header="Status" Binding="{Binding ApprovalStatus}" Width="90"/>
+                                <DataGridTemplateColumn Header="Actions" Width="260">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
@@ -55,6 +57,16 @@
                                                         CommandParameter="{Binding}"
                                                         Style="{StaticResource MaterialDesignFlatButton}"
                                                         Padding="0"/>
+                                                <Button Content="Approve"
+                                                        Command="{Binding DataContext.ApproveDestinationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                                        Foreground="Green" Padding="0" Margin="8,0,0,0"/>
+                                                <Button Content="Reject"
+                                                        Command="{Binding DataContext.RejectDestinationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                                        Foreground="DarkOrange" Padding="0" Margin="8,0,0,0"/>
                                                 <Button Content="Delete"
                                                         Command="{Binding DataContext.DeleteDestinationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                         CommandParameter="{Binding}"
@@ -137,7 +149,9 @@
                                 <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
                                 <DataGridTextColumn Header="Price/Night" Binding="{Binding PricePerNight}" Width="100"/>
                                 <DataGridTextColumn Header="Rating" Binding="{Binding Rating}" Width="70"/>
-                                <DataGridTemplateColumn Header="Actions" Width="135">
+                                <DataGridTextColumn Header="Created by" Binding="{Binding CreatedByGuide.FullName}" Width="130"/>
+                                <DataGridTextColumn Header="Status" Binding="{Binding ApprovalStatus}" Width="90"/>
+                                <DataGridTemplateColumn Header="Actions" Width="260">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
@@ -146,6 +160,16 @@
                                                         CommandParameter="{Binding}"
                                                         Style="{StaticResource MaterialDesignFlatButton}"
                                                         Padding="0"/>
+                                                <Button Content="Approve"
+                                                        Command="{Binding DataContext.ApproveHotelCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                                        Foreground="Green" Padding="0" Margin="8,0,0,0"/>
+                                                <Button Content="Reject"
+                                                        Command="{Binding DataContext.RejectHotelCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                                        Foreground="DarkOrange" Padding="0" Margin="8,0,0,0"/>
                                                 <Button Content="Delete"
                                                         Command="{Binding DataContext.DeleteHotelCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                         CommandParameter="{Binding}"

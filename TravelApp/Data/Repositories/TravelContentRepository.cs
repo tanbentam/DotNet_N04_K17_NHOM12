@@ -4,6 +4,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelApp.Models;
+using TravelApp.Models.Enums;
 
 namespace TravelApp.Data.Repositories
 {
@@ -15,6 +16,7 @@ namespace TravelApp.Data.Repositories
             {
                 return await context.Destinations
                     .AsNoTracking()
+                    .Include(destination => destination.CreatedByGuide)
                     .OrderBy(destination => destination.Name)
                     .ToListAsync();
             }
@@ -27,6 +29,7 @@ namespace TravelApp.Data.Repositories
                 return await context.Hotels
                     .AsNoTracking()
                     .Include(hotel => hotel.Destination)
+                    .Include(hotel => hotel.CreatedByGuide)
                     .OrderBy(hotel => hotel.Name)
                     .ToListAsync();
             }
@@ -132,6 +135,23 @@ namespace TravelApp.Data.Repositories
             }
         }
 
+        public async Task<bool> UpdateDestinationApprovalAsync(
+            int destinationId,
+            ContentApprovalStatus status)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var destination = await context.Destinations.FindAsync(destinationId);
+                if (destination == null)
+                {
+                    return false;
+                }
+
+                destination.ApprovalStatus = status;
+                return await SaveChangesAsync(context);
+            }
+        }
+
         public async Task<bool> UpdateHotelAsync(HotelModel hotel)
         {
             if (hotel == null || hotel.Id <= 0)
@@ -193,6 +213,23 @@ namespace TravelApp.Data.Repositories
             catch (DbUpdateException)
             {
                 return false;
+            }
+        }
+
+        public async Task<bool> UpdateHotelApprovalAsync(
+            int hotelId,
+            ContentApprovalStatus status)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var hotel = await context.Hotels.FindAsync(hotelId);
+                if (hotel == null)
+                {
+                    return false;
+                }
+
+                hotel.ApprovalStatus = status;
+                return await SaveChangesAsync(context);
             }
         }
     }
