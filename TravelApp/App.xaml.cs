@@ -7,8 +7,12 @@ using TravelApp.Services.Contracts;
 using TravelApp.ViewModels;
 using TravelApp.ViewModels.Admin;
 using TravelApp.ViewModels.Authentication;
+using TravelApp.ViewModels.TourGuide;
+using TravelApp.ViewModels.User;
 using TravelApp.Views.Admin;
 using TravelApp.Views.Authentication;
+using TravelApp.Views.TourGuide;
+using TravelApp.Views.User;
 
 namespace TravelApp
 {
@@ -36,10 +40,17 @@ namespace TravelApp
             services.AddTransient<AccountManagementView>();
             services.AddTransient<ContentManagementView>();
             services.AddTransient<IAuthService, AuthService>();
+            services.AddSingleton<IRoleNavigationService, RoleNavigationService>();
             services.AddTransient<LoginViewModel>();
             services.AddTransient<RegisterViewModel>();
             services.AddTransient<LoginView>();
             services.AddTransient<RegisterView>();
+            services.AddTransient<AdminDashboardViewModel>();
+            services.AddTransient<GuideDashboardViewModel>();
+            services.AddTransient<UserDashboardViewModel>();
+            services.AddTransient<AdminDashboardView>();
+            services.AddTransient<GuideDashboardView>();
+            services.AddTransient<UserDashboardView>();
             services.AddTransient<MainWindow>();
 
             return services.BuildServiceProvider();

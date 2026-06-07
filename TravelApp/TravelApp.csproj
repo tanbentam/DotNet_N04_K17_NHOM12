@@ -78,7 +78,9 @@
     <Compile Include="Models\DestinationModel.cs" />
     <Compile Include="Models\Enums\RoleType.cs" />
     <Compile Include="Services\Contracts\IAuthService.cs" />
+    <Compile Include="Services\Contracts\IRoleNavigationService.cs" />
     <Compile Include="Services\AuthService.cs" />
+    <Compile Include="Services\RoleNavigationService.cs" />
     <Compile Include="Services\BookingService.cs" />
     <Compile Include="Services\DatabaseConnectionService.cs" />
     <Compile Include="Utils\PasswordHelper.cs" />

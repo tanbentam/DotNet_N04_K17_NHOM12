@@ -74,7 +74,7 @@ Ký hiệu:
 - [x] Thay mock `admin/admin` bằng truy vấn database
 - [x] Lưu tài khoản đăng ký vào database
 - [x] Thay SHA-256 bằng password hashing có salt như PBKDF2, bcrypt hoặc Argon2
-- [ ] Điều hướng tự động theo role sau khi đăng nhập
+- [x] Điều hướng tự động theo role sau khi đăng nhập
 - [ ] Quản lý phiên đăng nhập và logout
 
 ## 6. Admin Features

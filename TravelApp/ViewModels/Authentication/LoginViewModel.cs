@@ -9,6 +9,7 @@ namespace TravelApp.ViewModels.Authentication
     public partial class LoginViewModel : ObservableObject
     {
         private readonly IAuthService _authService;
+        private readonly IRoleNavigationService _navigationService;
 
         [ObservableProperty]
         private string _identifier;
@@ -22,9 +23,12 @@ namespace TravelApp.ViewModels.Authentication
         [ObservableProperty]
         private bool _isBusy;
 
-        public LoginViewModel(IAuthService authService)
+        public LoginViewModel(
+            IAuthService authService,
+            IRoleNavigationService navigationService)
         {
             _authService = authService;
+            _navigationService = navigationService;
         }
 
         [RelayCommand]
@@ -44,8 +48,8 @@ namespace TravelApp.ViewModels.Authentication
                 var user = await _authService.LoginAsync(Identifier, Password);
                 if (user != null)
                 {
-                    // Logic điều hướng (Navigation) sẽ được triển khai thông qua Strategy Pattern sau
-                    // Điều hướng sang Dashboard tương ứng dựa trên user.Role
+                    Password = string.Empty;
+                    _navigationService.NavigateToDashboard(user);
                 }
                 else
                 {

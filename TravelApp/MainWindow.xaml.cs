@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using TravelApp.Services;
+using TravelApp.Services.Contracts;
 using TravelApp.Services.Logging;
 using TravelApp.Views.Admin;
 using TravelApp.Views.Authentication;
@@ -16,16 +17,21 @@ namespace TravelApp
     {
         private readonly DatabaseConnectionService _databaseConnectionService;
         private readonly IServiceProvider _services;
+        private readonly IRoleNavigationService _roleNavigationService;
 
         public MainWindow(
             DatabaseConnectionService databaseConnectionService,
-            IServiceProvider services)
+            IServiceProvider services,
+            IRoleNavigationService roleNavigationService)
         {
             _databaseConnectionService = databaseConnectionService;
             _services = services;
+            _roleNavigationService = roleNavigationService;
             InitializeComponent();
             ShowHome();
             Loaded += MainWindow_Loaded;
+            Closed += MainWindow_Closed;
+            _roleNavigationService.DashboardRequested += ShowDashboardForUser;
         }
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -58,9 +64,15 @@ namespace TravelApp
                 case "register": ShowView(
                     "Register",
                     _services.GetRequiredService<RegisterView>()); break;
-                case "user": ShowView("User Dashboard", new UserDashboardView()); break;
-                case "guide": ShowView("Tour Guide Dashboard", new GuideDashboardView()); break;
-                case "admin": ShowView("Admin Dashboard", new AdminDashboardView()); break;
+                case "user": ShowView(
+                    "User Dashboard",
+                    _services.GetRequiredService<UserDashboardView>()); break;
+                case "guide": ShowView(
+                    "Tour Guide Dashboard",
+                    _services.GetRequiredService<GuideDashboardView>()); break;
+                case "admin": ShowView(
+                    "Admin Dashboard",
+                    _services.GetRequiredService<AdminDashboardView>()); break;
                 case "accounts": ShowView(
                     "Account Management",
                     _services.GetRequiredService<AccountManagementView>()); break;
@@ -69,6 +81,36 @@ namespace TravelApp
                     _services.GetRequiredService<ContentManagementView>()); break;
                 default: ShowHome(); break;
             }
+        }
+
+        private void ShowDashboardForUser(Models.UserModel user)
+        {
+            switch (user.Role)
+            {
+                case Models.Enums.RoleType.Admin:
+                    ShowView(
+                        "Admin Dashboard",
+                        _services.GetRequiredService<AdminDashboardView>());
+                    break;
+                case Models.Enums.RoleType.TourGuide:
+                    ShowView(
+                        "Tour Guide Dashboard",
+                        _services.GetRequiredService<GuideDashboardView>());
+                    break;
+                case Models.Enums.RoleType.User:
+                    ShowView(
+                        "User Dashboard",
+                        _services.GetRequiredService<UserDashboardView>());
+                    break;
+                default:
+                    throw new InvalidOperationException(
+                        $"Unsupported user role: {user.Role}");
+            }
+        }
+
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            _roleNavigationService.DashboardRequested -= ShowDashboardForUser;
         }
 
         private void ShowView(string title, UserControl view)
