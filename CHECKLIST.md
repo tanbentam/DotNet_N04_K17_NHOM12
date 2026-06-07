@@ -57,8 +57,8 @@ Ký hiệu:
 - [x] Tạo enums cho Role và Booking Status
 - [x] Cấu hình connection string MySQL
 - [x] Kiểm tra và hiển thị trạng thái kết nối database khi application khởi động
-- [ ] Cập nhật MySQL credentials hợp lệ để startup check trả về `Database connected`
-- [ ] Hoàn thiện mapping, relationships và constraints cho models
+- [x] Cập nhật MySQL credentials hợp lệ để startup check trả về `Database connected`
+- [x] Hoàn thiện mapping, relationships và constraints cho models
 - [ ] Tạo EF6 migrations ban đầu
 - [ ] Tạo hoặc cập nhật schema MySQL bằng migrations
 - [ ] Tách repository/data service khỏi ViewModels
