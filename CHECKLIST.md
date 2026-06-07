@@ -62,7 +62,7 @@ Ký hiệu:
 - [x] Tạo EF6 migrations ban đầu
 - [x] Tạo hoặc cập nhật schema MySQL bằng migrations
 - [x] Tách repository/data service khỏi ViewModels
-- [ ] Giữ data access trong thư mục `Data` và `Services` của cùng project
+- [x] Giữ data access trong thư mục `Data` và `Services` của cùng project
 
 ## 5. Authentication And Roles
 
