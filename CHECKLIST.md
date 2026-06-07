@@ -71,7 +71,7 @@ Ký hiệu:
 - [x] Tạo validation email và số điện thoại
 - [x] Tạo role navigation strategy cho Admin, Guide và User
 - [x] Kết nối form Login/Register với DI và `AuthService`
-- [ ] Thay mock `admin/admin` bằng truy vấn database
+- [x] Thay mock `admin/admin` bằng truy vấn database
 - [ ] Lưu tài khoản đăng ký vào database
 - [ ] Thay SHA-256 bằng password hashing có salt như PBKDF2, bcrypt hoặc Argon2
 - [ ] Điều hướng tự động theo role sau khi đăng nhập

@@ -19,6 +19,25 @@ namespace TravelApp.Data.Repositories
             }
         }
 
+        public async Task<UserModel> FindByIdentifierAsync(string emailOrPhone)
+        {
+            if (string.IsNullOrWhiteSpace(emailOrPhone))
+            {
+                return null;
+            }
+
+            var identifier = emailOrPhone.Trim();
+
+            using (var context = new ApplicationDbContext())
+            {
+                return await context.Users
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(user =>
+                        user.Email == identifier ||
+                        user.Phone == identifier);
+            }
+        }
+
         public async Task<bool> DeleteAsync(int userId)
         {
             using (var context = new ApplicationDbContext())

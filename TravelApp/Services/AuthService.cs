@@ -1,35 +1,42 @@
-using System;
 using System.Threading.Tasks;
+using TravelApp.Data.Repositories;
 using TravelApp.Models;
 using TravelApp.Services.Contracts;
+using TravelApp.Utils;
 
 namespace TravelApp.Services
 {
     public class AuthService : IAuthService
     {
-        public UserModel Authenticate(string emailOrPhone, string password)
+        private readonly IUserRepository _userRepository;
+
+        public AuthService(IUserRepository userRepository)
         {
-            // TODO: implement real authentication (hashing, DB lookup)
-            if (emailOrPhone == "admin" && password == "admin")
-            {
-                return new UserModel { Id = 1, Email = "admin", FullName = "Administrator" };
-            }
-            return null;
+            _userRepository = userRepository;
         }
 
         public async Task<UserModel> LoginAsync(string emailOrPhone, string password)
         {
-            return await Task.Run(() => Authenticate(emailOrPhone, password));
+            if (string.IsNullOrWhiteSpace(emailOrPhone) ||
+                string.IsNullOrWhiteSpace(password))
+            {
+                return null;
+            }
+
+            var user = await _userRepository.FindByIdentifierAsync(emailOrPhone);
+            if (user == null ||
+                !PasswordHelper.VerifyPassword(password, user.PasswordHash))
+            {
+                return null;
+            }
+
+            return user;
         }
 
-        public async Task<bool> RegisterAsync(UserModel user, string password)
+        public Task<bool> RegisterAsync(UserModel user, string password)
         {
-            // TODO: implement real registration with DB
-            return await Task.Run(() =>
-            {
-                // Placeholder for registration logic
-                return true;
-            });
+            // Persisting registrations is implemented in the next checklist item.
+            return Task.FromResult(true);
         }
     }
 }

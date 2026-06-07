@@ -7,6 +7,7 @@ namespace TravelApp.Data.Repositories
     public interface IUserRepository
     {
         Task<IReadOnlyList<UserModel>> GetAllAsync();
+        Task<UserModel> FindByIdentifierAsync(string emailOrPhone);
         Task<bool> DeleteAsync(int userId);
     }
 }
