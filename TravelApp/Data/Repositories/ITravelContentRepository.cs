@@ -9,5 +9,11 @@ namespace TravelApp.Data.Repositories
         Task<IReadOnlyList<DestinationModel>> GetDestinationsAsync();
         Task<IReadOnlyList<HotelModel>> GetHotelsAsync();
         Task<IReadOnlyList<BookingModel>> GetBookingsAsync();
+        Task<bool> CreateDestinationAsync(DestinationModel destination);
+        Task<bool> UpdateDestinationAsync(DestinationModel destination);
+        Task<bool> DeleteDestinationAsync(int destinationId);
+        Task<bool> CreateHotelAsync(HotelModel hotel);
+        Task<bool> UpdateHotelAsync(HotelModel hotel);
+        Task<bool> DeleteHotelAsync(int hotelId);
     }
 }

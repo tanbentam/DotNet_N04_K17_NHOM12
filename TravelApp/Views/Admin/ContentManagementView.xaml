@@ -2,30 +2,233 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <Grid>
-        <TabControl Style="{StaticResource MaterialDesignNavigationRailTabControl}">
-            <TabItem Header="Điểm Đến">
-                <Grid Margin="16">
-                    <TextBlock Text="Khu vực quản lý Điểm đến Du lịch (Đang cập nhật...)" FontSize="16"/>
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+            <ProgressBar IsIndeterminate="True" Height="4"
+                         Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red"
+                       TextWrapping="Wrap"
+                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+            <TextBlock Text="{Binding SuccessMessage}" Foreground="Green"
+                       TextWrapping="Wrap"
+                       Visibility="{Binding SuccessMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+        </StackPanel>
+
+        <TabControl Grid.Row="1" Style="{StaticResource MaterialDesignTabControl}">
+            <TabItem Header="DESTINATIONS">
+                <Grid Margin="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <DockPanel Grid.Column="0">
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal"
+                                    Margin="0,0,0,12">
+                            <Button Content="+ Create Destination"
+                                    Command="{Binding CreateDestinationCommand}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Margin="0,0,8,0"/>
+                            <Button Content="Refresh"
+                                    Command="{Binding LoadContentDataCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                        </StackPanel>
+
+                        <DataGrid ItemsSource="{Binding Destinations}"
+                                  AutoGenerateColumns="False" CanUserAddRows="False"
+                                  materialDesign:DataGridAssist.CellPadding="10">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="150"/>
+                                <DataGridTextColumn Header="Rating" Binding="{Binding AverageRating}" Width="80"/>
+                                <DataGridTemplateColumn Header="Actions" Width="135">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="Edit"
+                                                        Command="{Binding DataContext.EditDestinationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                                        Padding="0"/>
+                                                <Button Content="Delete"
+                                                        Command="{Binding DataContext.DeleteDestinationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                                        Foreground="Red" Padding="0" Margin="8,0,0,0"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+
+                    <materialDesign:Card Grid.Column="1" Width="330" Padding="20"
+                                         Margin="20,0,0,0" VerticalAlignment="Top"
+                                         Visibility="{Binding IsDestinationEditorOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding DestinationFormTitle}"
+                                       FontSize="20" FontWeight="SemiBold"
+                                       Margin="0,0,0,16"/>
+                            <TextBox Text="{Binding DestinationName, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Name"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,0,10"/>
+                            <TextBox Text="{Binding DestinationCountry, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Country"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,0,10"/>
+                            <TextBox Text="{Binding DestinationDescription, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Description"
+                                     AcceptsReturn="True" Height="70"
+                                     TextWrapping="Wrap" Margin="0,0,0,10"/>
+                            <TextBox Text="{Binding DestinationImageUrl, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Image URL"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,0,10"/>
+                            <TextBox Text="{Binding DestinationRating, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Rating (0 - 9.99)"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,0,16"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="Cancel"
+                                        Command="{Binding CancelDestinationEditCommand}"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        Margin="0,0,8,0"/>
+                                <Button Content="Save"
+                                        Command="{Binding SaveDestinationCommand}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </materialDesign:Card>
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Khách Sạn">
-                <Grid Margin="16">
-                    <TextBlock Text="Khu vực quản lý và phê duyệt Khách sạn (Đang cập nhật...)" FontSize="16"/>
+            <TabItem Header="HOTELS">
+                <Grid Margin="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <DockPanel Grid.Column="0">
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal"
+                                    Margin="0,0,0,12">
+                            <Button Content="+ Create Hotel"
+                                    Command="{Binding CreateHotelCommand}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Margin="0,0,8,0"/>
+                            <Button Content="Refresh"
+                                    Command="{Binding LoadContentDataCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                        </StackPanel>
+
+                        <DataGrid ItemsSource="{Binding Hotels}"
+                                  AutoGenerateColumns="False" CanUserAddRows="False"
+                                  materialDesign:DataGridAssist.CellPadding="10">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                <DataGridTextColumn Header="Destination" Binding="{Binding Destination.Name}" Width="150"/>
+                                <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
+                                <DataGridTextColumn Header="Price/Night" Binding="{Binding PricePerNight}" Width="100"/>
+                                <DataGridTextColumn Header="Rating" Binding="{Binding Rating}" Width="70"/>
+                                <DataGridTemplateColumn Header="Actions" Width="135">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="Edit"
+                                                        Command="{Binding DataContext.EditHotelCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                                        Padding="0"/>
+                                                <Button Content="Delete"
+                                                        Command="{Binding DataContext.DeleteHotelCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                                        Foreground="Red" Padding="0" Margin="8,0,0,0"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+
+                    <materialDesign:Card Grid.Column="1" Width="350" Padding="20"
+                                         Margin="20,0,0,0" VerticalAlignment="Top"
+                                         Visibility="{Binding IsHotelEditorOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding HotelFormTitle}"
+                                       FontSize="20" FontWeight="SemiBold"
+                                       Margin="0,0,0,16"/>
+                            <ComboBox ItemsSource="{Binding Destinations}"
+                                      DisplayMemberPath="Name"
+                                      SelectedValuePath="Id"
+                                      SelectedValue="{Binding HotelDestinationId}"
+                                      materialDesign:HintAssist.Hint="Destination"
+                                      Margin="0,0,0,10"/>
+                            <TextBox Text="{Binding HotelName, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Name"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,0,10"/>
+                            <TextBox Text="{Binding HotelAddress, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Address"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,0,10"/>
+                            <TextBox Text="{Binding HotelDescription, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Description"
+                                     AcceptsReturn="True" Height="60"
+                                     TextWrapping="Wrap" Margin="0,0,0,10"/>
+                            <TextBox Text="{Binding HotelPricePerNight, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Price per night"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,0,10"/>
+                            <TextBox Text="{Binding HotelRating, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Rating (0 - 5)"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,0,10"/>
+                            <TextBox Text="{Binding HotelImageUrl, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Image URL"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,0,16"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="Cancel"
+                                        Command="{Binding CancelHotelEditCommand}"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        Margin="0,0,8,0"/>
+                                <Button Content="Save"
+                                        Command="{Binding SaveHotelCommand}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </materialDesign:Card>
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Lịch Trình Guide">
+            <TabItem Header="GUIDE SCHEDULES">
                 <Grid Margin="16">
-                    <TextBlock Text="Quản lý lịch rảnh hàng tuần (Thứ 2 - Chủ Nhật) của Guides (Đang cập nhật...)" FontSize="16"/>
+                    <TextBlock Text="Guide schedule management is implemented in the Guide module."
+                               FontSize="16"/>
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Đơn Đặt Tour">
-                <Grid Margin="16">
-                    <TextBlock Text="Theo dõi toàn bộ đơn Booking của Users (Đang cập nhật...)" FontSize="16"/>
-                </Grid>
+            <TabItem Header="BOOKINGS">
+                <DataGrid Margin="12" ItemsSource="{Binding Bookings}"
+                          AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Booking ID" Binding="{Binding BookingId}" Width="130"/>
+                        <DataGridTextColumn Header="User" Binding="{Binding User.FullName}" Width="*"/>
+                        <DataGridTextColumn Header="Guide" Binding="{Binding Guide.FullName}" Width="*"/>
+                        <DataGridTextColumn Header="Destination" Binding="{Binding Destination.Name}" Width="*"/>
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="100"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
         </TabControl>
     </Grid>
