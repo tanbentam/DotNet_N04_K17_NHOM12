@@ -1,11 +1,16 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using TravelApp.Data.Repositories;
 using TravelApp.Models;
 
 namespace TravelApp.ViewModels.Admin
 {
     public partial class ContentManagementViewModel : ObservableObject
     {
+        private readonly ITravelContentRepository _contentRepository;
+
         [ObservableProperty]
         private ObservableCollection<DestinationModel> _destinations;
 
@@ -15,23 +20,50 @@ namespace TravelApp.ViewModels.Admin
         [ObservableProperty]
         private ObservableCollection<BookingModel> _bookings;
 
-        public ContentManagementViewModel()
+        [ObservableProperty]
+        private bool _isLoading;
+
+        [ObservableProperty]
+        private string _errorMessage;
+
+        public ContentManagementViewModel(ITravelContentRepository contentRepository)
         {
+            _contentRepository = contentRepository;
             Destinations = new ObservableCollection<DestinationModel>();
             Hotels = new ObservableCollection<HotelModel>();
             Bookings = new ObservableCollection<BookingModel>();
 
-            LoadContentData();
+            LoadContentDataAsync();
         }
 
-        private void LoadContentData()
+        private async void LoadContentDataAsync()
         {
-            // [BACKEND DEVELOPER NOTE] 
-            // Cần tạo các API GET endpoints để Admin có thể lấy:
-            // 1. Toàn bộ danh sách điểm đến 
-            // 2. Toàn bộ thông tin khách sạn cần phê duyệt/quản lý 
-            // 3. Toàn bộ đơn booking của hệ thống 
-            // 4. Lịch trình khả dụng của các Guide (Thứ 2 - Chủ Nhật) 
+            IsLoading = true;
+            ErrorMessage = string.Empty;
+
+            try
+            {
+                var destinationsTask = _contentRepository.GetDestinationsAsync();
+                var hotelsTask = _contentRepository.GetHotelsAsync();
+                var bookingsTask = _contentRepository.GetBookingsAsync();
+
+                await Task.WhenAll(destinationsTask, hotelsTask, bookingsTask);
+
+                Destinations = new ObservableCollection<DestinationModel>(
+                    await destinationsTask);
+                Hotels = new ObservableCollection<HotelModel>(
+                    await hotelsTask);
+                Bookings = new ObservableCollection<BookingModel>(
+                    await bookingsTask);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.GetBaseException().Message;
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 }

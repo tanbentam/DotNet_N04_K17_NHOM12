@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
+using TravelApp.Data.Repositories;
 using TravelApp.Services;
 using TravelApp.ViewModels;
+using TravelApp.ViewModels.Admin;
+using TravelApp.Views.Admin;
 
 namespace TravelApp
 {
@@ -23,6 +26,13 @@ namespace TravelApp
             // Đăng ký ViewModels
             services.AddTransient<MainViewModel>();
             services.AddSingleton<DatabaseConnectionService>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ITravelContentRepository, TravelContentRepository>();
+            services.AddTransient<AccountManagementViewModel>();
+            services.AddTransient<ContentManagementViewModel>();
+            services.AddTransient<AccountManagementView>();
+            services.AddTransient<ContentManagementView>();
+            services.AddTransient<MainWindow>();
 
             // Đăng ký Services (Sẽ thêm vào ở các phần sau)
             // services.AddSingleton<IAuthService, AuthService>();
@@ -33,8 +43,7 @@ namespace TravelApp
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             // Khởi chạy MainWindow
-            var mainWindow = new MainWindow(
-                Services.GetRequiredService<DatabaseConnectionService>());
+            var mainWindow = Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }
     }

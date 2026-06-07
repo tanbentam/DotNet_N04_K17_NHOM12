@@ -63,6 +63,10 @@
     <!-- Moved shared Contracts/Models into TravelApp.Common project -->
     <Compile Include="Models\Enums\BookingStatus.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
+    <Compile Include="Data\Repositories\ITravelContentRepository.cs" />
+    <Compile Include="Data\Repositories\IUserRepository.cs" />
+    <Compile Include="Data\Repositories\TravelContentRepository.cs" />
+    <Compile Include="Data\Repositories\UserRepository.cs" />
     <Compile Include="Data\Migrations\Configuration.cs" />
     <Compile Include="Data\Migrations\202606070341212_InitialCreate.cs" />
     <Compile Include="Data\Migrations\202606070341212_InitialCreate.Designer.cs">

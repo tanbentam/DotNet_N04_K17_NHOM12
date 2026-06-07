@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,10 +15,14 @@ namespace TravelApp
     public partial class MainWindow : Window
     {
         private readonly DatabaseConnectionService _databaseConnectionService;
+        private readonly IServiceProvider _services;
 
-        public MainWindow(DatabaseConnectionService databaseConnectionService)
+        public MainWindow(
+            DatabaseConnectionService databaseConnectionService,
+            IServiceProvider services)
         {
             _databaseConnectionService = databaseConnectionService;
+            _services = services;
             InitializeComponent();
             ShowHome();
             Loaded += MainWindow_Loaded;
@@ -52,8 +57,12 @@ namespace TravelApp
                 case "user": ShowView("User Dashboard", new UserDashboardView()); break;
                 case "guide": ShowView("Tour Guide Dashboard", new GuideDashboardView()); break;
                 case "admin": ShowView("Admin Dashboard", new AdminDashboardView()); break;
-                case "accounts": ShowView("Account Management", new AccountManagementView()); break;
-                case "content": ShowView("Content Management", new ContentManagementView()); break;
+                case "accounts": ShowView(
+                    "Account Management",
+                    _services.GetRequiredService<AccountManagementView>()); break;
+                case "content": ShowView(
+                    "Content Management",
+                    _services.GetRequiredService<ContentManagementView>()); break;
                 default: ShowHome(); break;
             }
         }
