@@ -50,6 +50,23 @@ namespace TravelApp.Data.Repositories
             }
         }
 
+        public async Task<bool> UpdateBookingStatusAsync(
+            int bookingId,
+            BookingStatus status)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var booking = await context.Bookings.FindAsync(bookingId);
+                if (booking == null)
+                {
+                    return false;
+                }
+
+                booking.Status = status;
+                return await SaveChangesAsync(context);
+            }
+        }
+
         public async Task<bool> CreateDestinationAsync(
             DestinationModel destination)
         {

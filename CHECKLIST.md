@@ -86,7 +86,7 @@ Ký hiệu:
 - [x] Tạo, sửa và xóa User/Guide trong database
 - [x] Quản lý Destination và Hotel
 - [x] Duyệt Hotel và nội dung do Guide tạo
-- [ ] Theo dõi và quản lý Booking
+- [x] Theo dõi và quản lý Booking
 
 ## 7. Guide Features
 

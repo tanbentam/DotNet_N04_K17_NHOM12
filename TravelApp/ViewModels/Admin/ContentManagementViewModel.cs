@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using TravelApp.Data.Repositories;
@@ -16,6 +17,8 @@ namespace TravelApp.ViewModels.Admin
         [ObservableProperty] private ObservableCollection<DestinationModel> _destinations;
         [ObservableProperty] private ObservableCollection<HotelModel> _hotels;
         [ObservableProperty] private ObservableCollection<BookingModel> _bookings;
+        [ObservableProperty] private BookingModel _selectedBooking;
+        [ObservableProperty] private BookingStatus _selectedBookingStatus;
         [ObservableProperty] private bool _isLoading;
         [ObservableProperty] private string _errorMessage;
         [ObservableProperty] private string _successMessage;
@@ -41,6 +44,9 @@ namespace TravelApp.ViewModels.Admin
         [ObservableProperty] private decimal _hotelPricePerNight;
         [ObservableProperty] private int _hotelRating;
         [ObservableProperty] private string _hotelImageUrl;
+
+        public IReadOnlyList<BookingStatus> BookingStatuses { get; } =
+            (BookingStatus[])Enum.GetValues(typeof(BookingStatus));
 
         public ContentManagementViewModel(
             ITravelContentRepository contentRepository)
@@ -320,6 +326,61 @@ namespace TravelApp.ViewModels.Admin
             ClearMessages();
         }
 
+        partial void OnSelectedBookingChanged(BookingModel value)
+        {
+            if (value != null)
+            {
+                SelectedBookingStatus = value.Status;
+            }
+        }
+
+        [RelayCommand]
+        private async Task SaveBookingStatusAsync()
+        {
+            ClearMessages();
+            if (SelectedBooking == null)
+            {
+                ErrorMessage = "Hãy chọn một booking cần quản lý.";
+                return;
+            }
+
+            if (!CanChangeBookingStatus(
+                SelectedBooking.Status,
+                SelectedBookingStatus))
+            {
+                ErrorMessage =
+                    "Không thể chuyển booking từ trạng thái hiện tại sang trạng thái đã chọn.";
+                return;
+            }
+
+            IsLoading = true;
+            try
+            {
+                var updated = await _contentRepository.UpdateBookingStatusAsync(
+                    SelectedBooking.Id,
+                    SelectedBookingStatus);
+                if (!updated)
+                {
+                    ErrorMessage = "Không thể cập nhật trạng thái booking.";
+                    return;
+                }
+
+                var bookingCode = SelectedBooking.BookingId;
+                await RefreshDataAsync();
+                SelectedBooking = null;
+                SuccessMessage =
+                    "Đã cập nhật booking " + bookingCode + " thành công.";
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.GetBaseException().Message;
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
         private async Task RefreshDataAsync()
         {
             IsLoading = true;
@@ -436,6 +497,32 @@ namespace TravelApp.ViewModels.Admin
             }
 
             return true;
+        }
+
+        private static bool CanChangeBookingStatus(
+            BookingStatus current,
+            BookingStatus next)
+        {
+            if (current == next)
+            {
+                return true;
+            }
+
+            switch (current)
+            {
+                case BookingStatus.Pending:
+                    return next == BookingStatus.Accepted ||
+                        next == BookingStatus.Rejected ||
+                        next == BookingStatus.Cancelled;
+                case BookingStatus.Accepted:
+                    return next == BookingStatus.Paid ||
+                        next == BookingStatus.Cancelled;
+                case BookingStatus.Paid:
+                    return next == BookingStatus.Completed ||
+                        next == BookingStatus.Cancelled;
+                default:
+                    return false;
+            }
         }
 
         private bool ValidateHotel()

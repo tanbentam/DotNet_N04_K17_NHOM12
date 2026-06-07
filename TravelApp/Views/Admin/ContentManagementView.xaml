@@ -242,17 +242,60 @@
             </TabItem>
 
             <TabItem Header="BOOKINGS">
-                <DataGrid Margin="12" ItemsSource="{Binding Bookings}"
-                          AutoGenerateColumns="False" CanUserAddRows="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Booking ID" Binding="{Binding BookingId}" Width="130"/>
-                        <DataGridTextColumn Header="User" Binding="{Binding User.FullName}" Width="*"/>
-                        <DataGridTextColumn Header="Guide" Binding="{Binding Guide.FullName}" Width="*"/>
-                        <DataGridTextColumn Header="Destination" Binding="{Binding Destination.Name}" Width="*"/>
-                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
-                        <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="100"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <Grid Margin="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
+
+                    <DockPanel Grid.Column="0">
+                        <Button DockPanel.Dock="Top" Content="Refresh"
+                                Command="{Binding LoadContentDataCommand}"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                HorizontalAlignment="Left" Margin="0,0,0,12"/>
+                        <DataGrid ItemsSource="{Binding Bookings}"
+                                  SelectedItem="{Binding SelectedBooking}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Booking ID" Binding="{Binding BookingId}" Width="110"/>
+                                <DataGridTextColumn Header="User" Binding="{Binding User.FullName}" Width="*"/>
+                                <DataGridTextColumn Header="Guide" Binding="{Binding Guide.FullName}" Width="*"/>
+                                <DataGridTextColumn Header="Destination" Binding="{Binding Destination.Name}" Width="*"/>
+                                <DataGridTextColumn Header="Hotel" Binding="{Binding Hotel.Name}" Width="*"/>
+                                <DataGridTextColumn Header="Start date" Binding="{Binding StartDate, StringFormat=d}" Width="90"/>
+                                <DataGridTextColumn Header="Nights" Binding="{Binding Nights}" Width="60"/>
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="90"/>
+                                <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=N0}" Width="90"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+
+                    <materialDesign:Card Grid.Column="1" Padding="20"
+                                         Margin="20,0,0,0"
+                                         VerticalAlignment="Top">
+                        <StackPanel>
+                            <TextBlock Text="Manage Booking"
+                                       FontSize="20" FontWeight="SemiBold"
+                                       Margin="0,0,0,16"/>
+                            <TextBlock Text="Select a booking from the table."
+                                       TextWrapping="Wrap" Margin="0,0,0,12"/>
+                            <TextBlock Text="{Binding SelectedBooking.BookingId}"
+                                       FontSize="16" FontWeight="SemiBold"
+                                       Margin="0,0,0,4"/>
+                            <TextBlock Text="{Binding SelectedBooking.User.FullName}"
+                                       Margin="0,0,0,12"/>
+                            <ComboBox ItemsSource="{Binding BookingStatuses}"
+                                      SelectedItem="{Binding SelectedBookingStatus}"
+                                      materialDesign:HintAssist.Hint="New status"
+                                      Margin="0,0,0,16"/>
+                            <Button Content="Update Status"
+                                    Command="{Binding SaveBookingStatusCommand}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>
