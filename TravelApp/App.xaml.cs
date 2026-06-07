@@ -3,9 +3,12 @@ using System;
 using System.Windows;
 using TravelApp.Data.Repositories;
 using TravelApp.Services;
+using TravelApp.Services.Contracts;
 using TravelApp.ViewModels;
 using TravelApp.ViewModels.Admin;
+using TravelApp.ViewModels.Authentication;
 using TravelApp.Views.Admin;
+using TravelApp.Views.Authentication;
 
 namespace TravelApp
 {
@@ -32,10 +35,12 @@ namespace TravelApp
             services.AddTransient<ContentManagementViewModel>();
             services.AddTransient<AccountManagementView>();
             services.AddTransient<ContentManagementView>();
+            services.AddSingleton<IAuthService, AuthService>();
+            services.AddTransient<LoginViewModel>();
+            services.AddTransient<RegisterViewModel>();
+            services.AddTransient<LoginView>();
+            services.AddTransient<RegisterView>();
             services.AddTransient<MainWindow>();
-
-            // Đăng ký Services (Sẽ thêm vào ở các phần sau)
-            // services.AddSingleton<IAuthService, AuthService>();
 
             return services.BuildServiceProvider();
         }

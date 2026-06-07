@@ -70,7 +70,7 @@ Ký hiệu:
 - [x] Tạo Login và Register ViewModel
 - [x] Tạo validation email và số điện thoại
 - [x] Tạo role navigation strategy cho Admin, Guide và User
-- [~] Kết nối form Login/Register với DI và `AuthService`
+- [x] Kết nối form Login/Register với DI và `AuthService`
 - [ ] Thay mock `admin/admin` bằng truy vấn database
 - [ ] Lưu tài khoản đăng ký vào database
 - [ ] Thay SHA-256 bằng password hashing có salt như PBKDF2, bcrypt hoặc Argon2

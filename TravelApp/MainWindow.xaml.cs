@@ -52,8 +52,12 @@ namespace TravelApp
 
             switch (destination)
             {
-                case "login": ShowView("Login", new LoginView()); break;
-                case "register": ShowView("Register", new RegisterView()); break;
+                case "login": ShowView(
+                    "Login",
+                    _services.GetRequiredService<LoginView>()); break;
+                case "register": ShowView(
+                    "Register",
+                    _services.GetRequiredService<RegisterView>()); break;
                 case "user": ShowView("User Dashboard", new UserDashboardView()); break;
                 case "guide": ShowView("Tour Guide Dashboard", new GuideDashboardView()); break;
                 case "admin": ShowView("Admin Dashboard", new AdminDashboardView()); break;

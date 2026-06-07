@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Threading.Tasks;
 using TravelApp.Models;
+using TravelApp.Models.Enums;
 using TravelApp.Services.Contracts;
 using TravelApp.Utils;
 
@@ -65,15 +66,13 @@ namespace TravelApp.ViewModels.Authentication
                     Email = Email,
                     Phone = PhoneNumber,
                     FullName = Province,
+                    Role = RoleType.User
                 };
 
-                // TODO: Implement RegisterAsync in IAuthService
-                // var success = await _authService.RegisterAsync(newUser, Password);
-                var success = true;
+                var success = await _authService.RegisterAsync(newUser, Password);
                 if (success)
                 {
-                    // Chuyển hướng sang trang Đăng nhập sau khi đăng ký thành công
-                    // Logic Navigation sẽ được xử lý ở MainViewModel
+                    ErrorMessage = "Đăng ký thành công.";
                 }
                 else
                 {
