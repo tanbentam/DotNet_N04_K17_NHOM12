@@ -8,41 +8,64 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
-            <Button Content="+ Create Guide Account" Command="{Binding CreateGuideAccountCommand}"
-                    Style="{StaticResource MaterialDesignRaisedButton}" Margin="0,0,10,0"/>
-            <Button Content="+ Create User Account" Command="{Binding CreateUserAccountCommand}"
-                    Style="{StaticResource MaterialDesignOutlinedButton}"/>
-        </StackPanel>
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="+ Create Guide Account"
+                        Command="{Binding CreateGuideAccountCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Margin="0,0,10,0"/>
+                <Button Content="+ Create User Account"
+                        Command="{Binding CreateUserAccountCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"/>
+            </StackPanel>
 
-        <ProgressBar Grid.Row="1" IsIndeterminate="True" Width="50" Height="50"
-                     Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="{Binding UserCount, StringFormat='Total: {0} accounts'}"
+                           VerticalAlignment="Center" Margin="0,0,16,0"/>
+                <Button Content="Refresh"
+                        Command="{Binding LoadAccountsCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"/>
+            </StackPanel>
+        </Grid>
 
-        <DataGrid Grid.Row="1" ItemsSource="{Binding UsersList}" AutoGenerateColumns="False"
-                  CanUserAddRows="False" materialDesign:DataGridAssist.CellPadding="12"
-                  Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
-                <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="150"/>
-                <DataGridTextColumn Header="Phone Number" Binding="{Binding Phone}" Width="150"/>
-                <DataGridTemplateColumn Header="Actions" Width="150">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="Edit"
-                                        Command="{Binding DataContext.EditAccountCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        CommandParameter="{Binding}"
-                                        Style="{StaticResource MaterialDesignFlatButton}" Padding="0"/>
+        <Grid Grid.Row="1">
+            <ProgressBar IsIndeterminate="True" Width="50" Height="50"
+                         Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Visibility="{Binding IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock Text="No accounts found." FontSize="18" FontWeight="SemiBold"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Text="Register an account, then press Refresh."
+                           Foreground="Gray" Margin="0,6,0,0"/>
+            </StackPanel>
+
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red"
+                       TextWrapping="Wrap" HorizontalAlignment="Center"
+                       VerticalAlignment="Top" Margin="0,8,0,0"
+                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+
+            <DataGrid ItemsSource="{Binding UsersList}" AutoGenerateColumns="False"
+                      CanUserAddRows="False" materialDesign:DataGridAssist.CellPadding="12"
+                      Visibility="{Binding HasUsers, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="*"/>
+                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                    <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="130"/>
+                    <DataGridTextColumn Header="Phone Number" Binding="{Binding Phone}" Width="150"/>
+                    <DataGridTemplateColumn Header="Actions" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
                                 <Button Content="Delete"
                                         Command="{Binding DataContext.DeleteAccountCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                         CommandParameter="{Binding}"
                                         Style="{StaticResource MaterialDesignFlatButton}"
-                                        Foreground="Red" Padding="0" Margin="10,0,0,0"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                                        Foreground="Red" Padding="0"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </UserControl>

@@ -21,14 +21,24 @@ namespace TravelApp.ViewModels.Admin
         [ObservableProperty]
         private string _errorMessage;
 
+        [ObservableProperty]
+        private int _userCount;
+
+        [ObservableProperty]
+        private bool _isEmpty;
+
+        [ObservableProperty]
+        private bool _hasUsers;
+
         public AccountManagementViewModel(IUserRepository userRepository)
         {
             _userRepository = userRepository;
             UsersList = new ObservableCollection<UserModel>();
-            LoadAccountsAsync();
+            _ = LoadAccountsAsync();
         }
 
-        private async void LoadAccountsAsync()
+        [RelayCommand]
+        private async Task LoadAccountsAsync()
         {
             IsLoading = true;
             ErrorMessage = string.Empty;
@@ -37,10 +47,14 @@ namespace TravelApp.ViewModels.Admin
             {
                 var users = await _userRepository.GetAllAsync();
                 UsersList = new ObservableCollection<UserModel>(users);
+                UpdateSummary();
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                UsersList.Clear();
+                UpdateSummary();
+                ErrorMessage = "Không thể tải danh sách tài khoản: " +
+                    ex.GetBaseException().Message;
             }
             finally
             {
@@ -51,13 +65,13 @@ namespace TravelApp.ViewModels.Admin
         [RelayCommand]
         private void CreateGuideAccount()
         {
-            // The account form will call the repository when create/edit is implemented.
+            // Account creation is implemented in the next checklist item.
         }
 
         [RelayCommand]
         private void CreateUserAccount()
         {
-            // The account form will call the repository when create/edit is implemented.
+            // Account creation is implemented in the next checklist item.
         }
 
         [RelayCommand]
@@ -79,11 +93,19 @@ namespace TravelApp.ViewModels.Admin
                 }
 
                 UsersList.Remove(user);
+                UpdateSummary();
             }
             catch (Exception ex)
             {
                 ErrorMessage = ex.GetBaseException().Message;
             }
+        }
+
+        private void UpdateSummary()
+        {
+            UserCount = UsersList.Count;
+            IsEmpty = UserCount == 0;
+            HasUsers = UserCount > 0;
         }
     }
 }

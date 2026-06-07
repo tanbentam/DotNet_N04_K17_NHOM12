@@ -82,7 +82,7 @@ Ký hiệu:
 - [x] Tạo Admin Dashboard
 - [x] Tạo Account Management UI và ViewModel
 - [x] Tạo Content Management UI và ViewModel
-- [~] Hiển thị danh sách tài khoản bằng dữ liệu thật
+- [x] Hiển thị danh sách tài khoản bằng dữ liệu thật
 - [ ] Tạo, sửa và xóa User/Guide trong database
 - [ ] Quản lý Destination và Hotel
 - [ ] Duyệt Hotel và nội dung do Guide tạo
