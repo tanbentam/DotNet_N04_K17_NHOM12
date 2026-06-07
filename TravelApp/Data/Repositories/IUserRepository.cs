@@ -8,6 +8,7 @@ namespace TravelApp.Data.Repositories
     {
         Task<IReadOnlyList<UserModel>> GetAllAsync();
         Task<UserModel> FindByIdentifierAsync(string emailOrPhone);
+        Task<bool> CreateAsync(UserModel user);
         Task<bool> DeleteAsync(int userId);
     }
 }

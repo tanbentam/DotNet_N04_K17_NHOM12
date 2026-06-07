@@ -33,10 +33,23 @@ namespace TravelApp.Services
             return user;
         }
 
-        public Task<bool> RegisterAsync(UserModel user, string password)
+        public async Task<bool> RegisterAsync(UserModel user, string password)
         {
-            // Persisting registrations is implemented in the next checklist item.
-            return Task.FromResult(true);
+            if (user == null ||
+                string.IsNullOrWhiteSpace(user.Email) ||
+                string.IsNullOrWhiteSpace(user.Phone) ||
+                string.IsNullOrWhiteSpace(user.FullName) ||
+                string.IsNullOrWhiteSpace(password))
+            {
+                return false;
+            }
+
+            user.Email = user.Email.Trim().ToLowerInvariant();
+            user.Phone = user.Phone.Trim();
+            user.FullName = user.FullName.Trim();
+            user.PasswordHash = PasswordHelper.HashPassword(password);
+
+            return await _userRepository.CreateAsync(user);
         }
     }
 }

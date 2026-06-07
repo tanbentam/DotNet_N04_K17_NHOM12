@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,6 +36,38 @@ namespace TravelApp.Data.Repositories
                     .FirstOrDefaultAsync(user =>
                         user.Email == identifier ||
                         user.Phone == identifier);
+            }
+        }
+
+        public async Task<bool> CreateAsync(UserModel user)
+        {
+            if (user == null)
+            {
+                return false;
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                var exists = await context.Users.AnyAsync(existingUser =>
+                    existingUser.Email == user.Email ||
+                    existingUser.Phone == user.Phone);
+                if (exists)
+                {
+                    return false;
+                }
+
+                context.Users.Add(user);
+
+                try
+                {
+                    await context.SaveChangesAsync();
+                    return true;
+                }
+                catch (DbUpdateException)
+                {
+                    // Unique indexes remain the final guard against concurrent registration.
+                    return false;
+                }
             }
         }
 

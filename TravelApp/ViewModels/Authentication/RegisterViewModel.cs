@@ -73,6 +73,10 @@ namespace TravelApp.ViewModels.Authentication
                 if (success)
                 {
                     ErrorMessage = "Đăng ký thành công.";
+                    Email = string.Empty;
+                    Password = string.Empty;
+                    PhoneNumber = string.Empty;
+                    Province = string.Empty;
                 }
                 else
                 {
