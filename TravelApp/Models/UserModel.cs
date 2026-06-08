@@ -11,6 +11,7 @@ namespace TravelApp.Models
             GuidedBookings = new HashSet<BookingModel>();
             CreatedDestinations = new HashSet<DestinationModel>();
             CreatedHotels = new HashSet<HotelModel>();
+            Availabilities = new HashSet<GuideAvailabilityModel>();
         }
 
         public int Id { get; set; }
@@ -24,5 +25,6 @@ namespace TravelApp.Models
         public virtual ICollection<BookingModel> GuidedBookings { get; set; }
         public virtual ICollection<DestinationModel> CreatedDestinations { get; set; }
         public virtual ICollection<HotelModel> CreatedHotels { get; set; }
+        public virtual ICollection<GuideAvailabilityModel> Availabilities { get; set; }
     }
 }

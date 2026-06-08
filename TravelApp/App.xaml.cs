@@ -36,6 +36,7 @@ namespace TravelApp
             services.AddSingleton<DatabaseConnectionService>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ITravelContentRepository, TravelContentRepository>();
+            services.AddTransient<IGuideAvailabilityRepository, GuideAvailabilityRepository>();
             services.AddTransient<AccountManagementViewModel>();
             services.AddTransient<ContentManagementViewModel>();
             services.AddTransient<AccountManagementView>();

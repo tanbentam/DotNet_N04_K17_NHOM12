@@ -1,50 +1,125 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using TravelApp.Data.Repositories;
+using TravelApp.Models;
+using TravelApp.Models.Enums;
+using TravelApp.Services.Contracts;
+using TravelApp.Services.NotificationQueue;
 
 namespace TravelApp.ViewModels.TourGuide
 {
     public partial class AvailableDay : ObservableObject
     {
-        public string DayOfWeek { get; set; } // Thứ 2 đến Chủ Nhật [cite: 94-95]
+        public int DayNumber { get; set; }
+        public string DayOfWeek { get; set; }
 
         [ObservableProperty]
         private bool _isAvailable;
 
         [ObservableProperty]
-        private string _timeSlot; // Ví dụ: "08:00 - 17:00"
+        private string _timeSlot;
     }
 
     public partial class ScheduleManagementViewModel : ObservableObject
     {
+        private readonly IGuideAvailabilityRepository _availabilityRepository;
+        private readonly IUserSessionService _userSessionService;
+        private readonly NotificationManager _notificationManager;
+
         [ObservableProperty]
         private ObservableCollection<AvailableDay> _weeklySchedule;
 
-        public ScheduleManagementViewModel()
+        public ScheduleManagementViewModel(
+            IGuideAvailabilityRepository availabilityRepository,
+            IUserSessionService userSessionService,
+            NotificationManager notificationManager)
         {
-            WeeklySchedule = new ObservableCollection<AvailableDay>
-            {
-                new AvailableDay { DayOfWeek = "Thứ 2", IsAvailable = false },
-                new AvailableDay { DayOfWeek = "Thứ 3", IsAvailable = false },
-                new AvailableDay { DayOfWeek = "Thứ 4", IsAvailable = false },
-                new AvailableDay { DayOfWeek = "Thứ 5", IsAvailable = false },
-                new AvailableDay { DayOfWeek = "Thứ 6", IsAvailable = false },
-                new AvailableDay { DayOfWeek = "Thứ 7", IsAvailable = false },
-                new AvailableDay { DayOfWeek = "Chủ Nhật", IsAvailable = false }
-            };
+            _availabilityRepository = availabilityRepository;
+            _userSessionService = userSessionService;
+            _notificationManager = notificationManager;
+            WeeklySchedule = CreateDefaultSchedule();
+
+            _ = LoadScheduleAsync();
         }
 
         [RelayCommand]
         private async Task SaveScheduleAsync()
         {
-            // [BACKEND DEVELOPER NOTE]
-            // Payload sẽ gửi mảng WeeklySchedule chứa các ngày IsAvailable = true.
-            // Endpoint gợi ý: Constants.Guide_ManageSchedule_Endpoint
+            var guide = _userSessionService.CurrentUser;
+            if (guide == null || guide.Role != RoleType.TourGuide)
+            {
+                _notificationManager.ShowNotification(
+                    "Không thể lưu lịch",
+                    "Bạn cần đăng nhập bằng tài khoản Guide.",
+                    true);
+                return;
+            }
 
-            await Task.Delay(500); // Giả lập API call
+            var saved = await _availabilityRepository.SaveWeeklyScheduleAsync(
+                guide.Id,
+                WeeklySchedule.Select(day => new GuideAvailabilityModel
+                {
+                    DayOfWeek = day.DayNumber,
+                    DayName = day.DayOfWeek,
+                    IsAvailable = day.IsAvailable,
+                    TimeSlot = string.IsNullOrWhiteSpace(day.TimeSlot)
+                        ? null
+                        : day.TimeSlot.Trim()
+                }));
 
-            // Có thể gọi NotificationManager ở đây để báo lưu thành công
+            _notificationManager.ShowNotification(
+                saved ? "Đã lưu lịch" : "Không thể lưu lịch",
+                saved
+                    ? "Lịch trống của bạn đã được cập nhật trong database."
+                    : "Vui lòng kiểm tra kết nối database và thử lại.",
+                !saved);
+        }
+
+        private async Task LoadScheduleAsync()
+        {
+            var guide = _userSessionService.CurrentUser;
+            if (guide == null || guide.Role != RoleType.TourGuide)
+            {
+                return;
+            }
+
+            var savedSchedule = await _availabilityRepository.GetByGuideIdAsync(guide.Id);
+            ApplySavedSchedule(savedSchedule);
+        }
+
+        private void ApplySavedSchedule(
+            IReadOnlyList<GuideAvailabilityModel> savedSchedule)
+        {
+            foreach (var savedDay in savedSchedule)
+            {
+                var day = WeeklySchedule.FirstOrDefault(
+                    item => item.DayNumber == savedDay.DayOfWeek);
+                if (day == null)
+                {
+                    continue;
+                }
+
+                day.IsAvailable = savedDay.IsAvailable;
+                day.TimeSlot = savedDay.TimeSlot;
+            }
+        }
+
+        private static ObservableCollection<AvailableDay> CreateDefaultSchedule()
+        {
+            return new ObservableCollection<AvailableDay>
+            {
+                new AvailableDay { DayNumber = 1, DayOfWeek = "Thứ 2", IsAvailable = false },
+                new AvailableDay { DayNumber = 2, DayOfWeek = "Thứ 3", IsAvailable = false },
+                new AvailableDay { DayNumber = 3, DayOfWeek = "Thứ 4", IsAvailable = false },
+                new AvailableDay { DayNumber = 4, DayOfWeek = "Thứ 5", IsAvailable = false },
+                new AvailableDay { DayNumber = 5, DayOfWeek = "Thứ 6", IsAvailable = false },
+                new AvailableDay { DayNumber = 6, DayOfWeek = "Thứ 7", IsAvailable = false },
+                new AvailableDay { DayNumber = 7, DayOfWeek = "Chủ Nhật", IsAvailable = false }
+            };
         }
     }
 }

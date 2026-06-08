@@ -15,6 +15,7 @@ namespace TravelApp.Data
         public DbSet<BookingModel> Bookings { get; set; }
         public DbSet<HotelModel> Hotels { get; set; }
         public DbSet<DestinationModel> Destinations { get; set; }
+        public DbSet<GuideAvailabilityModel> GuideAvailabilities { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -22,6 +23,7 @@ namespace TravelApp.Data
             ConfigureDestinations(modelBuilder);
             ConfigureHotels(modelBuilder);
             ConfigureBookings(modelBuilder);
+            ConfigureGuideAvailabilities(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -117,6 +119,21 @@ namespace TravelApp.Data
             booking.HasRequired(x => x.Destination)
                 .WithMany(x => x.Bookings)
                 .HasForeignKey(x => x.DestinationId)
+                .WillCascadeOnDelete(false);
+        }
+
+        private static void ConfigureGuideAvailabilities(DbModelBuilder modelBuilder)
+        {
+            var availability = modelBuilder.Entity<GuideAvailabilityModel>();
+
+            availability.ToTable("GuideAvailabilities");
+            availability.HasKey(x => x.Id);
+            availability.Property(x => x.DayName).IsRequired().HasMaxLength(20);
+            availability.Property(x => x.TimeSlot).IsOptional().HasMaxLength(50);
+
+            availability.HasRequired(x => x.Guide)
+                .WithMany(x => x.Availabilities)
+                .HasForeignKey(x => x.GuideId)
                 .WillCascadeOnDelete(false);
         }
     }
