@@ -71,15 +71,10 @@
     <Compile Include="Data\Repositories\TravelContentRepository.cs" />
     <Compile Include="Data\Repositories\UserRepository.cs" />
     <Compile Include="Data\Migrations\Configuration.cs" />
-    <Compile Include="Data\Migrations\202606070341212_InitialCreate.cs" />
-    <Compile Include="Data\Migrations\202606070341212_InitialCreate.Designer.cs">
-      <DependentUpon>202606070341212_InitialCreate.cs</DependentUpon>
+    <Compile Include="Data\Migrations\202606080919452_InitialCreate.cs" />
+    <Compile Include="Data\Migrations\202606080919452_InitialCreate.Designer.cs">
+      <DependentUpon>202606080919452_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Data\Migrations\202606070835419_AddContentApproval.cs" />
-    <Compile Include="Data\Migrations\202606070835419_AddContentApproval.Designer.cs">
-      <DependentUpon>202606070835419_AddContentApproval.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Migrations\202606080000000_AddGuideAvailabilities.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\BookingModel.cs" />
     <Compile Include="Models\GuideAvailabilityModel.cs" />
@@ -101,6 +96,7 @@
     <Compile Include="Services\AuthenticationStrategy\IAuthStrategy.cs" />
     <Compile Include="Services\AuthenticationStrategy\UserAuthStrategy.cs" />
     <Compile Include="Services\ImageManagement\ImageUploadService.cs" />
+    <Compile Include="Services\Logging\DatabaseErrorDiagnostics.cs" />
     <Compile Include="Services\Logging\LoggerService.cs" />
     <Compile Include="Services\NotificationQueue\NotificationManager.cs" />
     <Compile Include="Services\NotificationQueue\NotificationMessage.cs" />
@@ -203,11 +199,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EmbeddedResource Include="Data\Migrations\202606070341212_InitialCreate.resx">
-      <DependentUpon>202606070341212_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Migrations\202606070835419_AddContentApproval.resx">
-      <DependentUpon>202606070835419_AddContentApproval.cs</DependentUpon>
+    <EmbeddedResource Include="Data\Migrations\202606080919452_InitialCreate.resx">
+      <DependentUpon>202606080919452_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

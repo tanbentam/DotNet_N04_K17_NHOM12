@@ -5,7 +5,9 @@ namespace TravelApp.Services.Logging
 {
     public static class LoggerService
     {
-        private static readonly string LogFilePath = "TravelApp_ErrorLog.txt";
+        private static readonly string LogFilePath = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            "TravelApp_ErrorLog.txt");
 
         private static void WriteLog(string logType, string context, string message)
         {
@@ -42,6 +44,17 @@ namespace TravelApp.Services.Logging
         public static void LogDatabaseConnectionFailure(string reason)
         {
             WriteLog("DATABASE_CONNECTION", "ApplicationStartup", reason);
+        }
+
+        public static void LogDatabaseError(
+            string errorId,
+            string operation,
+            string diagnosticDetails)
+        {
+            WriteLog(
+                "DATABASE_ERROR",
+                errorId + "/" + operation,
+                diagnosticDetails);
         }
     }
 }

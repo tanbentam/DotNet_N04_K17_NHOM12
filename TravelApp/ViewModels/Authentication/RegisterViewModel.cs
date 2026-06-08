@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services.Contracts;
+using TravelApp.Services.Logging;
 using TravelApp.Utils;
 
 namespace TravelApp.ViewModels.Authentication
@@ -85,8 +86,7 @@ namespace TravelApp.ViewModels.Authentication
             }
             catch (Exception ex)
             {
-                ErrorMessage = "Lỗi kết nối đến máy chủ.";
-                // [BACKEND DEVELOPER NOTE] Ghi log lỗi API
+                ErrorMessage = DatabaseErrorDiagnostics.Report("Register", ex);
             }
             finally
             {

@@ -7,6 +7,12 @@ namespace TravelApp.Data
 {
     public class ApplicationDbContext : DbContext
     {
+        static ApplicationDbContext()
+        {
+            Database.SetInitializer(
+                new MigrateDatabaseToLatestVersion<ApplicationDbContext, Migrations.Configuration>());
+        }
+
         public ApplicationDbContext() : base("DefaultConnection")
         {
         }

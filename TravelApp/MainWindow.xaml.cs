@@ -7,7 +7,6 @@ using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services;
 using TravelApp.Services.Contracts;
-using TravelApp.Services.Logging;
 using TravelApp.Views.Admin;
 using TravelApp.Views.Authentication;
 using TravelApp.Views.TourGuide;
@@ -54,9 +53,12 @@ namespace TravelApp
             }
 
             DatabaseStatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(244, 67, 54));
-            DatabaseStatusText.Text = "Database unavailable";
+            DatabaseStatusText.Text = result.Message.IndexOf(
+                "schema",
+                StringComparison.OrdinalIgnoreCase) >= 0
+                ? "Database schema error"
+                : "Database error";
             DatabaseStatusText.ToolTip = result.Message;
-            LoggerService.LogDatabaseConnectionFailure(result.Message);
         }
 
         private void NavigationButton_Click(object sender, RoutedEventArgs e)

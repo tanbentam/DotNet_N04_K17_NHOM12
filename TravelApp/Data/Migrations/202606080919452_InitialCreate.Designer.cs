@@ -13,7 +13,7 @@ namespace TravelApp.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202606070341212_InitialCreate"; }
+            get { return "202606080919452_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

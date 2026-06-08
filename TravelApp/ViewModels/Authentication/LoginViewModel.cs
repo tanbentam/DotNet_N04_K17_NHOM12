@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Threading.Tasks;
+using TravelApp.Services.Logging;
 using TravelApp.Services.Contracts;
 
 namespace TravelApp.ViewModels.Authentication
@@ -63,8 +64,7 @@ namespace TravelApp.ViewModels.Authentication
             }
             catch (Exception ex)
             {
-                ErrorMessage = "Không thể kết nối đến máy chủ.";
-                // [BACKEND DEVELOPER NOTE] Ghi log API errors
+                ErrorMessage = DatabaseErrorDiagnostics.Report("Login", ex);
             }
             finally
             {

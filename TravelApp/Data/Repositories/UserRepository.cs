@@ -3,6 +3,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 using TravelApp.Models;
 
 namespace TravelApp.Data.Repositories
@@ -63,7 +64,7 @@ namespace TravelApp.Data.Repositories
                     await context.SaveChangesAsync();
                     return true;
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException ex) when (IsDuplicateKey(ex))
                 {
                     // Unique indexes remain the final guard against concurrent registration.
                     return false;
@@ -141,6 +142,22 @@ namespace TravelApp.Data.Repositories
                     return false;
                 }
             }
+        }
+
+        private static bool IsDuplicateKey(DbUpdateException exception)
+        {
+            for (var current = exception as System.Exception;
+                 current != null;
+                 current = current.InnerException)
+            {
+                var mysqlException = current as MySqlException;
+                if (mysqlException?.Number == 1062)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

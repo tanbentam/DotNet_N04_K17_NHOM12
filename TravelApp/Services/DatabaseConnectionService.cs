@@ -1,7 +1,9 @@
 using System;
-using System.Data;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using TravelApp.Data;
+using TravelApp.Services.Logging;
 
 namespace TravelApp.Services
 {
@@ -18,7 +20,7 @@ namespace TravelApp.Services
 
         public static DatabaseConnectionResult Success()
         {
-            return new DatabaseConnectionResult(true, "Database connected");
+            return new DatabaseConnectionResult(true, "Database ready");
         }
 
         public static DatabaseConnectionResult Failure(string message)
@@ -35,21 +37,18 @@ namespace TravelApp.Services
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var connection = context.Database.Connection;
-                    await connection.OpenAsync();
-
-                    if (connection.State != ConnectionState.Open)
-                    {
-                        return DatabaseConnectionResult.Failure("Database unavailable");
-                    }
-
-                    connection.Close();
+                    // A real query verifies connection, EF migrations and the current schema.
+                    await context.Users
+                        .AsNoTracking()
+                        .Select(user => user.Id)
+                        .FirstOrDefaultAsync();
                     return DatabaseConnectionResult.Success();
                 }
             }
             catch (Exception ex)
             {
-                return DatabaseConnectionResult.Failure(ex.GetBaseException().Message);
+                return DatabaseConnectionResult.Failure(
+                    DatabaseErrorDiagnostics.Report("Startup health check", ex));
             }
         }
     }
