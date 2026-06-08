@@ -180,6 +180,48 @@ namespace TravelApp
             LogoutButton.Visibility = isAuthenticated
                 ? Visibility.Visible
                 : Visibility.Collapsed;
+
+            UpdateNavigationVisibility(user);
+        }
+
+        private void UpdateNavigationVisibility(UserModel user)
+        {
+            var isAuthenticated = user != null;
+
+            LoginNavButton.Visibility = isAuthenticated
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+            RegisterNavButton.Visibility = isAuthenticated
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+
+            RoleSectionSeparator.Visibility = isAuthenticated
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+            RoleSectionTitle.Visibility = isAuthenticated
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+
+            UserDashboardNavButton.Visibility = IsRole(user, RoleType.User)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+            GuideDashboardNavButton.Visibility = IsRole(user, RoleType.TourGuide)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+            AdminDashboardNavButton.Visibility = IsRole(user, RoleType.Admin)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+            AccountManagementNavButton.Visibility = IsRole(user, RoleType.Admin)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+            ContentManagementNavButton.Visibility = IsRole(user, RoleType.Admin)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
+
+        private static bool IsRole(UserModel user, RoleType role)
+        {
+            return user != null && user.Role == role;
         }
 
         private void ShowLogin()

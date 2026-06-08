@@ -34,28 +34,36 @@
                     <Button Content="Home" Tag="home" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
-                    <Button Content="Login" Tag="login" Click="NavigationButton_Click"
+                    <Button x:Name="LoginNavButton"
+                            Content="Login" Tag="login" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
-                    <Button Content="Register" Tag="register" Click="NavigationButton_Click"
+                    <Button x:Name="RegisterNavButton"
+                            Content="Register" Tag="register" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
-                    <Separator Margin="0,12" Background="#7E57C2"/>
-                    <TextBlock Text="VIEW COMPONENTS" Foreground="#B39DDB" FontSize="11"
+                    <Separator x:Name="RoleSectionSeparator" Margin="0,12" Background="#7E57C2"/>
+                    <TextBlock x:Name="RoleSectionTitle"
+                               Text="VIEW COMPONENTS" Foreground="#B39DDB" FontSize="11"
                                FontWeight="SemiBold" Margin="12,0,0,8"/>
-                    <Button Content="User Dashboard" Tag="user" Click="NavigationButton_Click"
+                    <Button x:Name="UserDashboardNavButton"
+                            Content="User Dashboard" Tag="user" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
-                    <Button Content="Tour Guide Dashboard" Tag="guide" Click="NavigationButton_Click"
+                    <Button x:Name="GuideDashboardNavButton"
+                            Content="Tour Guide Dashboard" Tag="guide" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
-                    <Button Content="Admin Dashboard" Tag="admin" Click="NavigationButton_Click"
+                    <Button x:Name="AdminDashboardNavButton"
+                            Content="Admin Dashboard" Tag="admin" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
-                    <Button Content="Account Management" Tag="accounts" Click="NavigationButton_Click"
+                    <Button x:Name="AccountManagementNavButton"
+                            Content="Account Management" Tag="accounts" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
-                    <Button Content="Content Management" Tag="content" Click="NavigationButton_Click"
+                    <Button x:Name="ContentManagementNavButton"
+                            Content="Content Management" Tag="content" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
                 </StackPanel>
