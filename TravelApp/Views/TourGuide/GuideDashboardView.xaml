@@ -3,60 +3,202 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              Background="{DynamicResource MaterialDesignPaper}">
-    <Grid>
-        <TabControl Style="{StaticResource MaterialDesignNavigationRailTabControl}" TabStripPlacement="Left">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <TabItem Header="Điểm đến &amp; Khách sạn">
-                <Grid Margin="16">
-                    <StackPanel>
-                        <TextBlock Text="Quản lý điểm đến và khách sạn"
-                                   FontSize="20"
-                                   FontWeight="Bold"
-                                   Margin="0,0,0,20"/>
-                        <Button Content="+ Thêm điểm đến"
-                                Style="{StaticResource MaterialDesignRaisedButton}"
-                                Width="180"
-                                HorizontalAlignment="Left"
-                                Margin="0,0,0,10"/>
-                        <TextBlock Text="Khách sạn do Guide tạo cần chờ Admin phê duyệt."
-                                   FontStyle="Italic"
-                                   Foreground="Gray"/>
-                    </StackPanel>
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="Bảng điều khiển Guide"
+                           FontSize="26"
+                           FontWeight="SemiBold"/>
+                <TextBlock Text="Quản lý nội dung, lịch trống và các yêu cầu booking đang chờ xử lý."
+                           Foreground="Gray"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <Border Grid.Column="1"
+                    BorderBrush="#FFE0E0E0"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="14,8"
+                    VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="AccountTie"
+                                             Width="20"
+                                             Height="20"
+                                             Margin="0,0,8,0"/>
+                    <TextBlock Text="Guide"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <TabControl Grid.Row="1"
+                    Style="{StaticResource MaterialDesignTabControl}">
+            <TabItem Header="NỘI DUNG">
+                <Grid Margin="0,16,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <materialDesign:Card Grid.Column="0"
+                                         Padding="20"
+                                         Margin="0,0,10,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="MapMarkerPlus"
+                                                         Width="24"
+                                                         Height="24"
+                                                         Margin="0,0,10,0"/>
+                                <TextBlock Text="Điểm đến"
+                                           FontSize="20"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <TextBlock Grid.Row="1"
+                                       Text="Tạo và chỉnh sửa điểm đến do bạn phụ trách. Nội dung mới sẽ được gửi Admin duyệt trước khi hiển thị."
+                                       TextWrapping="Wrap"
+                                       Foreground="Gray"
+                                       Margin="0,12,0,18"/>
+
+                            <StackPanel Grid.Row="2">
+                                <TextBlock Text="Trạng thái hiện tại"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,8"/>
+                                <TextBlock Text="Chức năng lưu dữ liệu thật sẽ được hoàn thiện ở bước tiếp theo trong checklist."
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <Button Grid.Row="3"
+                                    Content="+ Thêm điểm đến"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,20,0,0"/>
+                        </Grid>
+                    </materialDesign:Card>
+
+                    <materialDesign:Card Grid.Column="1"
+                                         Padding="20"
+                                         Margin="10,0,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Bed"
+                                                         Width="24"
+                                                         Height="24"
+                                                         Margin="0,0,10,0"/>
+                                <TextBlock Text="Khách sạn"
+                                           FontSize="20"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <TextBlock Grid.Row="1"
+                                       Text="Đề xuất khách sạn phù hợp với điểm đến. Khách sạn mới cần chờ Admin phê duyệt."
+                                       TextWrapping="Wrap"
+                                       Foreground="Gray"
+                                       Margin="0,12,0,18"/>
+
+                            <StackPanel Grid.Row="2">
+                                <TextBlock Text="Quy trình duyệt"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,8"/>
+                                <TextBlock Text="Sau khi tạo, nội dung sẽ ở trạng thái chờ duyệt và chỉ được công khai khi Admin chấp nhận."
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <Button Grid.Row="3"
+                                    Content="+ Thêm khách sạn"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,20,0,0"/>
+                        </Grid>
+                    </materialDesign:Card>
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Lịch trống">
-                <Grid Margin="16" DataContext="{Binding ScheduleVM}">
+            <TabItem Header="LỊCH TRỐNG">
+                <Grid Margin="0,16,0,0"
+                      DataContext="{Binding ScheduleVM}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0"
-                                Orientation="Horizontal"
-                                Margin="0,0,0,12">
-                        <Button Content="Lưu lịch"
-                                Command="{Binding SaveScheduleCommand}"
-                                Style="{StaticResource MaterialDesignRaisedButton}"
-                                Margin="0,0,8,0"/>
-                        <TextBlock Text="Chọn ngày rảnh và nhập khung giờ làm việc."
-                                   VerticalAlignment="Center"
-                                   Foreground="Gray"/>
-                    </StackPanel>
+                    <materialDesign:Card Grid.Row="0"
+                                         Padding="18"
+                                         Margin="0,0,0,14">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CalendarClock"
+                                                             Width="24"
+                                                             Height="24"
+                                                             Margin="0,0,10,0"/>
+                                    <TextBlock Text="Đăng ký lịch rảnh trong tuần"
+                                               FontSize="20"
+                                               FontWeight="SemiBold"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <TextBlock Text="Tick các ngày có thể dẫn tour và nhập khung giờ như 08:00 - 17:00."
+                                           Foreground="Gray"
+                                           TextWrapping="Wrap"
+                                           Margin="0,8,0,0"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="1"
+                                    Content="Lưu lịch"
+                                    Command="{Binding SaveScheduleCommand}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    VerticalAlignment="Center"
+                                    Margin="16,0,0,0"/>
+                        </Grid>
+                    </materialDesign:Card>
 
                     <DataGrid Grid.Row="1"
                               ItemsSource="{Binding WeeklySchedule}"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
-                              materialDesign:DataGridAssist.CellPadding="10">
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              materialDesign:DataGridAssist.CellPadding="12">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Ngày"
                                                 Binding="{Binding DayOfWeek}"
-                                                Width="160"
+                                                Width="180"
                                                 IsReadOnly="True"/>
                             <DataGridCheckBoxColumn Header="Có thể dẫn tour"
                                                     Binding="{Binding IsAvailable}"
-                                                    Width="130"/>
+                                                    Width="160"/>
                             <DataGridTextColumn Header="Khung giờ"
                                                 Binding="{Binding TimeSlot, UpdateSourceTrigger=PropertyChanged}"
                                                 Width="*"/>
@@ -65,33 +207,69 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Yêu cầu booking">
-                <Grid Margin="16" DataContext="{Binding BookingRequestsVM}">
+            <TabItem Header="BOOKING">
+                <Grid Margin="0,16,0,0"
+                      DataContext="{Binding BookingRequestsVM}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0"
-                               Text="Danh sách booking đang chờ Guide xác nhận"
-                               FontSize="18"
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,12"/>
+                    <materialDesign:Card Grid.Row="0"
+                                         Padding="18"
+                                         Margin="0,0,0,14">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ClipboardList"
+                                                             Width="24"
+                                                             Height="24"
+                                                             Margin="0,0,10,0"/>
+                                    <TextBlock Text="Yêu cầu booking chờ xác nhận"
+                                               FontSize="20"
+                                               FontWeight="SemiBold"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <TextBlock Text="Kiểm tra thông tin khách hàng, điểm đến và quyết định nhận hoặc từ chối yêu cầu."
+                                           Foreground="Gray"
+                                           TextWrapping="Wrap"
+                                           Margin="0,8,0,0"/>
+                            </StackPanel>
+
+                            <Border Grid.Column="1"
+                                    Background="#FFFFF3E0"
+                                    CornerRadius="6"
+                                    Padding="12,8"
+                                    VerticalAlignment="Center"
+                                    Margin="16,0,0,0">
+                                <TextBlock Text="Đang chờ"
+                                           Foreground="#FFE65100"
+                                           FontWeight="SemiBold"/>
+                            </Border>
+                        </Grid>
+                    </materialDesign:Card>
 
                     <DataGrid Grid.Row="1"
                               ItemsSource="{Binding PendingBookings}"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               IsReadOnly="True"
-                              materialDesign:DataGridAssist.CellPadding="10">
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              materialDesign:DataGridAssist.CellPadding="12">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Mã booking" Binding="{Binding BookingId}" Width="120"/>
                             <DataGridTextColumn Header="Khách hàng" Binding="{Binding UserName}" Width="*"/>
                             <DataGridTextColumn Header="Điểm đến" Binding="{Binding DestinationName}" Width="*"/>
-                            <DataGridTextColumn Header="Ngày bắt đầu" Binding="{Binding StartDate, StringFormat=d}" Width="110"/>
-                            <DataGridTextColumn Header="Số đêm" Binding="{Binding Nights}" Width="70"/>
-                            <DataGridTextColumn Header="Giá" Binding="{Binding Price, StringFormat=N0}" Width="100"/>
-                            <DataGridTemplateColumn Header="Thao tác" Width="170">
+                            <DataGridTextColumn Header="Ngày bắt đầu" Binding="{Binding StartDate, StringFormat=d}" Width="120"/>
+                            <DataGridTextColumn Header="Số đêm" Binding="{Binding Nights}" Width="80"/>
+                            <DataGridTextColumn Header="Giá" Binding="{Binding Price, StringFormat=N0}" Width="110"/>
+                            <DataGridTemplateColumn Header="Thao tác" Width="190">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -107,7 +285,7 @@
                                                     Style="{StaticResource MaterialDesignFlatButton}"
                                                     Foreground="DarkOrange"
                                                     Padding="0"
-                                                    Margin="10,0,0,0"/>
+                                                    Margin="12,0,0,0"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -116,7 +294,6 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-
         </TabControl>
     </Grid>
 </UserControl>
