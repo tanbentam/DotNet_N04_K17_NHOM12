@@ -75,6 +75,10 @@
     <Compile Include="Data\Migrations\202606080919452_InitialCreate.Designer.cs">
       <DependentUpon>202606080919452_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Data\Migrations\202606080941143_SyncMySqlModelSnapshot.cs" />
+    <Compile Include="Data\Migrations\202606080941143_SyncMySqlModelSnapshot.Designer.cs">
+      <DependentUpon>202606080941143_SyncMySqlModelSnapshot.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\BookingModel.cs" />
     <Compile Include="Models\GuideAvailabilityModel.cs" />
@@ -201,6 +205,9 @@
     <None Include="App.config" />
     <EmbeddedResource Include="Data\Migrations\202606080919452_InitialCreate.resx">
       <DependentUpon>202606080919452_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Migrations\202606080941143_SyncMySqlModelSnapshot.resx">
+      <DependentUpon>202606080941143_SyncMySqlModelSnapshot.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

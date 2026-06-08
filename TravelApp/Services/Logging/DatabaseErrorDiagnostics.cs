@@ -31,7 +31,9 @@ namespace TravelApp.Services.Logging
 
             if (message.Contains("has changed since the database was created") ||
                 message.Contains("model backing the context has changed") ||
-                message.Contains("__migrationhistory"))
+                message.Contains("__migrationhistory") ||
+                message.Contains("pending changes") ||
+                message.Contains("automatic migration is disabled"))
             {
                 return "Model EF và migration history trong database không cùng phiên bản.";
             }
