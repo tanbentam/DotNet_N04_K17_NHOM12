@@ -23,6 +23,21 @@ namespace TravelApp.Data.Repositories
         }
 
         public async Task<IReadOnlyList<DestinationModel>>
+            GetApprovedDestinationsAsync()
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                return await context.Destinations
+                    .AsNoTracking()
+                    .Where(destination =>
+                        destination.ApprovalStatus ==
+                            ContentApprovalStatus.Approved)
+                    .OrderBy(destination => destination.Name)
+                    .ToListAsync();
+            }
+        }
+
+        public async Task<IReadOnlyList<DestinationModel>>
             GetDestinationsByGuideAsync(int guideId)
         {
             if (guideId <= 0)
@@ -123,6 +138,25 @@ namespace TravelApp.Data.Repositories
                 existing.ImageUrl = destination.ImageUrl;
                 existing.AverageRating = destination.AverageRating;
                 return await SaveChangesAsync(context);
+            }
+        }
+
+        public async Task<IReadOnlyList<HotelModel>> GetHotelsByGuideAsync(
+            int guideId)
+        {
+            if (guideId <= 0)
+            {
+                return new List<HotelModel>();
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                return await context.Hotels
+                    .AsNoTracking()
+                    .Include(hotel => hotel.Destination)
+                    .Where(hotel => hotel.CreatedByGuideId == guideId)
+                    .OrderBy(hotel => hotel.Name)
+                    .ToListAsync();
             }
         }
 
@@ -241,6 +275,43 @@ namespace TravelApp.Data.Repositories
                 existing.PricePerNight = hotel.PricePerNight;
                 existing.Rating = hotel.Rating;
                 existing.ImageUrl = hotel.ImageUrl;
+                return await SaveChangesAsync(context);
+            }
+        }
+
+        public async Task<bool> UpdateHotelByGuideAsync(
+            HotelModel hotel,
+            int guideId)
+        {
+            if (hotel == null || hotel.Id <= 0 || guideId <= 0)
+            {
+                return false;
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                var existing = await context.Hotels
+                    .FirstOrDefaultAsync(item =>
+                        item.Id == hotel.Id &&
+                        item.CreatedByGuideId == guideId);
+                var destinationExists = await context.Destinations.AnyAsync(
+                    destination =>
+                        destination.Id == hotel.DestinationId &&
+                        destination.ApprovalStatus ==
+                            ContentApprovalStatus.Approved);
+                if (existing == null || !destinationExists)
+                {
+                    return false;
+                }
+
+                existing.DestinationId = hotel.DestinationId;
+                existing.Name = hotel.Name;
+                existing.Address = hotel.Address;
+                existing.Description = hotel.Description;
+                existing.PricePerNight = hotel.PricePerNight;
+                existing.Rating = hotel.Rating;
+                existing.ImageUrl = hotel.ImageUrl;
+                existing.ApprovalStatus = ContentApprovalStatus.Pending;
                 return await SaveChangesAsync(context);
             }
         }

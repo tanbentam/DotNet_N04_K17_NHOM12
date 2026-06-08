@@ -97,7 +97,7 @@ Ký hiệu:
 - [x] Nối Schedule và Booking Requests vào Guide Dashboard
 - [x] Lưu lịch trống vào database
 - [x] Tạo và chỉnh sửa Destination
-- [ ] Tạo và chỉnh sửa Hotel
+- [x] Tạo và chỉnh sửa Hotel
 - [ ] Chấp nhận hoặc từ chối Booking bằng dữ liệu thật
 
 ## 8. User Features

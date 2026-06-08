@@ -183,6 +183,165 @@
                 </Grid>
             </TabItem>
 
+            <TabItem Header="KHÁCH SẠN">
+                <Grid Margin="0,16,0,0"
+                      DataContext="{Binding HotelManagementVM}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Khách sạn của tôi"
+                                       FontSize="20"
+                                       FontWeight="SemiBold"/>
+                            <TextBlock Text="Khách sạn mới hoặc vừa chỉnh sửa sẽ chờ Admin duyệt."
+                                       Foreground="Gray"
+                                       Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Command="{Binding LoadHotelsCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    ToolTip="Tải lại danh sách"
+                                    Margin="0,0,8,0">
+                                <materialDesign:PackIcon Kind="Refresh"/>
+                            </Button>
+                            <Button Command="{Binding CreateHotelCommand}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Plus"
+                                                             Margin="0,0,8,0"/>
+                                    <TextBlock Text="Thêm khách sạn"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Foreground="#FFD32F2F"
+                                   TextWrapping="Wrap"
+                                   Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                        <TextBlock Text="{Binding SuccessMessage}"
+                                   Foreground="#FF2E7D32"
+                                   TextWrapping="Wrap"
+                                   Visibility="{Binding SuccessMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                        <ProgressBar IsIndeterminate="True"
+                                     Height="3"
+                                     Margin="0,8,0,0"
+                                     Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <DataGrid ItemsSource="{Binding Hotels}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  IsReadOnly="True"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal"
+                                  materialDesign:DataGridAssist.CellPadding="12">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Tên"
+                                                    Binding="{Binding Name}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Điểm đến"
+                                                    Binding="{Binding Destination.Name}"
+                                                    Width="150"/>
+                                <DataGridTextColumn Header="Giá/đêm"
+                                                    Binding="{Binding PricePerNight, StringFormat=N0}"
+                                                    Width="110"/>
+                                <DataGridTextColumn Header="Đánh giá"
+                                                    Binding="{Binding Rating}"
+                                                    Width="90"/>
+                                <DataGridTextColumn Header="Trạng thái"
+                                                    Binding="{Binding ApprovalStatus}"
+                                                    Width="110"/>
+                                <DataGridTemplateColumn Header="Sửa" Width="70">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Command="{Binding DataContext.EditHotelCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                                    ToolTip="Chỉnh sửa khách sạn"
+                                                    Padding="0">
+                                                <materialDesign:PackIcon Kind="Pencil"/>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <materialDesign:Card Grid.Column="1"
+                                             Width="380"
+                                             Padding="20"
+                                             Margin="18,0,0,0"
+                                             VerticalAlignment="Top"
+                                             Visibility="{Binding IsEditorOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel>
+                                <TextBlock Text="{Binding FormTitle}"
+                                           FontSize="20"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,16"/>
+                                <ComboBox ItemsSource="{Binding Destinations}"
+                                          DisplayMemberPath="Name"
+                                          SelectedValuePath="Id"
+                                          SelectedValue="{Binding DestinationId}"
+                                          materialDesign:HintAssist.Hint="Điểm đến đã duyệt"
+                                          Margin="0,0,0,10"/>
+                                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Tên khách sạn"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         Margin="0,0,0,10"/>
+                                <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Địa chỉ"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         Margin="0,0,0,10"/>
+                                <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Mô tả"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         Height="70"
+                                         Margin="0,0,0,10"/>
+                                <TextBox Text="{Binding PricePerNight, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Giá mỗi đêm"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         Margin="0,0,0,10"/>
+                                <TextBox Text="{Binding Rating, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Đánh giá (0 - 5)"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         Margin="0,0,0,10"/>
+                                <TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Đường dẫn ảnh"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         Margin="0,0,0,18"/>
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Right">
+                                    <Button Content="Hủy"
+                                            Command="{Binding CancelEditCommand}"
+                                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                                            Margin="0,0,8,0"/>
+                                    <Button Content="Lưu"
+                                            Command="{Binding SaveHotelCommand}"
+                                            Style="{StaticResource MaterialDesignRaisedButton}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </materialDesign:Card>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
             <TabItem Header="LỊCH TRỐNG">
                 <Grid Margin="0,16,0,0"
                       DataContext="{Binding ScheduleVM}">
