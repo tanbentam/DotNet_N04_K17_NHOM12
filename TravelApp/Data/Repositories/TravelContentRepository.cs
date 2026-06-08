@@ -84,6 +84,44 @@ namespace TravelApp.Data.Repositories
             }
         }
 
+        public async Task<IReadOnlyList<BookingModel>>
+            GetPendingBookingsByGuideAsync(int guideId)
+        {
+            if (guideId <= 0)
+            {
+                return new List<BookingModel>();
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                var bookings = await context.Bookings
+                    .AsNoTracking()
+                    .Include(booking => booking.User)
+                    .Include(booking => booking.Destination)
+                    .Include(booking => booking.Hotel)
+                    .Where(booking =>
+                        booking.GuideId == guideId &&
+                        booking.Status == BookingStatus.Pending)
+                    .OrderBy(booking => booking.StartDate)
+                    .ToListAsync();
+
+                foreach (var booking in bookings)
+                {
+                    if (string.IsNullOrWhiteSpace(booking.UserName))
+                    {
+                        booking.UserName = booking.User?.FullName;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(booking.DestinationName))
+                    {
+                        booking.DestinationName = booking.Destination?.Name;
+                    }
+                }
+
+                return bookings;
+            }
+        }
+
         public async Task<bool> UpdateBookingStatusAsync(
             int bookingId,
             BookingStatus status)
@@ -185,6 +223,36 @@ namespace TravelApp.Data.Repositories
                 existing.Description = destination.Description;
                 existing.ImageUrl = destination.ImageUrl;
                 existing.ApprovalStatus = ContentApprovalStatus.Pending;
+                return await SaveChangesAsync(context);
+            }
+        }
+
+        public async Task<bool> UpdatePendingBookingByGuideAsync(
+            int bookingId,
+            int guideId,
+            BookingStatus status)
+        {
+            if (bookingId <= 0 ||
+                guideId <= 0 ||
+                (status != BookingStatus.Accepted &&
+                 status != BookingStatus.Rejected))
+            {
+                return false;
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                var booking = await context.Bookings.FirstOrDefaultAsync(
+                    item =>
+                        item.Id == bookingId &&
+                        item.GuideId == guideId &&
+                        item.Status == BookingStatus.Pending);
+                if (booking == null)
+                {
+                    return false;
+                }
+
+                booking.Status = status;
                 return await SaveChangesAsync(context);
             }
         }

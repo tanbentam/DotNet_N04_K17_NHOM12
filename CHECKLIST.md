@@ -98,7 +98,7 @@ Ký hiệu:
 - [x] Lưu lịch trống vào database
 - [x] Tạo và chỉnh sửa Destination
 - [x] Tạo và chỉnh sửa Hotel
-- [ ] Chấp nhận hoặc từ chối Booking bằng dữ liệu thật
+- [x] Chấp nhận hoặc từ chối Booking bằng dữ liệu thật
 
 ## 8. User Features
 

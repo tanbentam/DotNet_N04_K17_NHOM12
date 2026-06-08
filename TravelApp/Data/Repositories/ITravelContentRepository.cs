@@ -14,8 +14,14 @@ namespace TravelApp.Data.Repositories
         Task<IReadOnlyList<HotelModel>> GetHotelsAsync();
         Task<IReadOnlyList<HotelModel>> GetHotelsByGuideAsync(int guideId);
         Task<IReadOnlyList<BookingModel>> GetBookingsAsync();
+        Task<IReadOnlyList<BookingModel>> GetPendingBookingsByGuideAsync(
+            int guideId);
         Task<bool> UpdateBookingStatusAsync(
             int bookingId,
+            BookingStatus status);
+        Task<bool> UpdatePendingBookingByGuideAsync(
+            int bookingId,
+            int guideId,
             BookingStatus status);
         Task<bool> CreateDestinationAsync(DestinationModel destination);
         Task<bool> UpdateDestinationAsync(DestinationModel destination);

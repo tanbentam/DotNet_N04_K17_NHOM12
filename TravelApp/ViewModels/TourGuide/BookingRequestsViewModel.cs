@@ -3,8 +3,11 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using TravelApp.Data.Repositories;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
+using TravelApp.Services.Contracts;
+using TravelApp.Services.Logging;
 using TravelApp.Services.NotificationQueue;
 
 namespace TravelApp.ViewModels.TourGuide
@@ -12,58 +15,126 @@ namespace TravelApp.ViewModels.TourGuide
     public partial class BookingRequestsViewModel : ObservableObject
     {
         private readonly NotificationManager _notificationManager;
+        private readonly ITravelContentRepository _contentRepository;
+        private readonly IUserSessionService _sessionService;
 
         [ObservableProperty]
         private ObservableCollection<BookingModel> _pendingBookings;
 
-        public BookingRequestsViewModel(NotificationManager notificationManager)
+        [ObservableProperty]
+        private bool _isBusy;
+
+        [ObservableProperty]
+        private string _errorMessage;
+
+        public BookingRequestsViewModel(
+            NotificationManager notificationManager,
+            ITravelContentRepository contentRepository,
+            IUserSessionService sessionService)
         {
             _notificationManager = notificationManager;
+            _contentRepository = contentRepository;
+            _sessionService = sessionService;
             PendingBookings = new ObservableCollection<BookingModel>();
-
-            LoadPendingBookings();
+            _ = LoadPendingBookingsAsync();
         }
 
-        private void LoadPendingBookings()
+        [RelayCommand]
+        private async Task LoadPendingBookingsAsync()
         {
-            PendingBookings.Add(new BookingModel
+            ErrorMessage = string.Empty;
+            var guide = _sessionService.CurrentUser;
+            if (guide == null || guide.Role != RoleType.TourGuide)
             {
-                BookingId = "BK001",
-                DestinationName = "Đà Nẵng",
-                UserName = "Nguyễn Văn A",
-                StartDate = DateTime.Today.AddDays(7),
-                Nights = 3,
-                Price = 4500000,
-                Status = BookingStatus.Pending
-            });
+                ErrorMessage = "Phiên đăng nhập Guide không hợp lệ.";
+                return;
+            }
+
+            IsBusy = true;
+            try
+            {
+                PendingBookings = new ObservableCollection<BookingModel>(
+                    await _contentRepository.GetPendingBookingsByGuideAsync(
+                        guide.Id));
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = DatabaseErrorDiagnostics.Report(
+                    "Load guide booking requests",
+                    ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         [RelayCommand]
-        private async Task AcceptBookingAsync(BookingModel booking)
+        private Task AcceptBookingAsync(BookingModel booking)
         {
-            if (booking == null)
-                return;
-
-            await Task.Delay(500);
-
-            booking.Status = BookingStatus.Accepted;
-            PendingBookings.Remove(booking);
-
-            _notificationManager.ShowNotification("Thành công", $"Đã chấp nhận đơn đặt tour {booking.BookingId}.", false);
+            return SetBookingStatusAsync(booking, BookingStatus.Accepted);
         }
 
         [RelayCommand]
-        private async Task RejectBookingAsync(BookingModel booking)
+        private Task RejectBookingAsync(BookingModel booking)
         {
-            if (booking == null)
+            return SetBookingStatusAsync(booking, BookingStatus.Rejected);
+        }
+
+        private async Task SetBookingStatusAsync(
+            BookingModel booking,
+            BookingStatus status)
+        {
+            if (booking == null || IsBusy)
+            {
                 return;
+            }
 
-            await Task.Delay(500);
+            ErrorMessage = string.Empty;
+            var guide = _sessionService.CurrentUser;
+            if (guide == null || guide.Role != RoleType.TourGuide)
+            {
+                ErrorMessage = "Phiên đăng nhập Guide không hợp lệ.";
+                return;
+            }
 
-            booking.Status = BookingStatus.Rejected;
-            PendingBookings.Remove(booking);
+            IsBusy = true;
+            try
+            {
+                var updated = await _contentRepository
+                    .UpdatePendingBookingByGuideAsync(
+                        booking.Id,
+                        guide.Id,
+                        status);
+                if (!updated)
+                {
+                    ErrorMessage =
+                        "Booking không còn chờ xử lý hoặc không thuộc Guide hiện tại.";
+                    return;
+                }
 
-            _notificationManager.ShowNotification("Đã hủy", $"Đã từ chối đơn đặt tour {booking.BookingId}.", true);
+                PendingBookings.Remove(booking);
+                var accepted = status == BookingStatus.Accepted;
+                _notificationManager.ShowNotification(
+                    accepted ? "Thành công" : "Đã từ chối",
+                    (accepted
+                        ? "Đã chấp nhận booking "
+                        : "Đã từ chối booking ") +
+                    booking.BookingId + ".",
+                    !accepted);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = DatabaseErrorDiagnostics.Report(
+                    status == BookingStatus.Accepted
+                        ? "Accept guide booking"
+                        : "Reject guide booking",
+                    ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
     }
 }

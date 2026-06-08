@@ -347,6 +347,7 @@
                       DataContext="{Binding ScheduleVM}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
@@ -442,20 +443,39 @@
                                            Margin="0,8,0,0"/>
                             </StackPanel>
 
-                            <Border Grid.Column="1"
-                                    Background="#FFFFF3E0"
-                                    CornerRadius="6"
-                                    Padding="12,8"
-                                    VerticalAlignment="Center"
-                                    Margin="16,0,0,0">
-                                <TextBlock Text="Đang chờ"
-                                           Foreground="#FFE65100"
-                                           FontWeight="SemiBold"/>
-                            </Border>
+                            <StackPanel Grid.Column="1"
+                                        Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        Margin="16,0,0,0">
+                                <Border Background="#FFFFF3E0"
+                                        CornerRadius="6"
+                                        Padding="12,8">
+                                    <TextBlock Text="Đang chờ"
+                                               Foreground="#FFE65100"
+                                               FontWeight="SemiBold"/>
+                                </Border>
+                                <Button Command="{Binding LoadPendingBookingsCommand}"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        ToolTip="Tải lại yêu cầu booking"
+                                        Margin="8,0,0,0">
+                                    <materialDesign:PackIcon Kind="Refresh"/>
+                                </Button>
+                            </StackPanel>
                         </Grid>
                     </materialDesign:Card>
 
-                    <DataGrid Grid.Row="1"
+                    <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Foreground="#FFD32F2F"
+                                   TextWrapping="Wrap"
+                                   Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                        <ProgressBar IsIndeterminate="True"
+                                     Height="3"
+                                     Margin="0,8,0,0"
+                                     Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="2"
                               ItemsSource="{Binding PendingBookings}"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
