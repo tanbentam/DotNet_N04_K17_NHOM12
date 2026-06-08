@@ -99,7 +99,7 @@ Ký hiệu:
 - [ ] Tạo và chỉnh sửa Hotel
 - [ ] Chấp nhận hoặc từ chối Booking bằng dữ liệu thật
 
-## 8. User Features
+## 8. User Features huihu
 
 - [x] Tạo User Dashboard
 - [x] Tạo Advanced Search ViewModel
