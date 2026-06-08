@@ -93,7 +93,7 @@ Ký hiệu:
 - [x] Tạo Guide Dashboard
 - [x] Tạo Schedule Management ViewModel
 - [x] Tạo Booking Requests ViewModel
-- [~] Nối Schedule và Booking Requests vào Guide Dashboard
+- [x] Nối Schedule và Booking Requests vào Guide Dashboard
 - [ ] Lưu lịch trống vào database
 - [ ] Tạo và chỉnh sửa Destination
 - [ ] Tạo và chỉnh sửa Hotel

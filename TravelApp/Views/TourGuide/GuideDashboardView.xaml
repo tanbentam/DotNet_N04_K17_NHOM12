@@ -6,23 +6,115 @@
     <Grid>
         <TabControl Style="{StaticResource MaterialDesignNavigationRailTabControl}" TabStripPlacement="Left">
 
-            <TabItem Header="Điểm Đến &amp; Khách Sạn">
+            <TabItem Header="Điểm đến &amp; Khách sạn">
                 <Grid Margin="16">
                     <StackPanel>
-                        <TextBlock Text="Quản lý Điểm Đến và Khách Sạn" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
-                        <Button Content="+ Thêm Điểm Đến Mới" Style="{StaticResource MaterialDesignRaisedButton}" Width="200" HorizontalAlignment="Left" Margin="0,0,0,10"/>
-                        <TextBlock Text="* Lưu ý: Khách sạn thêm mới cần chờ Admin phê duyệt [cite: 58]" FontStyle="Italic" Foreground="Gray"/>
-
+                        <TextBlock Text="Quản lý điểm đến và khách sạn"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,20"/>
+                        <Button Content="+ Thêm điểm đến"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Width="180"
+                                HorizontalAlignment="Left"
+                                Margin="0,0,0,10"/>
+                        <TextBlock Text="Khách sạn do Guide tạo cần chờ Admin phê duyệt."
+                                   FontStyle="Italic"
+                                   Foreground="Gray"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Lịch Trình Đăng Ký">
-                <ContentControl Content="{Binding ScheduleVM}" />
+            <TabItem Header="Lịch trống">
+                <Grid Margin="16" DataContext="{Binding ScheduleVM}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0"
+                                Orientation="Horizontal"
+                                Margin="0,0,0,12">
+                        <Button Content="Lưu lịch"
+                                Command="{Binding SaveScheduleCommand}"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Margin="0,0,8,0"/>
+                        <TextBlock Text="Chọn ngày rảnh và nhập khung giờ làm việc."
+                                   VerticalAlignment="Center"
+                                   Foreground="Gray"/>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding WeeklySchedule}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              materialDesign:DataGridAssist.CellPadding="10">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Ngày"
+                                                Binding="{Binding DayOfWeek}"
+                                                Width="160"
+                                                IsReadOnly="True"/>
+                            <DataGridCheckBoxColumn Header="Có thể dẫn tour"
+                                                    Binding="{Binding IsAvailable}"
+                                                    Width="130"/>
+                            <DataGridTextColumn Header="Khung giờ"
+                                                Binding="{Binding TimeSlot, UpdateSourceTrigger=PropertyChanged}"
+                                                Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </TabItem>
 
-            <TabItem Header="Yêu Cầu Booking">
-                <ContentControl Content="{Binding BookingRequestsVM}" />
+            <TabItem Header="Yêu cầu booking">
+                <Grid Margin="16" DataContext="{Binding BookingRequestsVM}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Text="Danh sách booking đang chờ Guide xác nhận"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,12"/>
+
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding PendingBookings}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              IsReadOnly="True"
+                              materialDesign:DataGridAssist.CellPadding="10">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Mã booking" Binding="{Binding BookingId}" Width="120"/>
+                            <DataGridTextColumn Header="Khách hàng" Binding="{Binding UserName}" Width="*"/>
+                            <DataGridTextColumn Header="Điểm đến" Binding="{Binding DestinationName}" Width="*"/>
+                            <DataGridTextColumn Header="Ngày bắt đầu" Binding="{Binding StartDate, StringFormat=d}" Width="110"/>
+                            <DataGridTextColumn Header="Số đêm" Binding="{Binding Nights}" Width="70"/>
+                            <DataGridTextColumn Header="Giá" Binding="{Binding Price, StringFormat=N0}" Width="100"/>
+                            <DataGridTemplateColumn Header="Thao tác" Width="170">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Nhận"
+                                                    Command="{Binding DataContext.AcceptBookingCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                                    Foreground="Green"
+                                                    Padding="0"/>
+                                            <Button Content="Từ chối"
+                                                    Command="{Binding DataContext.RejectBookingCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                                    Foreground="DarkOrange"
+                                                    Padding="0"
+                                                    Margin="10,0,0,0"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </TabItem>
 
         </TabControl>
