@@ -67,39 +67,46 @@ namespace TravelApp
             {
                 case "login": ShowView(
                     "Login",
-                    _services.GetRequiredService<LoginView>()); break;
+                    _services.GetRequiredService<LoginView>(),
+                    LoginNavButton); break;
                 case "register": ShowView(
                     "Register",
-                    _services.GetRequiredService<RegisterView>()); break;
+                    _services.GetRequiredService<RegisterView>(),
+                    RegisterNavButton); break;
                 case "user":
                     ShowRoleView(
                         RoleType.User,
                         "User Dashboard",
-                        () => _services.GetRequiredService<UserDashboardView>());
+                        () => _services.GetRequiredService<UserDashboardView>(),
+                        UserDashboardNavButton);
                     break;
                 case "guide":
                     ShowRoleView(
                         RoleType.TourGuide,
                         "Tour Guide Dashboard",
-                        () => _services.GetRequiredService<GuideDashboardView>());
+                        () => _services.GetRequiredService<GuideDashboardView>(),
+                        GuideDashboardNavButton);
                     break;
                 case "admin":
                     ShowRoleView(
                         RoleType.Admin,
                         "Admin Dashboard",
-                        () => _services.GetRequiredService<AdminDashboardView>());
+                        () => _services.GetRequiredService<AdminDashboardView>(),
+                        AdminDashboardNavButton);
                     break;
                 case "accounts":
                     ShowRoleView(
                         RoleType.Admin,
                         "Account Management",
-                        () => _services.GetRequiredService<AccountManagementView>());
+                        () => _services.GetRequiredService<AccountManagementView>(),
+                        AccountManagementNavButton);
                     break;
                 case "content":
                     ShowRoleView(
                         RoleType.Admin,
                         "Content Management",
-                        () => _services.GetRequiredService<ContentManagementView>());
+                        () => _services.GetRequiredService<ContentManagementView>(),
+                        ContentManagementNavButton);
                     break;
                 default: ShowHome(); break;
             }
@@ -108,7 +115,8 @@ namespace TravelApp
         private void ShowRoleView(
             RoleType requiredRole,
             string title,
-            Func<UserControl> viewFactory)
+            Func<UserControl> viewFactory,
+            Button activeNavButton)
         {
             if (!_sessionService.IsAuthenticated)
             {
@@ -122,7 +130,7 @@ namespace TravelApp
                 return;
             }
 
-            ShowView(title, viewFactory());
+            ShowView(title, viewFactory(), activeNavButton);
         }
 
         private void ShowDashboardForUser(UserModel user)
@@ -132,17 +140,20 @@ namespace TravelApp
                 case RoleType.Admin:
                     ShowView(
                         "Admin Dashboard",
-                        _services.GetRequiredService<AdminDashboardView>());
+                        _services.GetRequiredService<AdminDashboardView>(),
+                        AdminDashboardNavButton);
                     break;
                 case RoleType.TourGuide:
                     ShowView(
                         "Tour Guide Dashboard",
-                        _services.GetRequiredService<GuideDashboardView>());
+                        _services.GetRequiredService<GuideDashboardView>(),
+                        GuideDashboardNavButton);
                     break;
                 case RoleType.User:
                     ShowView(
                         "User Dashboard",
-                        _services.GetRequiredService<UserDashboardView>());
+                        _services.GetRequiredService<UserDashboardView>(),
+                        UserDashboardNavButton);
                     break;
                 default:
                     throw new InvalidOperationException(
@@ -240,18 +251,56 @@ namespace TravelApp
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
+            ClearActiveNavigationButton();
         }
 
-        private void ShowView(string title, UserControl view)
+        private void ShowView(string title, UserControl view, Button activeNavButton = null)
         {
             PageTitle.Text = title;
             MainContent.Content = view;
+            SetActiveNavigationButton(activeNavButton);
         }
 
         private void ShowHome()
         {
             PageTitle.Text = "Home";
             MainContent.Content = CreateHomeContent();
+            SetActiveNavigationButton(HomeNavButton);
+        }
+
+        private void SetActiveNavigationButton(Button activeButton)
+        {
+            ClearActiveNavigationButton();
+
+            if (activeButton == null)
+                return;
+
+            activeButton.Background = new SolidColorBrush(Color.FromRgb(94, 53, 177));
+            activeButton.FontWeight = FontWeights.SemiBold;
+        }
+
+        private void ClearActiveNavigationButton()
+        {
+            foreach (var button in GetNavigationButtons())
+            {
+                button.ClearValue(BackgroundProperty);
+                button.ClearValue(FontWeightProperty);
+            }
+        }
+
+        private Button[] GetNavigationButtons()
+        {
+            return new[]
+            {
+                HomeNavButton,
+                LoginNavButton,
+                RegisterNavButton,
+                UserDashboardNavButton,
+                GuideDashboardNavButton,
+                AdminDashboardNavButton,
+                AccountManagementNavButton,
+                ContentManagementNavButton
+            };
         }
 
         private static UIElement CreateHomeContent()

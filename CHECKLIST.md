@@ -39,7 +39,7 @@ Ký hiệu:
 - [x] Tạo màn hình Home mặc định
 - [x] Thêm code-behind cần thiết cho các WPF `UserControl`
 - [~] Chuẩn hóa toàn bộ text tiếng Việt về UTF-8
-- [~] Chuẩn hóa giao diện và trạng thái nút navigation
+- [x] Chuẩn hóa giao diện và trạng thái nút navigation
 
 ## 3. MVVM And Dependency Wiring
 
@@ -71,6 +71,7 @@ Ký hiệu:
 - [x] Tạo validation email và số điện thoại
 - [x] Tạo role navigation strategy cho Admin, Guide và User
 - [x] Kết nối form Login/Register với DI và `AuthService`
+- [x] Ẩn Login/Register sau khi đăng nhập và ẩn navigation không đúng role
 - [x] Thay mock `admin/admin` bằng truy vấn database
 - [x] Lưu tài khoản đăng ký vào database
 - [x] Thay SHA-256 bằng password hashing có salt như PBKDF2, bcrypt hoặc Argon2
