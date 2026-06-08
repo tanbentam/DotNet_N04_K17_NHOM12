@@ -114,6 +114,7 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\Shared\PaymentSimulationViewModel.cs" />
     <Compile Include="ViewModels\TourGuide\BookingRequestsViewModel.cs" />
+    <Compile Include="ViewModels\TourGuide\DestinationManagementViewModel.cs" />
     <Compile Include="ViewModels\TourGuide\GuideDashboardViewModel.cs" />
     <Compile Include="ViewModels\TourGuide\ScheduleManagementViewModel.cs" />
     <Compile Include="ViewModels\User\AdvancedSearchViewModel.cs" />

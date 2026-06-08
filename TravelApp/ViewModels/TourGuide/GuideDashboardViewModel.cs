@@ -6,13 +6,16 @@ namespace TravelApp.ViewModels.TourGuide
     {
         public ScheduleManagementViewModel ScheduleVM { get; }
         public BookingRequestsViewModel BookingRequestsVM { get; }
+        public DestinationManagementViewModel DestinationManagementVM { get; }
 
         public GuideDashboardViewModel(
             ScheduleManagementViewModel scheduleVM,
-            BookingRequestsViewModel bookingRequestsVM)
+            BookingRequestsViewModel bookingRequestsVM,
+            DestinationManagementViewModel destinationManagementVM)
         {
             ScheduleVM = scheduleVM;
             BookingRequestsVM = bookingRequestsVM;
+            DestinationManagementVM = destinationManagementVM;
         }
     }
 }

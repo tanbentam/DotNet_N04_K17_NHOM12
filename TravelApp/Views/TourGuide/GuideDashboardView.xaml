@@ -45,99 +45,141 @@
         <TabControl Grid.Row="1"
                     Style="{StaticResource MaterialDesignTabControl}">
             <TabItem Header="NỘI DUNG">
-                <Grid Margin="0,16,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                <Grid Margin="0,16,0,0"
+                      DataContext="{Binding DestinationManagementVM}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                    <materialDesign:Card Grid.Column="0"
-                                         Padding="20"
-                                         Margin="0,0,10,0">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="MapMarkerPlus"
-                                                         Width="24"
-                                                         Height="24"
-                                                         Margin="0,0,10,0"/>
-                                <TextBlock Text="Điểm đến"
-                                           FontSize="20"
-                                           FontWeight="SemiBold"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-
-                            <TextBlock Grid.Row="1"
-                                       Text="Tạo và chỉnh sửa điểm đến do bạn phụ trách. Nội dung mới sẽ được gửi Admin duyệt trước khi hiển thị."
-                                       TextWrapping="Wrap"
+                    <Grid Grid.Row="0" Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Điểm đến của tôi"
+                                       FontSize="20"
+                                       FontWeight="SemiBold"/>
+                            <TextBlock Text="Nội dung mới hoặc vừa chỉnh sửa sẽ chờ Admin duyệt."
                                        Foreground="Gray"
-                                       Margin="0,12,0,18"/>
-
-                            <StackPanel Grid.Row="2">
-                                <TextBlock Text="Trạng thái hiện tại"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,8"/>
-                                <TextBlock Text="Chức năng lưu dữ liệu thật sẽ được hoàn thiện ở bước tiếp theo trong checklist."
-                                           TextWrapping="Wrap"/>
-                            </StackPanel>
-
-                            <Button Grid.Row="3"
-                                    Content="+ Thêm điểm đến"
-                                    Style="{StaticResource MaterialDesignRaisedButton}"
-                                    HorizontalAlignment="Left"
-                                    Margin="0,20,0,0"/>
-                        </Grid>
-                    </materialDesign:Card>
-
-                    <materialDesign:Card Grid.Column="1"
-                                         Padding="20"
-                                         Margin="10,0,0,0">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Bed"
-                                                         Width="24"
-                                                         Height="24"
-                                                         Margin="0,0,10,0"/>
-                                <TextBlock Text="Khách sạn"
-                                           FontSize="20"
-                                           FontWeight="SemiBold"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-
-                            <TextBlock Grid.Row="1"
-                                       Text="Đề xuất khách sạn phù hợp với điểm đến. Khách sạn mới cần chờ Admin phê duyệt."
-                                       TextWrapping="Wrap"
-                                       Foreground="Gray"
-                                       Margin="0,12,0,18"/>
-
-                            <StackPanel Grid.Row="2">
-                                <TextBlock Text="Quy trình duyệt"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,8"/>
-                                <TextBlock Text="Sau khi tạo, nội dung sẽ ở trạng thái chờ duyệt và chỉ được công khai khi Admin chấp nhận."
-                                           TextWrapping="Wrap"/>
-                            </StackPanel>
-
-                            <Button Grid.Row="3"
-                                    Content="+ Thêm khách sạn"
+                                       Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Command="{Binding LoadDestinationsCommand}"
                                     Style="{StaticResource MaterialDesignOutlinedButton}"
-                                    HorizontalAlignment="Left"
-                                    Margin="0,20,0,0"/>
-                        </Grid>
-                    </materialDesign:Card>
+                                    ToolTip="Tải lại danh sách"
+                                    Margin="0,0,8,0">
+                                <materialDesign:PackIcon Kind="Refresh"/>
+                            </Button>
+                            <Button Command="{Binding CreateDestinationCommand}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Plus"
+                                                             Margin="0,0,8,0"/>
+                                    <TextBlock Text="Thêm điểm đến"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Foreground="#FFD32F2F"
+                                   TextWrapping="Wrap"
+                                   Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                        <TextBlock Text="{Binding SuccessMessage}"
+                                   Foreground="#FF2E7D32"
+                                   TextWrapping="Wrap"
+                                   Visibility="{Binding SuccessMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                        <ProgressBar IsIndeterminate="True"
+                                     Height="3"
+                                     Margin="0,8,0,0"
+                                     Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <DataGrid ItemsSource="{Binding Destinations}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  IsReadOnly="True"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal"
+                                  materialDesign:DataGridAssist.CellPadding="12">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Tên"
+                                                    Binding="{Binding Name}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Quốc gia"
+                                                    Binding="{Binding Country}"
+                                                    Width="150"/>
+                                <DataGridTextColumn Header="Trạng thái"
+                                                    Binding="{Binding ApprovalStatus}"
+                                                    Width="110"/>
+                                <DataGridTemplateColumn Header="Sửa" Width="70">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Command="{Binding DataContext.EditDestinationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                                    ToolTip="Chỉnh sửa điểm đến"
+                                                    Padding="0">
+                                                <materialDesign:PackIcon Kind="Pencil"/>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <materialDesign:Card Grid.Column="1"
+                                             Width="360"
+                                             Padding="20"
+                                             Margin="18,0,0,0"
+                                             VerticalAlignment="Top"
+                                             Visibility="{Binding IsEditorOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel>
+                                <TextBlock Text="{Binding FormTitle}"
+                                           FontSize="20"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,16"/>
+                                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Tên điểm đến"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         Margin="0,0,0,10"/>
+                                <TextBox Text="{Binding Country, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Quốc gia"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         Margin="0,0,0,10"/>
+                                <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Mô tả"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         Height="90"
+                                         Margin="0,0,0,10"/>
+                                <TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Đường dẫn ảnh"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         Margin="0,0,0,18"/>
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Right">
+                                    <Button Content="Hủy"
+                                            Command="{Binding CancelEditCommand}"
+                                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                                            Margin="0,0,8,0"/>
+                                    <Button Content="Lưu"
+                                            Command="{Binding SaveDestinationCommand}"
+                                            Style="{StaticResource MaterialDesignRaisedButton}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </materialDesign:Card>
+                    </Grid>
                 </Grid>
             </TabItem>
 

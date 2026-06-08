@@ -22,6 +22,25 @@ namespace TravelApp.Data.Repositories
             }
         }
 
+        public async Task<IReadOnlyList<DestinationModel>>
+            GetDestinationsByGuideAsync(int guideId)
+        {
+            if (guideId <= 0)
+            {
+                return new List<DestinationModel>();
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                return await context.Destinations
+                    .AsNoTracking()
+                    .Where(destination =>
+                        destination.CreatedByGuideId == guideId)
+                    .OrderBy(destination => destination.Name)
+                    .ToListAsync();
+            }
+        }
+
         public async Task<IReadOnlyList<HotelModel>> GetHotelsAsync()
         {
             using (var context = new ApplicationDbContext())
@@ -103,6 +122,35 @@ namespace TravelApp.Data.Repositories
                 existing.Description = destination.Description;
                 existing.ImageUrl = destination.ImageUrl;
                 existing.AverageRating = destination.AverageRating;
+                return await SaveChangesAsync(context);
+            }
+        }
+
+        public async Task<bool> UpdateDestinationByGuideAsync(
+            DestinationModel destination,
+            int guideId)
+        {
+            if (destination == null || destination.Id <= 0 || guideId <= 0)
+            {
+                return false;
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                var existing = await context.Destinations
+                    .FirstOrDefaultAsync(item =>
+                        item.Id == destination.Id &&
+                        item.CreatedByGuideId == guideId);
+                if (existing == null)
+                {
+                    return false;
+                }
+
+                existing.Name = destination.Name;
+                existing.Country = destination.Country;
+                existing.Description = destination.Description;
+                existing.ImageUrl = destination.ImageUrl;
+                existing.ApprovalStatus = ContentApprovalStatus.Pending;
                 return await SaveChangesAsync(context);
             }
         }

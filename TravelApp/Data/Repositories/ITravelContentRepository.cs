@@ -8,6 +8,8 @@ namespace TravelApp.Data.Repositories
     public interface ITravelContentRepository
     {
         Task<IReadOnlyList<DestinationModel>> GetDestinationsAsync();
+        Task<IReadOnlyList<DestinationModel>> GetDestinationsByGuideAsync(
+            int guideId);
         Task<IReadOnlyList<HotelModel>> GetHotelsAsync();
         Task<IReadOnlyList<BookingModel>> GetBookingsAsync();
         Task<bool> UpdateBookingStatusAsync(
@@ -15,6 +17,9 @@ namespace TravelApp.Data.Repositories
             BookingStatus status);
         Task<bool> CreateDestinationAsync(DestinationModel destination);
         Task<bool> UpdateDestinationAsync(DestinationModel destination);
+        Task<bool> UpdateDestinationByGuideAsync(
+            DestinationModel destination,
+            int guideId);
         Task<bool> DeleteDestinationAsync(int destinationId);
         Task<bool> UpdateDestinationApprovalAsync(
             int destinationId,
