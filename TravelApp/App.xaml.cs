@@ -9,6 +9,7 @@ using TravelApp.ViewModels.Admin;
 using TravelApp.ViewModels.Authentication;
 using TravelApp.ViewModels.TourGuide;
 using TravelApp.ViewModels.User;
+using TravelApp.ViewModels.Shared; // Đã thêm thư viện này
 using TravelApp.Views.Admin;
 using TravelApp.Views.Authentication;
 using TravelApp.Views.TourGuide;
@@ -30,7 +31,7 @@ namespace TravelApp
         {
             var services = new ServiceCollection();
 
-            // Đăng ký ViewModels
+            // Đăng ký ViewModels và Services
             services.AddTransient<MainViewModel>();
             services.AddSingleton<DatabaseConnectionService>();
             services.AddTransient<IUserRepository, UserRepository>();
@@ -48,6 +49,14 @@ namespace TravelApp
             services.AddTransient<RegisterView>();
             services.AddTransient<AdminDashboardViewModel>();
             services.AddTransient<GuideDashboardViewModel>();
+
+            // --- CÁC VIEWMODEL CON CỦA USER DASHBOARD ĐÃ ĐƯỢC ĐĂNG KÝ VÀO ĐÂY ---
+            services.AddTransient<AdvancedSearchViewModel>();
+            services.AddTransient<TourBookingViewModel>();
+            services.AddTransient<PaymentSimulationViewModel>();
+            services.AddSingleton<TravelApp.Services.NotificationQueue.NotificationManager>();
+            // -------------------------------------------------------------------
+
             services.AddTransient<UserDashboardViewModel>();
             services.AddTransient<AdminDashboardView>();
             services.AddTransient<GuideDashboardView>();
@@ -59,7 +68,6 @@ namespace TravelApp
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            // Khởi chạy MainWindow
             var mainWindow = Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }

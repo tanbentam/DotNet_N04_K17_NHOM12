@@ -2,43 +2,112 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:userVM="clr-namespace:TravelApp.ViewModels.User"
+             xmlns:sharedVM="clr-namespace:TravelApp.ViewModels.Shared"
              Background="{DynamicResource MaterialDesignPaper}">
-    <Grid>
-        <TabControl Style="{StaticResource MaterialDesignTabControl}">
 
-            <TabItem Header="KHÁM PHÁ &amp; ĐẶT TOUR">
-                <Grid Margin="16">
-                    <StackPanel>
-                        <TextBlock Text="Tìm kiếm điểm đến và khách sạn" FontWeight="Bold" FontSize="18"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,20">
-                            <TextBox materialDesign:HintAssist.Hint="Tỉnh/Thành phố" Width="150" Margin="0,0,10,0"/>
-                            <TextBox materialDesign:HintAssist.Hint="Giá tối đa" Width="100" Margin="0,0,10,0"/>
-                            <Button Content="Tìm kiếm" Style="{StaticResource MaterialDesignRaisedButton}"/>
-                        </StackPanel>
-
-                        <Separator Margin="0,10,0,20"/>
-
-                        <TextBlock Text="Thanh Toán Mô Phỏng" FontWeight="Bold" FontSize="18"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                            <Button Content="Quét QR (Fake)" Style="{StaticResource MaterialDesignOutlinedButton}" Margin="0,0,10,0"/>
-                            <Button Content="Chuyển khoản (Simulated)" Style="{StaticResource MaterialDesignOutlinedButton}"/>
-                        </StackPanel>
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type userVM:AdvancedSearchViewModel}">
+            <Grid Margin="16">
+                <StackPanel>
+                    <TextBlock Text="Tìm kiếm điểm đến và khách sạn"
+                            FontWeight="Bold"
+                            FontSize="20"
+                            Margin="0,0,0,16"/>
+                    <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,20">
+                        <TextBox materialDesign:HintAssist.Hint="Tỉnh/Thành phố"
+                                Width="150"
+                                Margin="0,0,10,0"/>
+                        <TextBox materialDesign:HintAssist.Hint="Giá tối đa"
+                                Width="100"
+                                Margin="0,0,10,0"/>
+                        <Button Content="Tìm kiếm"
+                                Style="{StaticResource MaterialDesignRaisedButton}"/>
                     </StackPanel>
-                </Grid>
-            </TabItem>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
 
-            <TabItem Header="YÊU THÍCH &amp; ĐÁNH GIÁ">
-                <Grid Margin="16">
-                    <TextBlock Text="Quản lý danh sách Yêu thích và Đánh giá Guide/Khách sạn" FontSize="16"/>
-                </Grid>
-            </TabItem>
+        <DataTemplate DataType="{x:Type userVM:TourBookingViewModel}">
+            <Grid Margin="16">
+                <TextBlock Text="Chi tiết &amp; Đặt Tour (Sẽ kết nối Database sau)"
+                        FontWeight="Bold"
+                        FontSize="20"/>
+            </Grid>
+        </DataTemplate>
 
-            <TabItem Header="HỒ SƠ CỦA TÔI">
-                <Grid Margin="16">
-                    <TextBlock Text="Chỉnh sửa thông tin cá nhân" FontSize="16"/>
-                </Grid>
-            </TabItem>
+        <DataTemplate DataType="{x:Type sharedVM:PaymentSimulationViewModel}">
+            <Grid Margin="16">
+                <StackPanel>
+                    <TextBlock Text="Thanh Toán Mô Phỏng"
+                            FontWeight="Bold"
+                            FontSize="20"
+                            Margin="0,0,0,16"/>
+                    <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,0">
+                        <Button Content="Quét QR (Fake)"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Margin="0,0,10,0"/>
+                        <Button Content="Chuyển khoản (Simulated)"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
 
-        </TabControl>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="230"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0"
+                Background="{DynamicResource MaterialDesignCardBackground}"
+                Margin="0,0,8,0"
+                CornerRadius="0,8,8,0">
+            <StackPanel Margin="0,20,0,0">
+                <TextBlock Text="MENU NGƯỜI DÙNG"
+                        FontWeight="Bold"
+                        Margin="16,0,16,16"
+                        Foreground="{DynamicResource MaterialDesignBody}"/>
+
+                <Button Content="🔍 Khám Phá &amp; Tìm Kiếm"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="Search"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        HorizontalContentAlignment="Left"
+                        Height="45"/>
+
+                <Button Content="📅 Quản Lý Đặt Tour"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="Booking"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        HorizontalContentAlignment="Left"
+                        Height="45"/>
+
+                <Button Content="💳 Thanh Toán"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="Payment"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        HorizontalContentAlignment="Left"
+                        Height="45"/>
+
+                <Separator Margin="16"/>
+
+                <Button Content="❤️ Yêu thích &amp; Đánh giá"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        HorizontalContentAlignment="Left"
+                        Height="45"/>
+                <Button Content="👤 Hồ sơ của tôi"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        HorizontalContentAlignment="Left"
+                        Height="45"/>
+            </StackPanel>
+        </Border>
+
+        <ContentControl Grid.Column="1"
+                Content="{Binding CurrentViewModel}"/>
     </Grid>
 </UserControl>
