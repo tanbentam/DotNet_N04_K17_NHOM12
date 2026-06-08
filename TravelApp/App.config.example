@@ -3,9 +3,49 @@
   <configSections>
     <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
   </configSections>
-  <connectionStrings>
-    <add name="DefaultConnection" connectionString="SslMode=Required;Server=mysql-24d022fe-dotnet-group-12.h.aivencloud.com;Port=16202;Database=travelapp_1;Uid=avnadmin;Pwd=AVNS_p-89g2MRIMj9QopWPCJ;" providerName="MySql.Data.MySqlClient" />
-  </connectionStrings>
+<connectionStrings>
+
+  <!--
+      CẤU HÌNH KẾT NỐI CƠ SỞ DỮ LIỆU
+  
+      Lưu ý RẤT QUAN TRỌNG:
+      KHÔNG commit App.config chứa thông tin thật lên Git (đã cho sẵn vào .gitignore).
+
+    Các bước cấu hình:
+
+    1. Tạo MySQL Database trên Aiven.
+    2. Lấy các thông tin:
+       - Host (Server)
+       - Port
+       - Database Name
+       - Username
+       - Password
+
+    3. Thay các giá trị bên dưới bằng thông tin của bạn.
+
+    Ví dụ:
+       Server=mydb.aivencloud.com
+       Port=16202
+       Database=travelapp_dev
+       Uid=avnadmin
+       Pwd=your_password
+
+    Nếu chưa cấu hình đúng, ứng dụng sẽ không thể truy cập cơ sở dữ liệu.
+
+    =============================================================
+  -->
+
+  <add
+      name="DefaultConnection"
+      connectionString="SslMode=Required;
+                        Server=NHAP_HOST_CUA_BAN_VAO_DAY;
+                        Port=NHAP_PORT;
+                        Database=TEN_DATABASE;
+                        Uid=NHAP_USERNAME;
+                        Pwd=NHAP_PASSWORD;"
+      providerName="MySql.Data.MySqlClient" />
+
+</connectionStrings>
   <system.data>
     <DbProviderFactories>
       <remove invariant="MySql.Data.MySqlClient" />
