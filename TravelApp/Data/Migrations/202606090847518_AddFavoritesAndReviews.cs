@@ -7,45 +7,46 @@
     {
         public override void Up()
         {
-            CreateTable(
-                "dbo.Favorites",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        UserId = c.Int(nullable: false),
-                        HotelId = c.Int(),
-                        GuideId = c.Int(),
-                        CreatedAt = c.DateTime(nullable: false, precision: 0),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Users", t => t.GuideId)
-                .ForeignKey("dbo.Hotels", t => t.HotelId)
-                .ForeignKey("dbo.Users", t => t.UserId)
-                .Index(t => t.UserId)
-                .Index(t => t.HotelId)
-                .Index(t => t.GuideId);
-            
-            CreateTable(
-                "dbo.Reviews",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        UserId = c.Int(nullable: false),
-                        HotelId = c.Int(),
-                        GuideId = c.Int(),
-                        Rating = c.Int(nullable: false),
-                        Comment = c.String(maxLength: 1000, storeType: "nvarchar"),
-                        CreatedAt = c.DateTime(nullable: false, precision: 0),
-                        UpdatedAt = c.DateTime(nullable: false, precision: 0),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Users", t => t.GuideId)
-                .ForeignKey("dbo.Hotels", t => t.HotelId)
-                .ForeignKey("dbo.Users", t => t.UserId)
-                .Index(t => t.UserId)
-                .Index(t => t.HotelId)
-                .Index(t => t.GuideId);
-            
+            Sql(@"
+CREATE TABLE IF NOT EXISTS `Favorites` (
+    `Id` INT NOT NULL AUTO_INCREMENT,
+    `UserId` INT NOT NULL,
+    `HotelId` INT NULL,
+    `GuideId` INT NULL,
+    `CreatedAt` DATETIME NOT NULL,
+    PRIMARY KEY (`Id`),
+    INDEX `IX_Favorites_UserId` (`UserId`),
+    INDEX `IX_Favorites_HotelId` (`HotelId`),
+    INDEX `IX_Favorites_GuideId` (`GuideId`),
+    CONSTRAINT `FK_Favorites_Users_UserId`
+        FOREIGN KEY (`UserId`) REFERENCES `Users` (`Id`),
+    CONSTRAINT `FK_Favorites_Hotels_HotelId`
+        FOREIGN KEY (`HotelId`) REFERENCES `Hotels` (`Id`),
+    CONSTRAINT `FK_Favorites_Users_GuideId`
+        FOREIGN KEY (`GuideId`) REFERENCES `Users` (`Id`)
+) ENGINE=InnoDB;");
+
+            Sql(@"
+CREATE TABLE IF NOT EXISTS `Reviews` (
+    `Id` INT NOT NULL AUTO_INCREMENT,
+    `UserId` INT NOT NULL,
+    `HotelId` INT NULL,
+    `GuideId` INT NULL,
+    `Rating` INT NOT NULL,
+    `Comment` NVARCHAR(1000) NULL,
+    `CreatedAt` DATETIME NOT NULL,
+    `UpdatedAt` DATETIME NOT NULL,
+    PRIMARY KEY (`Id`),
+    INDEX `IX_Reviews_UserId` (`UserId`),
+    INDEX `IX_Reviews_HotelId` (`HotelId`),
+    INDEX `IX_Reviews_GuideId` (`GuideId`),
+    CONSTRAINT `FK_Reviews_Users_UserId`
+        FOREIGN KEY (`UserId`) REFERENCES `Users` (`Id`),
+    CONSTRAINT `FK_Reviews_Hotels_HotelId`
+        FOREIGN KEY (`HotelId`) REFERENCES `Hotels` (`Id`),
+    CONSTRAINT `FK_Reviews_Users_GuideId`
+        FOREIGN KEY (`GuideId`) REFERENCES `Users` (`Id`)
+) ENGINE=InnoDB;");
         }
         
         public override void Down()
