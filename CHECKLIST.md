@@ -120,7 +120,7 @@ Ký hiệu:
 - [x] Hiển thị Popup Notification trong application shell
 - [x] Kết nối logging vào các luồng lỗi thực tế
 - [x] Hoàn thiện Image Upload Service
-- [ ] Lưu ảnh cục bộ hoặc trên storage thật
+- [x] Lưu ảnh cục bộ hoặc trên storage thật
 - [ ] Hoàn thiện Booking Service và pricing rules
 
 ## 10. Quality And Delivery

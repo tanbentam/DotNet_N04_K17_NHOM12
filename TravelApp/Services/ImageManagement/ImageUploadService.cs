@@ -2,6 +2,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using TravelApp.Services.Logging;
@@ -11,6 +12,7 @@ namespace TravelApp.Services.ImageManagement
     public sealed class ImageUploadService
     {
         public const long MaximumFileSize = 5 * 1024 * 1024;
+        private readonly string _storageRoot;
 
         private static readonly HashSet<string> AllowedExtensions =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -21,6 +23,17 @@ namespace TravelApp.Services.ImageManagement
                 ".bmp",
                 ".gif"
             };
+
+        public ImageUploadService()
+        {
+            _storageRoot = Path.Combine(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.LocalApplicationData),
+                "TravelApp",
+                "Images");
+        }
+
+        public string StorageRoot => _storageRoot;
 
         public string SelectImageFile()
         {
@@ -50,7 +63,7 @@ namespace TravelApp.Services.ImageManagement
                 return await Task.Run(() =>
                 {
                     ValidateImage(localFilePath);
-                    return Path.GetFullPath(localFilePath);
+                    return StoreImage(localFilePath, targetType);
                 });
             }
             catch (ImageUploadException)
@@ -60,13 +73,55 @@ namespace TravelApp.Services.ImageManagement
             catch (Exception ex)
             {
                 LoggerService.LogException(
-                    "Prepare image upload",
+                    "Store uploaded image",
                     ex,
                     "TargetType=" + targetType);
                 throw new ImageUploadException(
-                    "Không thể đọc file ảnh đã chọn.",
+                    "Không thể lưu ảnh vào bộ nhớ cục bộ.",
                     ex);
             }
+        }
+
+        private string StoreImage(
+            string localFilePath,
+            string targetType)
+        {
+            var targetFolder = Path.Combine(
+                _storageRoot,
+                NormalizeTargetType(targetType));
+            Directory.CreateDirectory(targetFolder);
+
+            var extension = Path.GetExtension(localFilePath).ToLowerInvariant();
+            var fileName = ComputeFileHash(localFilePath) + extension;
+            var destinationPath = Path.Combine(targetFolder, fileName);
+
+            if (!File.Exists(destinationPath))
+            {
+                File.Copy(localFilePath, destinationPath, false);
+            }
+
+            return destinationPath;
+        }
+
+        private static string ComputeFileHash(string localFilePath)
+        {
+            using (var stream = File.OpenRead(localFilePath))
+            using (var sha256 = SHA256.Create())
+            {
+                return BitConverter.ToString(sha256.ComputeHash(stream))
+                    .Replace("-", string.Empty)
+                    .ToLowerInvariant();
+            }
+        }
+
+        private static string NormalizeTargetType(string targetType)
+        {
+            return string.Equals(
+                targetType,
+                "Destination",
+                StringComparison.OrdinalIgnoreCase)
+                ? "Destination"
+                : "Hotel";
         }
 
         private static void ValidateTargetType(string targetType)
