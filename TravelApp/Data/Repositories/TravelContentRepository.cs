@@ -38,6 +38,137 @@ namespace TravelApp.Data.Repositories
         }
 
         public async Task<IReadOnlyList<DestinationModel>>
+            SearchApprovedDestinationsAsync(
+                string location,
+                decimal minimumRating,
+                string guideName)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var query = context.Destinations
+                    .AsNoTracking()
+                    .Include(destination => destination.CreatedByGuide)
+                    .Where(destination =>
+                        destination.ApprovalStatus ==
+                            ContentApprovalStatus.Approved);
+
+                if (!string.IsNullOrWhiteSpace(location))
+                {
+                    var locationFilter = location.Trim();
+                    query = query.Where(destination =>
+                        destination.Name.Contains(locationFilter) ||
+                        destination.Country.Contains(locationFilter));
+                }
+
+                if (minimumRating > 0)
+                {
+                    query = query.Where(destination =>
+                        destination.AverageRating >= minimumRating);
+                }
+
+                if (!string.IsNullOrWhiteSpace(guideName))
+                {
+                    var guideFilter = guideName.Trim();
+                    query = query.Where(destination =>
+                        destination.CreatedByGuide != null &&
+                        destination.CreatedByGuide.FullName.Contains(
+                            guideFilter));
+                }
+
+                return await query
+                    .OrderBy(destination => destination.Name)
+                    .ToListAsync();
+            }
+        }
+
+        public async Task<IReadOnlyList<HotelModel>> SearchApprovedHotelsAsync(
+            string location,
+            decimal maximumPrice,
+            decimal minimumRating,
+            string guideName)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var query = context.Hotels
+                    .AsNoTracking()
+                    .Include(hotel => hotel.Destination)
+                    .Include(hotel => hotel.CreatedByGuide)
+                    .Where(hotel =>
+                        hotel.ApprovalStatus ==
+                            ContentApprovalStatus.Approved &&
+                        hotel.Destination.ApprovalStatus ==
+                            ContentApprovalStatus.Approved);
+
+                if (!string.IsNullOrWhiteSpace(location))
+                {
+                    var locationFilter = location.Trim();
+                    query = query.Where(hotel =>
+                        hotel.Name.Contains(locationFilter) ||
+                        hotel.Address.Contains(locationFilter) ||
+                        hotel.Destination.Name.Contains(locationFilter) ||
+                        hotel.Destination.Country.Contains(locationFilter));
+                }
+
+                if (maximumPrice > 0)
+                {
+                    query = query.Where(hotel =>
+                        hotel.PricePerNight <= maximumPrice);
+                }
+
+                if (minimumRating > 0)
+                {
+                    query = query.Where(hotel =>
+                        hotel.Rating >= minimumRating);
+                }
+
+                if (!string.IsNullOrWhiteSpace(guideName))
+                {
+                    var guideFilter = guideName.Trim();
+                    query = query.Where(hotel =>
+                        hotel.CreatedByGuide != null &&
+                        hotel.CreatedByGuide.FullName.Contains(guideFilter));
+                }
+
+                return await query
+                    .OrderBy(hotel => hotel.Name)
+                    .ToListAsync();
+            }
+        }
+
+        public async Task<IReadOnlyList<UserModel>> SearchGuidesAsync(
+            string guideName,
+            string availability)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var query = context.Users
+                    .AsNoTracking()
+                    .Where(user => user.Role == RoleType.TourGuide);
+
+                if (!string.IsNullOrWhiteSpace(guideName))
+                {
+                    var guideFilter = guideName.Trim();
+                    query = query.Where(user =>
+                        user.FullName.Contains(guideFilter));
+                }
+
+                if (!string.IsNullOrWhiteSpace(availability))
+                {
+                    var availabilityFilter = availability.Trim();
+                    query = query.Where(user =>
+                        user.Availabilities.Any(item =>
+                            item.IsAvailable &&
+                            (item.DayName.Contains(availabilityFilter) ||
+                             item.TimeSlot.Contains(availabilityFilter))));
+                }
+
+                return await query
+                    .OrderBy(user => user.FullName)
+                    .ToListAsync();
+            }
+        }
+
+        public async Task<IReadOnlyList<DestinationModel>>
             GetDestinationsByGuideAsync(int guideId)
         {
             if (guideId <= 0)

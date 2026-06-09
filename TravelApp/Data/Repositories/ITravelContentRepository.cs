@@ -9,6 +9,18 @@ namespace TravelApp.Data.Repositories
     {
         Task<IReadOnlyList<DestinationModel>> GetDestinationsAsync();
         Task<IReadOnlyList<DestinationModel>> GetApprovedDestinationsAsync();
+        Task<IReadOnlyList<DestinationModel>> SearchApprovedDestinationsAsync(
+            string location,
+            decimal minimumRating,
+            string guideName);
+        Task<IReadOnlyList<HotelModel>> SearchApprovedHotelsAsync(
+            string location,
+            decimal maximumPrice,
+            decimal minimumRating,
+            string guideName);
+        Task<IReadOnlyList<UserModel>> SearchGuidesAsync(
+            string guideName,
+            string availability);
         Task<IReadOnlyList<DestinationModel>> GetDestinationsByGuideAsync(
             int guideId);
         Task<IReadOnlyList<HotelModel>> GetHotelsAsync();

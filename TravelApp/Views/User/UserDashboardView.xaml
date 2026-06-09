@@ -34,6 +34,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
@@ -57,7 +58,12 @@
                                      materialDesign:HintAssist.Hint="Tên Guide"
                                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                      Margin="0,0,10,0"/>
-                            <Button Grid.Column="4"
+                            <TextBox Grid.Column="4"
+                                     Text="{Binding SearchTime, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Ngày/khung giờ"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,10,0"/>
+                            <Button Grid.Column="5"
                                     Command="{Binding SearchCommand}"
                                     Style="{StaticResource MaterialDesignRaisedButton}"
                                     Height="40"
@@ -74,34 +80,102 @@
                     <Grid Grid.Row="1"
                           DataContext="{Binding SearchVM}"
                           Margin="0,18,0,18">
-                        <DataGrid ItemsSource="{Binding SearchResults}"
-                                  SelectedItem="{Binding DataContext.BookingVM.SelectedDestination, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                  AutoGenerateColumns="False"
-                                  CanUserAddRows="False"
-                                  IsReadOnly="True"
-                                  HeadersVisibility="Column"
-                                  GridLinesVisibility="Horizontal"
-                                  materialDesign:DataGridAssist.CellPadding="12">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Điểm đến"
-                                                    Binding="{Binding Name}"
-                                                    Width="2*"/>
-                                <DataGridTextColumn Header="Quốc gia"
-                                                    Binding="{Binding Country}"
-                                                    Width="*"/>
-                                <DataGridTextColumn Header="Đánh giá"
-                                                    Binding="{Binding AverageRating}"
-                                                    Width="100"/>
-                                <DataGridTextColumn Header="Trạng thái"
-                                                    Binding="{Binding ApprovalStatus}"
-                                                    Width="110"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <ProgressBar IsIndeterminate="True"
-                                     Height="3"
-                                     VerticalAlignment="Top"
-                                     Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <GroupBox Grid.Row="0"
+                                      Grid.Column="0"
+                                      Header="Điểm đến"
+                                      Margin="0,0,6,0">
+                                <DataGrid ItemsSource="{Binding DestinationResults}"
+                                          SelectedItem="{Binding DataContext.BookingVM.SelectedDestination, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          IsReadOnly="True"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="Horizontal">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Tên"
+                                                            Binding="{Binding Name}"
+                                                            Width="*"/>
+                                        <DataGridTextColumn Header="Khu vực"
+                                                            Binding="{Binding Country}"
+                                                            Width="*"/>
+                                        <DataGridTextColumn Header="Đánh giá"
+                                                            Binding="{Binding AverageRating}"
+                                                            Width="75"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </GroupBox>
+
+                            <GroupBox Grid.Row="0"
+                                      Grid.Column="1"
+                                      Header="Khách sạn"
+                                      Margin="6,0">
+                                <DataGrid ItemsSource="{Binding HotelResults}"
+                                          SelectedItem="{Binding DataContext.BookingVM.SelectedHotel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          IsReadOnly="True"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="Horizontal">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Tên"
+                                                            Binding="{Binding Name}"
+                                                            Width="*"/>
+                                        <DataGridTextColumn Header="Giá/đêm"
+                                                            Binding="{Binding PricePerNight, StringFormat={}{0:N0}}"
+                                                            Width="90"/>
+                                        <DataGridTextColumn Header="Sao"
+                                                            Binding="{Binding Rating}"
+                                                            Width="45"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </GroupBox>
+
+                            <GroupBox Grid.Row="0"
+                                      Grid.Column="2"
+                                      Header="Guide"
+                                      Margin="6,0,0,0">
+                                <DataGrid ItemsSource="{Binding GuideResults}"
+                                          SelectedItem="{Binding DataContext.BookingVM.SelectedGuide, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          IsReadOnly="True"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="Horizontal">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Họ tên"
+                                                            Binding="{Binding FullName}"
+                                                            Width="*"/>
+                                        <DataGridTextColumn Header="Email"
+                                                            Binding="{Binding Email}"
+                                                            Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </GroupBox>
+
+                            <TextBlock Grid.Row="1"
+                                       Grid.ColumnSpan="3"
+                                       Text="{Binding SearchMessage}"
+                                       Foreground="Gray"
+                                       Margin="0,8,0,0"/>
+
+                            <ProgressBar Grid.Row="0"
+                                         Grid.ColumnSpan="3"
+                                         IsIndeterminate="True"
+                                         Height="3"
+                                         VerticalAlignment="Top"
+                                         Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </Grid>
                     </Grid>
 
                     <Grid Grid.Row="2">
@@ -118,6 +192,10 @@
                                        FontWeight="SemiBold"/>
                             <TextBlock Text="{Binding SelectedDestination.Name, StringFormat=Điểm đến đã chọn: {0}, TargetNullValue=Chưa chọn điểm đến}"
                                        Margin="0,8,0,8"/>
+                            <TextBlock Text="{Binding SelectedHotel.Name, StringFormat=Khách sạn đã chọn: {0}, TargetNullValue=Chưa chọn khách sạn}"
+                                       Margin="0,0,0,4"/>
+                            <TextBlock Text="{Binding SelectedGuide.FullName, StringFormat=Guide đã chọn: {0}, TargetNullValue=Chưa chọn Guide}"
+                                       Margin="0,0,0,8"/>
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Text="{Binding TripDurationDays, UpdateSourceTrigger=PropertyChanged}"
                                          materialDesign:HintAssist.Hint="Số ngày"

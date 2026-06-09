@@ -107,7 +107,7 @@ Ký hiệu:
 - [x] Tạo Tour Booking ViewModel
 - [x] Tạo Payment Simulation ViewModel
 - [x] Nối search, booking và payment vào User Dashboard
-- [ ] Tìm kiếm Destination, Hotel và Guide từ database
+- [x] Tìm kiếm Destination, Hotel và Guide từ database
 - [ ] Tạo và hủy Booking bằng dữ liệu thật
 - [ ] Hoàn thiện hồ sơ người dùng
 - [ ] Hoàn thiện yêu thích và đánh giá
