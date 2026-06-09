@@ -8,15 +8,18 @@ namespace TravelApp.ViewModels.User
         public AdvancedSearchViewModel SearchVM { get; }
         public TourBookingViewModel BookingVM { get; }
         public PaymentSimulationViewModel PaymentVM { get; }
+        public UserProfileViewModel ProfileVM { get; }
 
         public UserDashboardViewModel(
             AdvancedSearchViewModel searchVM,
             TourBookingViewModel bookingVM,
-            PaymentSimulationViewModel paymentVM)
+            PaymentSimulationViewModel paymentVM,
+            UserProfileViewModel profileVM)
         {
             SearchVM = searchVM;
             BookingVM = bookingVM;
             PaymentVM = paymentVM;
+            ProfileVM = profileVM;
         }
     }
 }

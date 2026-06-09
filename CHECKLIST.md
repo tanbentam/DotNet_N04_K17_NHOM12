@@ -109,7 +109,7 @@ Ký hiệu:
 - [x] Nối search, booking và payment vào User Dashboard
 - [x] Tìm kiếm Destination, Hotel và Guide từ database
 - [x] Tạo và hủy Booking bằng dữ liệu thật
-- [ ] Hoàn thiện hồ sơ người dùng
+- [x] Hoàn thiện hồ sơ người dùng
 - [ ] Hoàn thiện yêu thích và đánh giá
 - [ ] Hoàn thiện quy trình thanh toán mô phỏng
 
