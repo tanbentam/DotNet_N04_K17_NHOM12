@@ -106,7 +106,7 @@ Ký hiệu:
 - [x] Tạo Advanced Search ViewModel
 - [x] Tạo Tour Booking ViewModel
 - [x] Tạo Payment Simulation ViewModel
-- [~] Nối search, booking và payment vào User Dashboard
+- [x] Nối search, booking và payment vào User Dashboard
 - [ ] Tìm kiếm Destination, Hotel và Guide từ database
 - [ ] Tạo và hủy Booking bằng dữ liệu thật
 - [ ] Hoàn thiện hồ sơ người dùng
@@ -131,7 +131,7 @@ Ký hiệu:
 - [ ] Viết Integration Tests cho EF6/MySQL
 - [ ] Viết smoke test cho các luồng UI chính
 - [ ] Bổ sung README với hướng dẫn setup và build
-- [ ] Di chuyển database credentials khỏi `App.config`
+- [x] Di chuyển database credentials khỏi `App.config`
 - [ ] Thêm cấu hình theo environment
 - [ ] Thực hiện security review
 - [ ] Chuẩn bị release build và deployment package

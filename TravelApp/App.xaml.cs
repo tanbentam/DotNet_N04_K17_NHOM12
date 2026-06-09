@@ -8,6 +8,7 @@ using TravelApp.Services.NotificationQueue;
 using TravelApp.ViewModels;
 using TravelApp.ViewModels.Admin;
 using TravelApp.ViewModels.Authentication;
+using TravelApp.ViewModels.Shared;
 using TravelApp.ViewModels.TourGuide;
 using TravelApp.ViewModels.User;
 using TravelApp.Views.Admin;
@@ -55,6 +56,9 @@ namespace TravelApp
             services.AddTransient<DestinationManagementViewModel>();
             services.AddTransient<HotelManagementViewModel>();
             services.AddTransient<GuideDashboardViewModel>();
+            services.AddTransient<AdvancedSearchViewModel>();
+            services.AddTransient<TourBookingViewModel>();
+            services.AddTransient<PaymentSimulationViewModel>();
             services.AddTransient<UserDashboardViewModel>();
             services.AddTransient<AdminDashboardView>();
             services.AddTransient<GuideDashboardView>();
