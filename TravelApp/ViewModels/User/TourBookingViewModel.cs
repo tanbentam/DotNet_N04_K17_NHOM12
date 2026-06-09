@@ -7,6 +7,7 @@ using TravelApp.Data.Repositories;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services.Contracts;
+using TravelApp.Services.Logging;
 using TravelApp.Services.NotificationQueue;
 
 namespace TravelApp.ViewModels.User
@@ -93,6 +94,10 @@ namespace TravelApp.ViewModels.User
             {
                 if (!await _contentRepository.CreateBookingAsync(booking))
                 {
+                    LoggerService.LogBookingFailure(
+                        user.Id.ToString(),
+                        "Create booking was rejected. BookingCode=" +
+                            booking.BookingId);
                     BookingMessage =
                         "Không thể tạo booking. Hãy kiểm tra lại lựa chọn.";
                     return;
@@ -108,8 +113,14 @@ namespace TravelApp.ViewModels.User
             }
             catch (Exception ex)
             {
+                var errorId = LoggerService.LogException(
+                    "Create user booking",
+                    ex,
+                    "UserId=" + user.Id +
+                    "; BookingCode=" + booking.BookingId);
                 BookingMessage = "Không thể tạo booking: " +
-                    ex.GetBaseException().Message;
+                    ex.GetBaseException().Message +
+                    " [" + errorId + "]";
             }
             finally
             {
@@ -137,6 +148,10 @@ namespace TravelApp.ViewModels.User
                         user.Id);
                 if (!cancelled)
                 {
+                    LoggerService.LogBookingFailure(
+                        user.Id.ToString(),
+                        "Cancel booking was rejected. BookingId=" +
+                            booking.Id);
                     BookingMessage =
                         "Chỉ có thể hủy booking đang chờ hoặc đã được chấp nhận.";
                     return;
@@ -151,8 +166,14 @@ namespace TravelApp.ViewModels.User
             }
             catch (Exception ex)
             {
+                var errorId = LoggerService.LogException(
+                    "Cancel user booking",
+                    ex,
+                    "UserId=" + user.Id +
+                    "; BookingId=" + booking.Id);
                 BookingMessage = "Không thể hủy booking: " +
-                    ex.GetBaseException().Message;
+                    ex.GetBaseException().Message +
+                    " [" + errorId + "]";
             }
             finally
             {
@@ -178,8 +199,13 @@ namespace TravelApp.ViewModels.User
             }
             catch (Exception ex)
             {
+                var errorId = LoggerService.LogException(
+                    "Load user bookings",
+                    ex,
+                    "UserId=" + user.Id);
                 BookingMessage = "Không thể tải booking: " +
-                    ex.GetBaseException().Message;
+                    ex.GetBaseException().Message +
+                    " [" + errorId + "]";
             }
         }
 

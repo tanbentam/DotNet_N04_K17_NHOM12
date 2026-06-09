@@ -34,8 +34,10 @@ namespace TravelApp.Services.ImageManagement
             }
             catch (Exception ex)
             {
-                // Ghi log lỗi API
-                LoggerService.LogApiError("UploadImageAsync", ex.Message);
+                LoggerService.LogException(
+                    "Upload image",
+                    ex,
+                    "TargetType=" + targetType);
                 return null;
             }
         }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
+using TravelApp.Services.Logging;
 
 namespace TravelApp.Data.Repositories
 {
@@ -255,8 +256,11 @@ namespace TravelApp.Data.Repositories
                 await context.SaveChangesAsync();
                 return true;
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
+                LoggerService.LogException(
+                    "Save user engagement repository",
+                    ex);
                 return false;
             }
         }

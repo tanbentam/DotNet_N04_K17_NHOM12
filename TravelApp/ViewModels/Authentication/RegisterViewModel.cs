@@ -82,6 +82,10 @@ namespace TravelApp.ViewModels.Authentication
                 else
                 {
                     ErrorMessage = "Đăng ký thất bại. Email hoặc Số điện thoại có thể đã tồn tại.";
+                    LoggerService.LogWarning(
+                        "Register",
+                        "Registration was rejected because email or phone may already exist.",
+                        "Role=User");
                 }
             }
             catch (Exception ex)

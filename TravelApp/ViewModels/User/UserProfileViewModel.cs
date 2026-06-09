@@ -6,6 +6,7 @@ using TravelApp.Data.Repositories;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services.Contracts;
+using TravelApp.Services.Logging;
 using TravelApp.Services.NotificationQueue;
 using TravelApp.Utils;
 
@@ -86,6 +87,10 @@ namespace TravelApp.ViewModels.User
                     null);
                 if (!saved)
                 {
+                    LoggerService.LogWarning(
+                        "Update user profile",
+                        "Repository rejected profile update.",
+                        "UserId=" + currentUser.Id);
                     ProfileMessage =
                         "Không thể cập nhật. Email hoặc số điện thoại có thể đã tồn tại.";
                     return;
@@ -112,8 +117,13 @@ namespace TravelApp.ViewModels.User
             }
             catch (Exception ex)
             {
+                var errorId = LoggerService.LogException(
+                    "Update user profile",
+                    ex,
+                    "UserId=" + currentUser.Id);
                 ProfileMessage = "Không thể cập nhật hồ sơ: " +
-                    ex.GetBaseException().Message;
+                    ex.GetBaseException().Message +
+                    " [" + errorId + "]";
             }
             finally
             {

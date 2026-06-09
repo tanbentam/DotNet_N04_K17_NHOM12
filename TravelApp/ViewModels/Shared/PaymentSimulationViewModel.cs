@@ -7,6 +7,7 @@ using TravelApp.Data.Repositories;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services.Contracts;
+using TravelApp.Services.Logging;
 using TravelApp.Services.NotificationQueue;
 
 namespace TravelApp.ViewModels.Shared
@@ -83,8 +84,13 @@ namespace TravelApp.ViewModels.Shared
             }
             catch (Exception ex)
             {
+                var errorId = LoggerService.LogException(
+                    "Load payment data",
+                    ex,
+                    "UserId=" + user.Id);
                 PaymentMessage = "Không thể tải dữ liệu thanh toán: " +
-                    ex.GetBaseException().Message;
+                    ex.GetBaseException().Message +
+                    " [" + errorId + "]";
             }
             finally
             {
@@ -176,6 +182,12 @@ namespace TravelApp.ViewModels.Shared
                 PaymentMessage = result.Message;
                 if (!result.WasSaved)
                 {
+                    LoggerService.LogWarning(
+                        "Process payment",
+                        result.Message,
+                        "UserId=" + user.Id +
+                        "; BookingId=" + SelectedBooking.Id +
+                        "; Method=" + SelectedPaymentMethod.Value);
                     return;
                 }
 
@@ -201,8 +213,14 @@ namespace TravelApp.ViewModels.Shared
             }
             catch (Exception ex)
             {
+                var errorId = LoggerService.LogException(
+                    "Process payment",
+                    ex,
+                    "UserId=" + user.Id +
+                    "; BookingId=" + SelectedBooking.Id);
                 PaymentMessage = "Không thể xử lý thanh toán: " +
-                    ex.GetBaseException().Message;
+                    ex.GetBaseException().Message +
+                    " [" + errorId + "]";
             }
             finally
             {

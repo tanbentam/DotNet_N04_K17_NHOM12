@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TravelApp.Data.Repositories;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
+using TravelApp.Services.Logging;
 
 namespace TravelApp.ViewModels.Admin
 {
@@ -141,7 +142,11 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Save destination",
+                    ex,
+                    "Không thể lưu điểm đến",
+                    "DestinationId=" + destination.Id);
             }
             finally
             {
@@ -280,7 +285,11 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Save hotel",
+                    ex,
+                    "Không thể lưu khách sạn",
+                    "HotelId=" + hotel.Id);
             }
             finally
             {
@@ -373,7 +382,11 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Update admin booking status",
+                    ex,
+                    "Không thể cập nhật trạng thái booking",
+                    "BookingId=" + SelectedBooking?.Id);
             }
             finally
             {
@@ -400,8 +413,10 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = "Không thể tải dữ liệu nội dung: " +
-                    ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Load admin content",
+                    ex,
+                    "Không thể tải dữ liệu nội dung");
             }
             finally
             {
@@ -437,7 +452,12 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Update destination approval",
+                    ex,
+                    "Không thể cập nhật trạng thái duyệt điểm đến",
+                    "DestinationId=" + destination.Id +
+                    "; Status=" + status);
             }
             finally
             {
@@ -473,7 +493,12 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Update hotel approval",
+                    ex,
+                    "Không thể cập nhật trạng thái duyệt khách sạn",
+                    "HotelId=" + hotel.Id +
+                    "; Status=" + status);
             }
             finally
             {
@@ -550,6 +575,19 @@ namespace TravelApp.ViewModels.Admin
         {
             ErrorMessage = string.Empty;
             SuccessMessage = string.Empty;
+        }
+
+        private void SetLoggedError(
+            string operation,
+            Exception exception,
+            string message,
+            string context = null)
+        {
+            var errorId = LoggerService.LogException(
+                operation,
+                exception,
+                context);
+            ErrorMessage = message + ". Mã lỗi: " + errorId;
         }
     }
 }

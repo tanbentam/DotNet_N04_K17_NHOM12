@@ -59,7 +59,9 @@ namespace TravelApp.ViewModels.Authentication
                 else
                 {
                     ErrorMessage = "Thông tin đăng nhập không chính xác.";
-                    // [BACKEND DEVELOPER NOTE] Ghi log lỗi đăng nhập (Login failures) vào file cục bộ 
+                    LoggerService.LogLoginFailure(
+                        Identifier,
+                        "Invalid identifier or password.");
                 }
             }
             catch (Exception ex)

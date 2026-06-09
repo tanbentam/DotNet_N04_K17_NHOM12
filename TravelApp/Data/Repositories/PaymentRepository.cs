@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
+using TravelApp.Services.Logging;
 
 namespace TravelApp.Data.Repositories
 {
@@ -132,9 +133,15 @@ namespace TravelApp.Data.Repositories
                         ? PaymentProcessResult.Success()
                         : PaymentProcessResult.FailedSimulation();
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException ex)
                 {
                     transaction.Rollback();
+                    LoggerService.LogException(
+                        "Save payment repository",
+                        ex,
+                        "UserId=" + userId +
+                        "; BookingId=" + bookingId +
+                        "; Method=" + method);
                     return PaymentProcessResult.Rejected(
                         "Không thể lưu giao dịch hoặc mã giao dịch đã tồn tại.");
                 }

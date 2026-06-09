@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using TravelApp.Models;
+using TravelApp.Services.Logging;
 
 namespace TravelApp.Data.Repositories
 {
@@ -67,6 +68,10 @@ namespace TravelApp.Data.Repositories
                 catch (DbUpdateException ex) when (IsDuplicateKey(ex))
                 {
                     // Unique indexes remain the final guard against concurrent registration.
+                    LoggerService.LogWarning(
+                        "Create user",
+                        "Database rejected a duplicate email or phone.",
+                        "Role=" + user.Role);
                     return false;
                 }
             }
@@ -113,8 +118,12 @@ namespace TravelApp.Data.Repositories
                     await context.SaveChangesAsync();
                     return true;
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException ex)
                 {
+                    LoggerService.LogException(
+                        "Update user repository",
+                        ex,
+                        "UserId=" + user.Id);
                     return false;
                 }
             }
@@ -137,8 +146,12 @@ namespace TravelApp.Data.Repositories
                     await context.SaveChangesAsync();
                     return true;
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException ex)
                 {
+                    LoggerService.LogException(
+                        "Delete user repository",
+                        ex,
+                        "UserId=" + userId);
                     return false;
                 }
             }

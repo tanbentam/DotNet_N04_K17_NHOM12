@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using TravelApp.Data.Repositories;
 using TravelApp.Models;
+using TravelApp.Services.Logging;
 
 namespace TravelApp.ViewModels.User
 {
@@ -85,8 +86,12 @@ namespace TravelApp.ViewModels.User
             }
             catch (Exception ex)
             {
+                var errorId = LoggerService.LogException(
+                    "User advanced search",
+                    ex);
                 SearchMessage = "Không thể tìm kiếm dữ liệu: " +
-                    ex.GetBaseException().Message;
+                    ex.GetBaseException().Message +
+                    " [" + errorId + "]";
             }
             finally
             {

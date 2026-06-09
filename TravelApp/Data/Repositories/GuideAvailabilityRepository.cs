@@ -5,6 +5,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelApp.Models;
+using TravelApp.Services.Logging;
 
 namespace TravelApp.Data.Repositories
 {
@@ -64,8 +65,12 @@ namespace TravelApp.Data.Repositories
                     await context.SaveChangesAsync();
                     return true;
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException ex)
                 {
+                    LoggerService.LogException(
+                        "Save guide availability repository",
+                        ex,
+                        "GuideId=" + guideId);
                     return false;
                 }
             }

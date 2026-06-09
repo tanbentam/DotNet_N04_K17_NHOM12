@@ -7,6 +7,7 @@ using TravelApp.Data.Repositories;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services.Contracts;
+using TravelApp.Services.Logging;
 using TravelApp.Services.NotificationQueue;
 
 namespace TravelApp.ViewModels.User
@@ -92,8 +93,13 @@ namespace TravelApp.ViewModels.User
             }
             catch (Exception ex)
             {
+                var errorId = LoggerService.LogException(
+                    "Load user favorites and reviews",
+                    ex,
+                    "UserId=" + user.Id);
                 EngagementMessage = "Không thể tải dữ liệu: " +
-                    ex.GetBaseException().Message;
+                    ex.GetBaseException().Message +
+                    " [" + errorId + "]";
             }
             finally
             {
@@ -144,6 +150,11 @@ namespace TravelApp.ViewModels.User
                 favorite.Id,
                 user.Id))
             {
+                LoggerService.LogWarning(
+                    "Remove favorite",
+                    "Repository rejected favorite removal.",
+                    "UserId=" + user.Id +
+                    "; FavoriteId=" + favorite.Id);
                 EngagementMessage = "Không thể bỏ mục yêu thích.";
                 return;
             }
@@ -203,6 +214,11 @@ namespace TravelApp.ViewModels.User
                 review.Id,
                 user.Id))
             {
+                LoggerService.LogWarning(
+                    "Delete review",
+                    "Repository rejected review deletion.",
+                    "UserId=" + user.Id +
+                    "; ReviewId=" + review.Id);
                 EngagementMessage = "Không thể xóa đánh giá.";
                 return;
             }
@@ -224,6 +240,10 @@ namespace TravelApp.ViewModels.User
             {
                 if (!await addAction())
                 {
+                    LoggerService.LogWarning(
+                        "Add favorite",
+                        "Repository rejected favorite creation.",
+                        "UserId=" + user.Id);
                     EngagementMessage =
                         "Không thể thêm yêu thích hoặc mục này đã tồn tại.";
                     return;
@@ -267,6 +287,10 @@ namespace TravelApp.ViewModels.User
             {
                 if (!await saveAction())
                 {
+                    LoggerService.LogWarning(
+                        "Save review",
+                        "Repository rejected review save.",
+                        "UserId=" + user.Id);
                     EngagementMessage = "Không thể lưu đánh giá.";
                     return;
                 }
