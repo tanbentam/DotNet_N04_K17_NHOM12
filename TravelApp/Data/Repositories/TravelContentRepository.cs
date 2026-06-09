@@ -215,6 +215,105 @@ namespace TravelApp.Data.Repositories
             }
         }
 
+        public async Task<IReadOnlyList<BookingModel>> GetBookingsByUserAsync(
+            int userId)
+        {
+            if (userId <= 0)
+            {
+                return new List<BookingModel>();
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                return await context.Bookings
+                    .AsNoTracking()
+                    .Include(booking => booking.Guide)
+                    .Include(booking => booking.Hotel)
+                    .Include(booking => booking.Destination)
+                    .Where(booking => booking.UserId == userId)
+                    .OrderByDescending(booking => booking.StartDate)
+                    .ThenByDescending(booking => booking.Id)
+                    .ToListAsync();
+            }
+        }
+
+        public async Task<bool> CreateBookingAsync(BookingModel booking)
+        {
+            if (booking == null ||
+                booking.UserId <= 0 ||
+                booking.GuideId <= 0 ||
+                booking.DestinationId <= 0 ||
+                booking.Nights <= 0 ||
+                booking.StartDate.Date < System.DateTime.Today ||
+                string.IsNullOrWhiteSpace(booking.BookingId))
+            {
+                return false;
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                var userExists = await context.Users.AnyAsync(user =>
+                    user.Id == booking.UserId &&
+                    user.Role == RoleType.User);
+                var guideExists = await context.Users.AnyAsync(guide =>
+                    guide.Id == booking.GuideId &&
+                    guide.Role == RoleType.TourGuide);
+                var destinationExists =
+                    await context.Destinations.AnyAsync(destination =>
+                        destination.Id == booking.DestinationId &&
+                        destination.ApprovalStatus ==
+                            ContentApprovalStatus.Approved);
+
+                if (!userExists || !guideExists || !destinationExists)
+                {
+                    return false;
+                }
+
+                if (booking.HotelId.HasValue)
+                {
+                    var hotelExists = await context.Hotels.AnyAsync(hotel =>
+                        hotel.Id == booking.HotelId.Value &&
+                        hotel.DestinationId == booking.DestinationId &&
+                        hotel.ApprovalStatus ==
+                            ContentApprovalStatus.Approved);
+                    if (!hotelExists)
+                    {
+                        return false;
+                    }
+                }
+
+                booking.Status = BookingStatus.Pending;
+                context.Bookings.Add(booking);
+                return await SaveChangesAsync(context);
+            }
+        }
+
+        public async Task<bool> CancelBookingByUserAsync(
+            int bookingId,
+            int userId)
+        {
+            if (bookingId <= 0 || userId <= 0)
+            {
+                return false;
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                var booking = await context.Bookings.FirstOrDefaultAsync(item =>
+                    item.Id == bookingId &&
+                    item.UserId == userId &&
+                    (item.Status == BookingStatus.Pending ||
+                     item.Status == BookingStatus.Accepted));
+                if (booking == null)
+                {
+                    return false;
+                }
+
+                booking.Status = BookingStatus.Cancelled;
+                return await SaveChangesAsync(context);
+            }
+        }
+
         public async Task<IReadOnlyList<BookingModel>>
             GetPendingBookingsByGuideAsync(int guideId)
         {

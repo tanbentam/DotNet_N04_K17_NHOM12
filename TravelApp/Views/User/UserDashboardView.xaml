@@ -197,6 +197,10 @@
                             <TextBlock Text="{Binding SelectedGuide.FullName, StringFormat=Guide đã chọn: {0}, TargetNullValue=Chưa chọn Guide}"
                                        Margin="0,0,0,8"/>
                             <StackPanel Orientation="Horizontal">
+                                <DatePicker SelectedDate="{Binding StartDate}"
+                                            materialDesign:HintAssist.Hint="Ngày khởi hành"
+                                            Width="150"
+                                            Margin="0,0,10,0"/>
                                 <TextBox Text="{Binding TripDurationDays, UpdateSourceTrigger=PropertyChanged}"
                                          materialDesign:HintAssist.Hint="Số ngày"
                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
@@ -207,6 +211,10 @@
                                         Style="{StaticResource MaterialDesignRaisedButton}"
                                         Height="40"/>
                             </StackPanel>
+                            <TextBlock Text="{Binding BookingMessage}"
+                                       Foreground="Gray"
+                                       TextWrapping="Wrap"
+                                       Margin="0,8,0,0"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="1"
@@ -239,6 +247,82 @@
                                        Foreground="Gray"/>
                         </StackPanel>
                     </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="BOOKING CỦA TÔI">
+                <Grid Margin="16"
+                      DataContext="{Binding BookingVM}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0"
+                               Margin="0,0,0,12">
+                        <TextBlock Text="Danh sách booking của tôi"
+                                   FontSize="20"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"/>
+                        <Button Content="Làm mới"
+                                Command="{Binding LoadBookingsCommand}"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                DockPanel.Dock="Right"
+                                HorizontalAlignment="Right"/>
+                    </DockPanel>
+
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding Bookings}"
+                              SelectedItem="{Binding SelectedBooking}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              IsReadOnly="True"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Mã booking"
+                                                Binding="{Binding BookingId}"
+                                                Width="130"/>
+                            <DataGridTextColumn Header="Điểm đến"
+                                                Binding="{Binding Destination.Name}"
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Guide"
+                                                Binding="{Binding Guide.FullName}"
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Khách sạn"
+                                                Binding="{Binding Hotel.Name, TargetNullValue=Không chọn}"
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Khởi hành"
+                                                Binding="{Binding StartDate, StringFormat={}{0:dd/MM/yyyy}}"
+                                                Width="100"/>
+                            <DataGridTextColumn Header="Số ngày"
+                                                Binding="{Binding Nights}"
+                                                Width="70"/>
+                            <DataGridTextColumn Header="Tổng tiền"
+                                                Binding="{Binding Price, StringFormat={}{0:N0}}"
+                                                Width="100"/>
+                            <DataGridTextColumn Header="Trạng thái"
+                                                Binding="{Binding Status}"
+                                                Width="90"/>
+                            <DataGridTemplateColumn Header="Thao tác"
+                                                    Width="90">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Hủy"
+                                                Command="{Binding DataContext.CancelBookingCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <ProgressBar Grid.Row="1"
+                                 IsIndeterminate="True"
+                                 Height="3"
+                                 VerticalAlignment="Top"
+                                 Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </Grid>
             </TabItem>
 
