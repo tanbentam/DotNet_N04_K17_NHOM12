@@ -67,9 +67,11 @@
     <Compile Include="Data\Repositories\IGuideAvailabilityRepository.cs" />
     <Compile Include="Data\Repositories\ITravelContentRepository.cs" />
     <Compile Include="Data\Repositories\IUserRepository.cs" />
+    <Compile Include="Data\Repositories\IUserEngagementRepository.cs" />
     <Compile Include="Data\Repositories\GuideAvailabilityRepository.cs" />
     <Compile Include="Data\Repositories\TravelContentRepository.cs" />
     <Compile Include="Data\Repositories\UserRepository.cs" />
+    <Compile Include="Data\Repositories\UserEngagementRepository.cs" />
     <Compile Include="Data\Migrations\Configuration.cs" />
     <Compile Include="Data\Migrations\202606080919452_InitialCreate.cs" />
     <Compile Include="Data\Migrations\202606080919452_InitialCreate.Designer.cs">
@@ -79,7 +81,13 @@
     <Compile Include="Data\Migrations\202606080941143_SyncMySqlModelSnapshot.Designer.cs">
       <DependentUpon>202606080941143_SyncMySqlModelSnapshot.cs</DependentUpon>
     </Compile>
+    <Compile Include="Data\Migrations\202606090847518_AddFavoritesAndReviews.cs" />
+    <Compile Include="Data\Migrations\202606090847518_AddFavoritesAndReviews.Designer.cs">
+      <DependentUpon>202606090847518_AddFavoritesAndReviews.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\FavoriteModel.cs" />
+    <Compile Include="Models\ReviewModel.cs" />
     <Compile Include="Models\BookingModel.cs" />
     <Compile Include="Models\GuideAvailabilityModel.cs" />
     <Compile Include="Models\HotelModel.cs" />
@@ -121,6 +129,7 @@
     <Compile Include="ViewModels\User\AdvancedSearchViewModel.cs" />
     <Compile Include="ViewModels\User\TourBookingViewModel.cs" />
     <Compile Include="ViewModels\User\UserProfileViewModel.cs" />
+    <Compile Include="ViewModels\User\UserEngagementViewModel.cs" />
     <Compile Include="ViewModels\User\UserDashboardViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -211,6 +220,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Migrations\202606080941143_SyncMySqlModelSnapshot.resx">
       <DependentUpon>202606080941143_SyncMySqlModelSnapshot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Migrations\202606090847518_AddFavoritesAndReviews.resx">
+      <DependentUpon>202606090847518_AddFavoritesAndReviews.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

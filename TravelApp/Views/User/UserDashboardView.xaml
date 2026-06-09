@@ -327,9 +327,215 @@
             </TabItem>
 
             <TabItem Header="YÊU THÍCH &amp; ĐÁNH GIÁ">
-                <Grid Margin="16">
-                    <TextBlock Text="Quản lý danh sách Yêu thích và Đánh giá Guide/Khách sạn"
-                               FontSize="16"/>
+                <Grid Margin="16"
+                      DataContext="{Binding EngagementVM}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <GroupBox Grid.Row="0"
+                              Grid.Column="0"
+                              Header="Khách sạn"
+                              Margin="0,0,8,12"
+                              Padding="12">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ComboBox Grid.Row="0"
+                                      Grid.ColumnSpan="2"
+                                      ItemsSource="{Binding Hotels}"
+                                      SelectedItem="{Binding SelectedHotel}"
+                                      DisplayMemberPath="Name"
+                                      materialDesign:HintAssist.Hint="Chọn khách sạn"
+                                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                      Margin="0,0,0,10"/>
+                            <TextBox Grid.Row="1"
+                                     Grid.Column="0"
+                                     Text="{Binding HotelComment, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Nội dung đánh giá"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     MaxLength="1000"
+                                     Margin="0,0,10,10"/>
+                            <TextBox Grid.Row="1"
+                                     Grid.Column="1"
+                                     Text="{Binding HotelRating, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Điểm 1-5"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,0,10"/>
+                            <StackPanel Grid.Row="2"
+                                        Grid.ColumnSpan="2"
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Right">
+                                <Button Content="Thêm yêu thích"
+                                        Command="{Binding AddHotelFavoriteCommand}"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        Margin="0,0,10,0"/>
+                                <Button Content="Lưu đánh giá"
+                                        Command="{Binding SaveHotelReviewCommand}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Grid.Row="0"
+                              Grid.Column="1"
+                              Header="Guide"
+                              Margin="8,0,0,12"
+                              Padding="12">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ComboBox Grid.Row="0"
+                                      Grid.ColumnSpan="2"
+                                      ItemsSource="{Binding Guides}"
+                                      SelectedItem="{Binding SelectedGuide}"
+                                      DisplayMemberPath="FullName"
+                                      materialDesign:HintAssist.Hint="Chọn Guide"
+                                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                      Margin="0,0,0,10"/>
+                            <TextBox Grid.Row="1"
+                                     Grid.Column="0"
+                                     Text="{Binding GuideComment, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Nội dung đánh giá"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     MaxLength="1000"
+                                     Margin="0,0,10,10"/>
+                            <TextBox Grid.Row="1"
+                                     Grid.Column="1"
+                                     Text="{Binding GuideRating, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Điểm 1-5"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,0,10"/>
+                            <StackPanel Grid.Row="2"
+                                        Grid.ColumnSpan="2"
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Right">
+                                <Button Content="Thêm yêu thích"
+                                        Command="{Binding AddGuideFavoriteCommand}"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        Margin="0,0,10,0"/>
+                                <Button Content="Lưu đánh giá"
+                                        Command="{Binding SaveGuideReviewCommand}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Grid.Row="1"
+                              Grid.Column="0"
+                              Header="Danh sách yêu thích"
+                              Margin="0,0,8,0">
+                        <DataGrid ItemsSource="{Binding Favorites}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  IsReadOnly="True"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Loại"
+                                                    Binding="{Binding TargetType}"
+                                                    Width="100"/>
+                                <DataGridTextColumn Header="Tên"
+                                                    Binding="{Binding TargetName}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Ngày thêm"
+                                                    Binding="{Binding CreatedAt, StringFormat={}{0:dd/MM/yyyy}}"
+                                                    Width="100"/>
+                                <DataGridTemplateColumn Header="Thao tác"
+                                                        Width="90">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Bỏ thích"
+                                                    Command="{Binding DataContext.RemoveFavoriteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+
+                    <GroupBox Grid.Row="1"
+                              Grid.Column="1"
+                              Header="Đánh giá của tôi"
+                              Margin="8,0,0,0">
+                        <DataGrid ItemsSource="{Binding Reviews}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  IsReadOnly="True"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Loại"
+                                                    Binding="{Binding TargetType}"
+                                                    Width="90"/>
+                                <DataGridTextColumn Header="Tên"
+                                                    Binding="{Binding TargetName}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Điểm"
+                                                    Binding="{Binding Rating}"
+                                                    Width="55"/>
+                                <DataGridTextColumn Header="Nội dung"
+                                                    Binding="{Binding Comment}"
+                                                    Width="2*"/>
+                                <DataGridTemplateColumn Header="Thao tác"
+                                                        Width="75">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Xóa"
+                                                    Command="{Binding DataContext.DeleteReviewCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+
+                    <DockPanel Grid.Row="2"
+                               Grid.ColumnSpan="2"
+                               Margin="0,10,0,0">
+                        <TextBlock Text="{Binding EngagementMessage}"
+                                   Foreground="Gray"
+                                   VerticalAlignment="Center"/>
+                        <Button Content="Làm mới"
+                                Command="{Binding LoadDataCommand}"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                DockPanel.Dock="Right"
+                                HorizontalAlignment="Right"/>
+                    </DockPanel>
+
+                    <ProgressBar Grid.Row="0"
+                                 Grid.RowSpan="3"
+                                 Grid.ColumnSpan="2"
+                                 IsIndeterminate="True"
+                                 Height="3"
+                                 VerticalAlignment="Top"
+                                 Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </Grid>
             </TabItem>
 
