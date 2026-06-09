@@ -24,6 +24,7 @@ namespace TravelApp.Data
         public DbSet<GuideAvailabilityModel> GuideAvailabilities { get; set; }
         public DbSet<FavoriteModel> Favorites { get; set; }
         public DbSet<ReviewModel> Reviews { get; set; }
+        public DbSet<PaymentModel> Payments { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -34,6 +35,7 @@ namespace TravelApp.Data
             ConfigureGuideAvailabilities(modelBuilder);
             ConfigureFavorites(modelBuilder);
             ConfigureReviews(modelBuilder);
+            ConfigurePayments(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -185,6 +187,36 @@ namespace TravelApp.Data
             review.HasOptional(x => x.Guide)
                 .WithMany(x => x.GuideReviews)
                 .HasForeignKey(x => x.GuideId)
+                .WillCascadeOnDelete(false);
+        }
+
+        private static void ConfigurePayments(DbModelBuilder modelBuilder)
+        {
+            var payment = modelBuilder.Entity<PaymentModel>();
+
+            payment.ToTable("Payments");
+            payment.HasKey(x => x.Id);
+            payment.Property(x => x.Amount).HasPrecision(18, 2);
+            payment.Property(x => x.TransactionCode)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(
+                        new IndexAttribute("UX_Payments_TransactionCode")
+                        {
+                            IsUnique = true
+                        }));
+            payment.Property(x => x.ReferenceCode)
+                .IsOptional()
+                .HasMaxLength(100);
+            payment.HasRequired(x => x.Booking)
+                .WithMany(x => x.Payments)
+                .HasForeignKey(x => x.BookingId)
+                .WillCascadeOnDelete(false);
+            payment.HasRequired(x => x.User)
+                .WithMany(x => x.Payments)
+                .HasForeignKey(x => x.UserId)
                 .WillCascadeOnDelete(false);
         }
     }

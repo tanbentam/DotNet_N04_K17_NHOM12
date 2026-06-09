@@ -111,7 +111,7 @@ Ký hiệu:
 - [x] Tạo và hủy Booking bằng dữ liệu thật
 - [x] Hoàn thiện hồ sơ người dùng
 - [x] Hoàn thiện yêu thích và đánh giá
-- [ ] Hoàn thiện quy trình thanh toán mô phỏng
+- [x] Hoàn thiện quy trình thanh toán mô phỏng
 
 ## 9. Supporting Services
 

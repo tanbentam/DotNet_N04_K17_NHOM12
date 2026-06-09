@@ -63,15 +63,19 @@
     <!-- Moved shared Contracts/Models into TravelApp.Common project -->
     <Compile Include="Models\Enums\BookingStatus.cs" />
     <Compile Include="Models\Enums\ContentApprovalStatus.cs" />
+    <Compile Include="Models\Enums\PaymentMethod.cs" />
+    <Compile Include="Models\Enums\PaymentStatus.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
     <Compile Include="Data\Repositories\IGuideAvailabilityRepository.cs" />
     <Compile Include="Data\Repositories\ITravelContentRepository.cs" />
     <Compile Include="Data\Repositories\IUserRepository.cs" />
     <Compile Include="Data\Repositories\IUserEngagementRepository.cs" />
+    <Compile Include="Data\Repositories\IPaymentRepository.cs" />
     <Compile Include="Data\Repositories\GuideAvailabilityRepository.cs" />
     <Compile Include="Data\Repositories\TravelContentRepository.cs" />
     <Compile Include="Data\Repositories\UserRepository.cs" />
     <Compile Include="Data\Repositories\UserEngagementRepository.cs" />
+    <Compile Include="Data\Repositories\PaymentRepository.cs" />
     <Compile Include="Data\Migrations\Configuration.cs" />
     <Compile Include="Data\Migrations\202606080919452_InitialCreate.cs" />
     <Compile Include="Data\Migrations\202606080919452_InitialCreate.Designer.cs">
@@ -85,9 +89,14 @@
     <Compile Include="Data\Migrations\202606090847518_AddFavoritesAndReviews.Designer.cs">
       <DependentUpon>202606090847518_AddFavoritesAndReviews.cs</DependentUpon>
     </Compile>
+    <Compile Include="Data\Migrations\202606090917135_AddPayments.cs" />
+    <Compile Include="Data\Migrations\202606090917135_AddPayments.Designer.cs">
+      <DependentUpon>202606090917135_AddPayments.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\FavoriteModel.cs" />
     <Compile Include="Models\ReviewModel.cs" />
+    <Compile Include="Models\PaymentModel.cs" />
     <Compile Include="Models\BookingModel.cs" />
     <Compile Include="Models\GuideAvailabilityModel.cs" />
     <Compile Include="Models\HotelModel.cs" />
@@ -223,6 +232,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Migrations\202606090847518_AddFavoritesAndReviews.resx">
       <DependentUpon>202606090847518_AddFavoritesAndReviews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Migrations\202606090917135_AddPayments.resx">
+      <DependentUpon>202606090917135_AddPayments.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

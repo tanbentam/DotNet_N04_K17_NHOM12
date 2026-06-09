@@ -38,6 +38,7 @@ namespace TravelApp
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ITravelContentRepository, TravelContentRepository>();
             services.AddTransient<IUserEngagementRepository, UserEngagementRepository>();
+            services.AddTransient<IPaymentRepository, PaymentRepository>();
             services.AddTransient<IGuideAvailabilityRepository, GuideAvailabilityRepository>();
             services.AddTransient<AccountManagementViewModel>();
             services.AddTransient<ContentManagementViewModel>();

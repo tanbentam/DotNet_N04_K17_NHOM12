@@ -16,6 +16,7 @@ namespace TravelApp.Models
             GuideFavorites = new HashSet<FavoriteModel>();
             Reviews = new HashSet<ReviewModel>();
             GuideReviews = new HashSet<ReviewModel>();
+            Payments = new HashSet<PaymentModel>();
         }
 
         public int Id { get; set; }
@@ -34,5 +35,6 @@ namespace TravelApp.Models
         public virtual ICollection<FavoriteModel> GuideFavorites { get; set; }
         public virtual ICollection<ReviewModel> Reviews { get; set; }
         public virtual ICollection<ReviewModel> GuideReviews { get; set; }
+        public virtual ICollection<PaymentModel> Payments { get; set; }
     }
 }

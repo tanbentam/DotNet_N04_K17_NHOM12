@@ -23,6 +23,9 @@ namespace TravelApp.ViewModels.User
             PaymentVM = paymentVM;
             ProfileVM = profileVM;
             EngagementVM = engagementVM;
+
+            PaymentVM.SuccessfulPaymentProcessed += () =>
+                BookingVM.LoadBookingsCommand.Execute(null);
         }
     }
 }
