@@ -117,7 +117,7 @@ Ký hiệu:
 
 - [x] Tạo local Notification Queue
 - [x] Tạo file Logger Service
-- [~] Hiển thị Popup Notification trong application shell
+- [x] Hiển thị Popup Notification trong application shell
 - [~] Kết nối logging vào các luồng lỗi thực tế
 - [~] Hoàn thiện Image Upload Service
 - [ ] Lưu ảnh cục bộ hoặc trên storage thật

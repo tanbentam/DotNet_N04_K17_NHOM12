@@ -168,6 +168,9 @@
     <Compile Include="Views\Authentication\RegisterView.xaml.cs">
       <DependentUpon>RegisterView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Components\PopupNotification.xaml.cs">
+      <DependentUpon>PopupNotification.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TourGuide\GuideDashboardView.xaml.cs">
       <DependentUpon>GuideDashboardView.xaml</DependentUpon>
     </Compile>
