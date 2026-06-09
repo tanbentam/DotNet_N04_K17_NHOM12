@@ -1,45 +1,162 @@
-﻿using System;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using TravelApp.Services.Logging;
 
 namespace TravelApp.Services.ImageManagement
 {
-    public class ImageUploadService
+    public sealed class ImageUploadService
     {
-        // [BACKEND DEVELOPER NOTE] 
-        // Endpoint nhận ảnh: Constants.Base_API_Url + "upload"
-        // Dữ liệu sẽ được gửi dưới dạng MultipartFormDataContent hoặc Base64.
+        public const long MaximumFileSize = 5 * 1024 * 1024;
 
-        public async Task<string> UploadImageAsync(string localFilePath, string targetType)
+        private static readonly HashSet<string> AllowedExtensions =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ".jpg",
+                ".jpeg",
+                ".png",
+                ".bmp",
+                ".gif"
+            };
+
+        public string SelectImageFile()
         {
-            // targetType: "Destination" hoặc "Hotel"
-            if (!File.Exists(localFilePath))
-                throw new FileNotFoundException("Không tìm thấy file ảnh.");
+            var dialog = new OpenFileDialog
+            {
+                Title = "Chọn ảnh",
+                Filter =
+                    "Image files (*.jpg;*.jpeg;*.png;*.bmp;*.gif)|" +
+                    "*.jpg;*.jpeg;*.png;*.bmp;*.gif",
+                CheckFileExists = true,
+                Multiselect = false
+            };
+
+            return dialog.ShowDialog() == true
+                ? dialog.FileName
+                : null;
+        }
+
+        public async Task<string> UploadImageAsync(
+            string localFilePath,
+            string targetType)
+        {
+            ValidateTargetType(targetType);
 
             try
             {
-                // Đọc file ảnh dưới dạng byte array
-                byte[] imageBytes = await Task.Run(() => File.ReadAllBytes(localFilePath));
-                string base64Image = Convert.ToBase64String(imageBytes);
-
-                // [BACKEND DEVELOPER NOTE]
-                // Thực hiện HTTP POST call tới Backend với chuỗi base64Image.
-                // Backend sẽ lưu trữ và trả về URL của hình ảnh.
-
-                await Task.Delay(500); // Giả lập API call
-
-                // Trả về URL giả lập
-                return $"https://backend-storage.com/images/{targetType.ToLower()}/{Guid.NewGuid()}.jpg";
+                return await Task.Run(() =>
+                {
+                    ValidateImage(localFilePath);
+                    return Path.GetFullPath(localFilePath);
+                });
+            }
+            catch (ImageUploadException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
                 LoggerService.LogException(
-                    "Upload image",
+                    "Prepare image upload",
                     ex,
                     "TargetType=" + targetType);
-                return null;
+                throw new ImageUploadException(
+                    "Không thể đọc file ảnh đã chọn.",
+                    ex);
             }
+        }
+
+        private static void ValidateTargetType(string targetType)
+        {
+            if (!string.Equals(
+                    targetType,
+                    "Destination",
+                    StringComparison.OrdinalIgnoreCase) &&
+                !string.Equals(
+                    targetType,
+                    "Hotel",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ImageUploadException(
+                    "Loại nội dung tải ảnh không hợp lệ.");
+            }
+        }
+
+        private static void ValidateImage(string localFilePath)
+        {
+            if (string.IsNullOrWhiteSpace(localFilePath) ||
+                !File.Exists(localFilePath))
+            {
+                throw new ImageUploadException(
+                    "Không tìm thấy file ảnh đã chọn.");
+            }
+
+            var extension = Path.GetExtension(localFilePath);
+            if (!AllowedExtensions.Contains(extension))
+            {
+                throw new ImageUploadException(
+                    "Chỉ hỗ trợ ảnh JPG, JPEG, PNG, BMP hoặc GIF.");
+            }
+
+            var fileInfo = new FileInfo(localFilePath);
+            if (fileInfo.Length <= 0)
+            {
+                throw new ImageUploadException("File ảnh đang trống.");
+            }
+
+            if (fileInfo.Length > MaximumFileSize)
+            {
+                throw new ImageUploadException(
+                    "Kích thước ảnh không được vượt quá 5 MB.");
+            }
+
+            try
+            {
+                using (var stream = File.Open(
+                    localFilePath,
+                    FileMode.Open,
+                    FileAccess.Read,
+                    FileShare.Read))
+                {
+                    var decoder = BitmapDecoder.Create(
+                        stream,
+                        BitmapCreateOptions.PreservePixelFormat,
+                        BitmapCacheOption.OnLoad);
+                    if (decoder.Frames.Count == 0 ||
+                        decoder.Frames[0].PixelWidth <= 0 ||
+                        decoder.Frames[0].PixelHeight <= 0)
+                    {
+                        throw new ImageUploadException(
+                            "File đã chọn không chứa ảnh hợp lệ.");
+                    }
+                }
+            }
+            catch (ImageUploadException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ImageUploadException(
+                    "File đã chọn không phải ảnh hợp lệ hoặc đã bị hỏng.",
+                    ex);
+            }
+        }
+    }
+
+    public sealed class ImageUploadException : Exception
+    {
+        public ImageUploadException(string message)
+            : base(message)
+        {
+        }
+
+        public ImageUploadException(string message, Exception innerException)
+            : base(message, innerException)
+        {
         }
     }
 }

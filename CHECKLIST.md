@@ -119,7 +119,7 @@ Ký hiệu:
 - [x] Tạo file Logger Service
 - [x] Hiển thị Popup Notification trong application shell
 - [x] Kết nối logging vào các luồng lỗi thực tế
-- [~] Hoàn thiện Image Upload Service
+- [x] Hoàn thiện Image Upload Service
 - [ ] Lưu ảnh cục bộ hoặc trên storage thật
 - [ ] Hoàn thiện Booking Service và pricing rules
 

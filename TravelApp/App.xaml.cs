@@ -4,6 +4,7 @@ using System.Windows;
 using TravelApp.Data.Repositories;
 using TravelApp.Services;
 using TravelApp.Services.Contracts;
+using TravelApp.Services.ImageManagement;
 using TravelApp.Services.NotificationQueue;
 using TravelApp.ViewModels;
 using TravelApp.ViewModels.Admin;
@@ -48,6 +49,7 @@ namespace TravelApp
             services.AddSingleton<IRoleNavigationService, RoleNavigationService>();
             services.AddSingleton<IUserSessionService, UserSessionService>();
             services.AddSingleton<NotificationManager>();
+            services.AddSingleton<ImageUploadService>();
             services.AddTransient<LoginViewModel>();
             services.AddTransient<RegisterViewModel>();
             services.AddTransient<LoginView>();

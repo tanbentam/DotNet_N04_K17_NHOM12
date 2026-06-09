@@ -163,10 +163,25 @@
                                          TextWrapping="Wrap"
                                          Height="90"
                                          Margin="0,0,0,10"/>
-                                <TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged}"
-                                         materialDesign:HintAssist.Hint="Đường dẫn ảnh"
-                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                         Margin="0,0,0,18"/>
+                                <Border Height="90" Background="#FFF2F2F2"
+                                        BorderBrush="#FFDDDDDD" BorderThickness="1"
+                                        CornerRadius="4" Margin="0,0,0,8">
+                                    <Image Source="{Binding ImageUrl}"
+                                           Stretch="Uniform"/>
+                                </Border>
+                                <Grid Margin="0,0,0,18">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged}"
+                                             materialDesign:HintAssist.Hint="URL hoặc đường dẫn ảnh"
+                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                             Margin="0,0,8,0"/>
+                                    <Button Grid.Column="1" Content="Chọn ảnh"
+                                            Command="{Binding SelectImageCommand}"
+                                            Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                                </Grid>
                                 <StackPanel Orientation="Horizontal"
                                             HorizontalAlignment="Right">
                                     <Button Content="Hủy"
@@ -322,10 +337,25 @@
                                          materialDesign:HintAssist.Hint="Đánh giá (0 - 5)"
                                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                          Margin="0,0,0,10"/>
-                                <TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged}"
-                                         materialDesign:HintAssist.Hint="Đường dẫn ảnh"
-                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                         Margin="0,0,0,18"/>
+                                <Border Height="90" Background="#FFF2F2F2"
+                                        BorderBrush="#FFDDDDDD" BorderThickness="1"
+                                        CornerRadius="4" Margin="0,0,0,8">
+                                    <Image Source="{Binding ImageUrl}"
+                                           Stretch="Uniform"/>
+                                </Border>
+                                <Grid Margin="0,0,0,18">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged}"
+                                             materialDesign:HintAssist.Hint="URL hoặc đường dẫn ảnh"
+                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                             Margin="0,0,8,0"/>
+                                    <Button Grid.Column="1" Content="Chọn ảnh"
+                                            Command="{Binding SelectImageCommand}"
+                                            Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                                </Grid>
                                 <StackPanel Orientation="Horizontal"
                                             HorizontalAlignment="Right">
                                     <Button Content="Hủy"
