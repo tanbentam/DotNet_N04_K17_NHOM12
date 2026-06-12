@@ -211,6 +211,14 @@
                                         Style="{StaticResource MaterialDesignRaisedButton}"
                                         Height="40"/>
                             </StackPanel>
+                            <TextBlock Text="{Binding EstimatedPrice, StringFormat=Tạm tính: {0:N0} VNĐ}"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Margin="0,10,0,0"/>
+                            <TextBlock Text="{Binding PricingSummary}"
+                                       Foreground="Gray"
+                                       TextWrapping="Wrap"
+                                       Margin="0,3,0,0"/>
                             <TextBlock Text="{Binding BookingMessage}"
                                        Foreground="Gray"
                                        TextWrapping="Wrap"

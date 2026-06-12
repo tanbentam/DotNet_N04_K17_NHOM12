@@ -9,6 +9,7 @@ using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services.ImageManagement;
 using TravelApp.Services.Logging;
+using TravelApp.Services.Contracts;
 
 namespace TravelApp.ViewModels.Admin
 {
@@ -16,6 +17,7 @@ namespace TravelApp.ViewModels.Admin
     {
         private readonly ITravelContentRepository _contentRepository;
         private readonly ImageUploadService _imageUploadService;
+        private readonly IBookingService _bookingService;
 
         [ObservableProperty] private ObservableCollection<DestinationModel> _destinations;
         [ObservableProperty] private ObservableCollection<HotelModel> _hotels;
@@ -53,10 +55,12 @@ namespace TravelApp.ViewModels.Admin
 
         public ContentManagementViewModel(
             ITravelContentRepository contentRepository,
-            ImageUploadService imageUploadService)
+            ImageUploadService imageUploadService,
+            IBookingService bookingService)
         {
             _contentRepository = contentRepository;
             _imageUploadService = imageUploadService;
+            _bookingService = bookingService;
             Destinations = new ObservableCollection<DestinationModel>();
             Hotels = new ObservableCollection<HotelModel>();
             Bookings = new ObservableCollection<BookingModel>();
@@ -357,24 +361,15 @@ namespace TravelApp.ViewModels.Admin
                 return;
             }
 
-            if (!CanChangeBookingStatus(
-                SelectedBooking.Status,
-                SelectedBookingStatus))
-            {
-                ErrorMessage =
-                    "Không thể chuyển booking từ trạng thái hiện tại sang trạng thái đã chọn.";
-                return;
-            }
-
             IsLoading = true;
             try
             {
-                var updated = await _contentRepository.UpdateBookingStatusAsync(
+                var result = await _bookingService.UpdateByAdminAsync(
                     SelectedBooking.Id,
                     SelectedBookingStatus);
-                if (!updated)
+                if (!result.Succeeded)
                 {
-                    ErrorMessage = "Không thể cập nhật trạng thái booking.";
+                    ErrorMessage = result.Message;
                     return;
                 }
 
@@ -526,32 +521,6 @@ namespace TravelApp.ViewModels.Admin
             }
 
             return true;
-        }
-
-        private static bool CanChangeBookingStatus(
-            BookingStatus current,
-            BookingStatus next)
-        {
-            if (current == next)
-            {
-                return true;
-            }
-
-            switch (current)
-            {
-                case BookingStatus.Pending:
-                    return next == BookingStatus.Accepted ||
-                        next == BookingStatus.Rejected ||
-                        next == BookingStatus.Cancelled;
-                case BookingStatus.Accepted:
-                    return next == BookingStatus.Paid ||
-                        next == BookingStatus.Cancelled;
-                case BookingStatus.Paid:
-                    return next == BookingStatus.Completed ||
-                        next == BookingStatus.Cancelled;
-                default:
-                    return false;
-            }
         }
 
         private bool ValidateHotel()

@@ -17,6 +17,7 @@ namespace TravelApp.ViewModels.TourGuide
         private readonly NotificationManager _notificationManager;
         private readonly ITravelContentRepository _contentRepository;
         private readonly IUserSessionService _sessionService;
+        private readonly IBookingService _bookingService;
 
         [ObservableProperty]
         private ObservableCollection<BookingModel> _pendingBookings;
@@ -30,11 +31,13 @@ namespace TravelApp.ViewModels.TourGuide
         public BookingRequestsViewModel(
             NotificationManager notificationManager,
             ITravelContentRepository contentRepository,
-            IUserSessionService sessionService)
+            IUserSessionService sessionService,
+            IBookingService bookingService)
         {
             _notificationManager = notificationManager;
             _contentRepository = contentRepository;
             _sessionService = sessionService;
+            _bookingService = bookingService;
             PendingBookings = new ObservableCollection<BookingModel>();
             _ = LoadPendingBookingsAsync();
         }
@@ -101,15 +104,13 @@ namespace TravelApp.ViewModels.TourGuide
             IsBusy = true;
             try
             {
-                var updated = await _contentRepository
-                    .UpdatePendingBookingByGuideAsync(
+                var result = await _bookingService.UpdateByGuideAsync(
                         booking.Id,
                         guide.Id,
                         status);
-                if (!updated)
+                if (!result.Succeeded)
                 {
-                    ErrorMessage =
-                        "Booking không còn chờ xử lý hoặc không thuộc Guide hiện tại.";
+                    ErrorMessage = result.Message;
                     return;
                 }
 
