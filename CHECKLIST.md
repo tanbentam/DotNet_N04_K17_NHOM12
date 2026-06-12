@@ -121,7 +121,7 @@ Ký hiệu:
 - [x] Kết nối logging vào các luồng lỗi thực tế
 - [x] Hoàn thiện Image Upload Service
 - [x] Lưu ảnh cục bộ hoặc trên storage thật
-- [ ] Hoàn thiện Booking Service và pricing rules
+- [x] Hoàn thiện Booking Service và pricing rules
 
 ## 10. Quality And Delivery
 

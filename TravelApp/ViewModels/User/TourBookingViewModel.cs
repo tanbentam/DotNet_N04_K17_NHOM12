@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TravelApp.Data.Repositories;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
+using TravelApp.Services.Booking;
 using TravelApp.Services.Contracts;
 using TravelApp.Services.Logging;
 using TravelApp.Services.NotificationQueue;
@@ -17,6 +18,7 @@ namespace TravelApp.ViewModels.User
         private readonly ITravelContentRepository _contentRepository;
         private readonly IUserSessionService _sessionService;
         private readonly NotificationManager _notificationManager;
+        private readonly IBookingService _bookingService;
 
         [ObservableProperty] private DestinationModel _selectedDestination;
         [ObservableProperty] private UserModel _selectedGuide;
@@ -27,17 +29,32 @@ namespace TravelApp.ViewModels.User
         [ObservableProperty] private BookingModel _selectedBooking;
         [ObservableProperty] private bool _isBusy;
         [ObservableProperty] private string _bookingMessage;
+        [ObservableProperty] private decimal _estimatedPrice;
+        [ObservableProperty] private string _pricingSummary;
 
         public TourBookingViewModel(
             ITravelContentRepository contentRepository,
             IUserSessionService sessionService,
-            NotificationManager notificationManager)
+            NotificationManager notificationManager,
+            IBookingService bookingService)
         {
             _contentRepository = contentRepository;
             _sessionService = sessionService;
             _notificationManager = notificationManager;
+            _bookingService = bookingService;
             Bookings = new ObservableCollection<BookingModel>();
+            UpdatePriceEstimate();
             _ = LoadBookingsAsync();
+        }
+
+        partial void OnSelectedHotelChanged(HotelModel value)
+        {
+            UpdatePriceEstimate();
+        }
+
+        partial void OnTripDurationDaysChanged(int value)
+        {
+            UpdatePriceEstimate();
         }
 
         [RelayCommand]
@@ -57,10 +74,14 @@ namespace TravelApp.ViewModels.User
                 return;
             }
 
-            if (TripDurationDays <= 0 || StartDate.Date < DateTime.Today)
+            if (TripDurationDays <= 0 ||
+                TripDurationDays > BookingService.MaximumTripDays ||
+                StartDate.Date < DateTime.Today ||
+                StartDate.Date > DateTime.Today.AddDays(
+                    BookingService.MaximumAdvanceBookingDays))
             {
                 BookingMessage =
-                    "Ngày bắt đầu không được ở quá khứ và số ngày phải lớn hơn 0.";
+                    "Ngày đặt phải trong 365 ngày tới và chuyến đi từ 1 đến 30 ngày.";
                 return;
             }
 
@@ -80,9 +101,7 @@ namespace TravelApp.ViewModels.User
                 DestinationId = SelectedDestination.Id,
                 StartDate = StartDate.Date,
                 Nights = TripDurationDays,
-                Price = SelectedHotel == null
-                    ? 0
-                    : SelectedHotel.PricePerNight * TripDurationDays,
+                Price = 0,
                 Status = BookingStatus.Pending,
                 BookingId = CreateBookingCode(),
                 DestinationName = SelectedDestination.Name,
@@ -92,14 +111,15 @@ namespace TravelApp.ViewModels.User
             IsBusy = true;
             try
             {
-                if (!await _contentRepository.CreateBookingAsync(booking))
+                var result = await _bookingService.CreateBookingAsync(booking);
+                if (!result.Succeeded)
                 {
                     LoggerService.LogBookingFailure(
                         user.Id.ToString(),
                         "Create booking was rejected. BookingCode=" +
-                            booking.BookingId);
-                    BookingMessage =
-                        "Không thể tạo booking. Hãy kiểm tra lại lựa chọn.";
+                            booking.BookingId +
+                            "; Reason=" + result.Message);
+                    BookingMessage = result.Message;
                     return;
                 }
 
@@ -142,18 +162,17 @@ namespace TravelApp.ViewModels.User
             IsBusy = true;
             try
             {
-                var cancelled =
-                    await _contentRepository.CancelBookingByUserAsync(
+                var result =
+                    await _bookingService.CancelByUserAsync(
                         booking.Id,
                         user.Id);
-                if (!cancelled)
+                if (!result.Succeeded)
                 {
                     LoggerService.LogBookingFailure(
                         user.Id.ToString(),
                         "Cancel booking was rejected. BookingId=" +
                             booking.Id);
-                    BookingMessage =
-                        "Chỉ có thể hủy booking đang chờ hoặc đã được chấp nhận.";
+                    BookingMessage = result.Message;
                     return;
                 }
 
@@ -214,6 +233,28 @@ namespace TravelApp.ViewModels.User
             return "BK" +
                 DateTime.Now.ToString("yyyyMMddHHmmss") +
                 Guid.NewGuid().ToString("N").Substring(0, 6).ToUpperInvariant();
+        }
+
+        private void UpdatePriceEstimate()
+        {
+            if (TripDurationDays <= 0 ||
+                TripDurationDays > BookingService.MaximumTripDays)
+            {
+                EstimatedPrice = 0;
+                PricingSummary = "Số ngày phải từ 1 đến 30.";
+                return;
+            }
+
+            var quote = _bookingService.CalculatePrice(
+                SelectedHotel?.PricePerNight ?? 0,
+                TripDurationDays);
+            EstimatedPrice = quote.Total;
+            PricingSummary = string.Format(
+                "Guide: {0:N0} | Phòng: {1:N0} | Giảm: {2:N0} | Phí DV: {3:N0}",
+                quote.GuideFee,
+                quote.HotelFee,
+                quote.Discount,
+                quote.ServiceFee);
         }
     }
 }

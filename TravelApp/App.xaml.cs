@@ -3,6 +3,7 @@ using System;
 using System.Windows;
 using TravelApp.Data.Repositories;
 using TravelApp.Services;
+using TravelApp.Services.Booking;
 using TravelApp.Services.Contracts;
 using TravelApp.Services.ImageManagement;
 using TravelApp.Services.NotificationQueue;
@@ -38,6 +39,7 @@ namespace TravelApp
             services.AddSingleton<DatabaseConnectionService>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ITravelContentRepository, TravelContentRepository>();
+            services.AddTransient<IBookingService, BookingService>();
             services.AddTransient<IUserEngagementRepository, UserEngagementRepository>();
             services.AddTransient<IPaymentRepository, PaymentRepository>();
             services.AddTransient<IGuideAvailabilityRepository, GuideAvailabilityRepository>();
