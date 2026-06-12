@@ -14,6 +14,8 @@ namespace TravelApp.ViewModels.TourGuide
 {
     public partial class BookingRequestsViewModel : ObservableObject
     {
+        public event EventHandler BookingAccepted;
+
         private readonly NotificationManager _notificationManager;
         private readonly ITravelContentRepository _contentRepository;
         private readonly IUserSessionService _sessionService;
@@ -116,6 +118,11 @@ namespace TravelApp.ViewModels.TourGuide
 
                 PendingBookings.Remove(booking);
                 var accepted = status == BookingStatus.Accepted;
+                if (accepted)
+                {
+                    BookingAccepted?.Invoke(this, EventArgs.Empty);
+                }
+
                 _notificationManager.ShowNotification(
                     accepted ? "Thành công" : "Đã từ chối",
                     (accepted

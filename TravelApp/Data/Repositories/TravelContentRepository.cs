@@ -353,6 +353,46 @@ namespace TravelApp.Data.Repositories
             }
         }
 
+        public async Task<IReadOnlyList<BookingModel>>
+            GetWorkScheduleByGuideAsync(int guideId)
+        {
+            if (guideId <= 0)
+            {
+                return new List<BookingModel>();
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                var bookings = await context.Bookings
+                    .AsNoTracking()
+                    .Include(booking => booking.User)
+                    .Include(booking => booking.Destination)
+                    .Include(booking => booking.Hotel)
+                    .Where(booking =>
+                        booking.GuideId == guideId &&
+                        (booking.Status == BookingStatus.Accepted ||
+                         booking.Status == BookingStatus.Paid))
+                    .OrderBy(booking => booking.StartDate)
+                    .ThenBy(booking => booking.Id)
+                    .ToListAsync();
+
+                foreach (var booking in bookings)
+                {
+                    if (string.IsNullOrWhiteSpace(booking.UserName))
+                    {
+                        booking.UserName = booking.User?.FullName;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(booking.DestinationName))
+                    {
+                        booking.DestinationName = booking.Destination?.Name;
+                    }
+                }
+
+                return bookings;
+            }
+        }
+
         public async Task<bool> UpdateBookingStatusAsync(
             int bookingId,
             BookingStatus status)

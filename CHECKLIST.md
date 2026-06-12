@@ -99,6 +99,7 @@ Ký hiệu:
 - [x] Tạo và chỉnh sửa Destination
 - [x] Tạo và chỉnh sửa Hotel
 - [x] Chấp nhận hoặc từ chối Booking bằng dữ liệu thật
+- [x] Chức năng lịch mới: xem lịch trình làm việc khi đã chấp nhận booking của user
 
 ## 8. User Features
 

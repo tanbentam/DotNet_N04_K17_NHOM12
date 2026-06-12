@@ -138,6 +138,7 @@
     <Compile Include="ViewModels\TourGuide\GuideDashboardViewModel.cs" />
     <Compile Include="ViewModels\TourGuide\HotelManagementViewModel.cs" />
     <Compile Include="ViewModels\TourGuide\ScheduleManagementViewModel.cs" />
+    <Compile Include="ViewModels\TourGuide\WorkScheduleViewModel.cs" />
     <Compile Include="ViewModels\User\AdvancedSearchViewModel.cs" />
     <Compile Include="ViewModels\User\TourBookingViewModel.cs" />
     <Compile Include="ViewModels\User\UserProfileViewModel.cs" />

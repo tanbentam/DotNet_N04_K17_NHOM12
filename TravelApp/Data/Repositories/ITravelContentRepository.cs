@@ -29,6 +29,8 @@ namespace TravelApp.Data.Repositories
         Task<IReadOnlyList<BookingModel>> GetBookingsByUserAsync(int userId);
         Task<IReadOnlyList<BookingModel>> GetPendingBookingsByGuideAsync(
             int guideId);
+        Task<IReadOnlyList<BookingModel>> GetWorkScheduleByGuideAsync(
+            int guideId);
         Task<bool> CreateBookingAsync(BookingModel booking);
         Task<bool> CancelBookingByUserAsync(int bookingId, int userId);
         Task<bool> UpdateBookingStatusAsync(

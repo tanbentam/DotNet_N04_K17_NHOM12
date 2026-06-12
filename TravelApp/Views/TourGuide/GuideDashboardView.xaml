@@ -444,6 +444,7 @@
                       DataContext="{Binding BookingRequestsVM}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
@@ -541,6 +542,84 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="LỊCH LÀM VIỆC">
+                <Grid Margin="0,16,0,0"
+                      DataContext="{Binding WorkScheduleVM}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <materialDesign:Card Grid.Row="0"
+                                         Padding="18"
+                                         Margin="0,0,0,14">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CalendarCheck"
+                                                             Width="24"
+                                                             Height="24"
+                                                             Margin="0,0,10,0"/>
+                                    <TextBlock Text="Lịch trình làm việc"
+                                               FontSize="20"
+                                               FontWeight="SemiBold"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <TextBlock Text="Các booking đã chấp nhận hoặc đã thanh toán được sắp xếp theo ngày bắt đầu."
+                                           Foreground="Gray"
+                                           TextWrapping="Wrap"
+                                           Margin="0,8,0,0"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="1"
+                                    Command="{Binding LoadWorkScheduleCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    ToolTip="Tải lại lịch làm việc"
+                                    VerticalAlignment="Center"
+                                    Margin="16,0,0,0">
+                                <materialDesign:PackIcon Kind="Refresh"/>
+                            </Button>
+                        </Grid>
+                    </materialDesign:Card>
+
+                    <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Foreground="#FFD32F2F"
+                                   TextWrapping="Wrap"
+                                   Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                        <ProgressBar IsIndeterminate="True"
+                                     Height="3"
+                                     Margin="0,8,0,0"
+                                     Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="2"
+                              ItemsSource="{Binding WorkSchedule}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              IsReadOnly="True"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              materialDesign:DataGridAssist.CellPadding="12">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Mã booking" Binding="{Binding BookingId}" Width="120"/>
+                            <DataGridTextColumn Header="Ngày bắt đầu" Binding="{Binding StartDate, StringFormat=dd/MM/yyyy}" Width="120"/>
+                            <DataGridTextColumn Header="Số ngày" Binding="{Binding Nights}" Width="80"/>
+                            <DataGridTextColumn Header="Khách hàng" Binding="{Binding UserName}" Width="*"/>
+                            <DataGridTextColumn Header="Điểm đến" Binding="{Binding DestinationName}" Width="*"/>
+                            <DataGridTextColumn Header="Khách sạn" Binding="{Binding Hotel.Name}" Width="*"/>
+                            <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" Width="110"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

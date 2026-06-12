@@ -59,6 +59,7 @@ namespace TravelApp
             services.AddTransient<AdminDashboardViewModel>();
             services.AddTransient<ScheduleManagementViewModel>();
             services.AddTransient<BookingRequestsViewModel>();
+            services.AddTransient<WorkScheduleViewModel>();
             services.AddTransient<DestinationManagementViewModel>();
             services.AddTransient<HotelManagementViewModel>();
             services.AddTransient<GuideDashboardViewModel>();

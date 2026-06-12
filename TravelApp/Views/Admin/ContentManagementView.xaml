@@ -264,13 +264,6 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="GUIDE SCHEDULES">
-                <Grid Margin="16">
-                    <TextBlock Text="Guide schedule management is implemented in the Guide module."
-                               FontSize="16"/>
-                </Grid>
-            </TabItem>
-
             <TabItem Header="BOOKINGS">
                 <Grid Margin="12">
                     <Grid.ColumnDefinitions>
