@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,6 +9,7 @@ using TravelApp.Data.Repositories;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services.Contracts;
+using TravelApp.Services.Logging;
 using TravelApp.Services.NotificationQueue;
 
 namespace TravelApp.ViewModels.TourGuide
@@ -59,24 +61,46 @@ namespace TravelApp.ViewModels.TourGuide
                 return;
             }
 
-            var saved = await _availabilityRepository.SaveWeeklyScheduleAsync(
-                guide.Id,
-                WeeklySchedule.Select(day => new GuideAvailabilityModel
-                {
-                    DayOfWeek = day.DayNumber,
-                    DayName = day.DayOfWeek,
-                    IsAvailable = day.IsAvailable,
-                    TimeSlot = string.IsNullOrWhiteSpace(day.TimeSlot)
-                        ? null
-                        : day.TimeSlot.Trim()
-                }));
+            try
+            {
+                var saved = await _availabilityRepository.SaveWeeklyScheduleAsync(
+                    guide.Id,
+                    WeeklySchedule.Select(day => new GuideAvailabilityModel
+                    {
+                        DayOfWeek = day.DayNumber,
+                        DayName = day.DayOfWeek,
+                        IsAvailable = day.IsAvailable,
+                        TimeSlot = string.IsNullOrWhiteSpace(day.TimeSlot)
+                            ? null
+                            : day.TimeSlot.Trim()
+                    }));
 
-            _notificationManager.ShowNotification(
-                saved ? "Đã lưu lịch" : "Không thể lưu lịch",
-                saved
-                    ? "Lịch trống của bạn đã được cập nhật trong database."
-                    : "Vui lòng kiểm tra kết nối database và thử lại.",
-                !saved);
+                if (!saved)
+                {
+                    LoggerService.LogWarning(
+                        "Save guide schedule",
+                        "Repository rejected schedule save.",
+                        "GuideId=" + guide.Id);
+                }
+
+                _notificationManager.ShowNotification(
+                    saved ? "Đã lưu lịch" : "Không thể lưu lịch",
+                    saved
+                        ? "Lịch trống của bạn đã được cập nhật trong database."
+                        : "Vui lòng kiểm tra kết nối database và thử lại.",
+                    !saved);
+            }
+            catch (Exception ex)
+            {
+                var errorId = LoggerService.LogException(
+                    "Save guide schedule",
+                    ex,
+                    "GuideId=" + guide.Id);
+                _notificationManager.ShowNotification(
+                    "Không thể lưu lịch",
+                    "Đã xảy ra lỗi. Mã lỗi: " + errorId,
+                    true);
+            }
         }
 
         private async Task LoadScheduleAsync()
@@ -87,8 +111,23 @@ namespace TravelApp.ViewModels.TourGuide
                 return;
             }
 
-            var savedSchedule = await _availabilityRepository.GetByGuideIdAsync(guide.Id);
-            ApplySavedSchedule(savedSchedule);
+            try
+            {
+                var savedSchedule =
+                    await _availabilityRepository.GetByGuideIdAsync(guide.Id);
+                ApplySavedSchedule(savedSchedule);
+            }
+            catch (Exception ex)
+            {
+                var errorId = LoggerService.LogException(
+                    "Load guide schedule",
+                    ex,
+                    "GuideId=" + guide.Id);
+                _notificationManager.ShowNotification(
+                    "Không thể tải lịch",
+                    "Đã xảy ra lỗi. Mã lỗi: " + errorId,
+                    true);
+            }
         }
 
         private void ApplySavedSchedule(

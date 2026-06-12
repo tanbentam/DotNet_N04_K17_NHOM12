@@ -8,6 +8,7 @@ using TravelApp.Data.Repositories;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services.Contracts;
+using TravelApp.Services.ImageManagement;
 using TravelApp.Services.Logging;
 
 namespace TravelApp.ViewModels.TourGuide
@@ -16,6 +17,7 @@ namespace TravelApp.ViewModels.TourGuide
     {
         private readonly ITravelContentRepository _contentRepository;
         private readonly IUserSessionService _sessionService;
+        private readonly ImageUploadService _imageUploadService;
 
         [ObservableProperty]
         private ObservableCollection<HotelModel> _hotels;
@@ -67,13 +69,43 @@ namespace TravelApp.ViewModels.TourGuide
 
         public HotelManagementViewModel(
             ITravelContentRepository contentRepository,
-            IUserSessionService sessionService)
+            IUserSessionService sessionService,
+            ImageUploadService imageUploadService)
         {
             _contentRepository = contentRepository;
             _sessionService = sessionService;
+            _imageUploadService = imageUploadService;
             Hotels = new ObservableCollection<HotelModel>();
             Destinations = new ObservableCollection<DestinationModel>();
             _ = LoadHotelsAsync();
+        }
+
+        [RelayCommand]
+        private async Task SelectImageAsync()
+        {
+            ClearMessages();
+            var selectedFile = _imageUploadService.SelectImageFile();
+            if (string.IsNullOrWhiteSpace(selectedFile))
+            {
+                return;
+            }
+
+            IsBusy = true;
+            try
+            {
+                ImageUrl = await _imageUploadService.UploadImageAsync(
+                    selectedFile,
+                    "Hotel");
+                SuccessMessage = "Đã chọn ảnh hợp lệ.";
+            }
+            catch (ImageUploadException ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         [RelayCommand]

@@ -7,6 +7,7 @@ using TravelApp.Data.Repositories;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services.Contracts;
+using TravelApp.Services.Logging;
 using TravelApp.Utils;
 
 namespace TravelApp.ViewModels.Admin
@@ -63,8 +64,10 @@ namespace TravelApp.ViewModels.Admin
             {
                 UsersList.Clear();
                 UpdateSummary();
-                ErrorMessage = "Không thể tải danh sách tài khoản: " +
-                    ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Load admin accounts",
+                    ex,
+                    "Không thể tải danh sách tài khoản");
             }
             finally
             {
@@ -163,7 +166,11 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Save admin account",
+                    ex,
+                    "Không thể lưu tài khoản",
+                    "UserId=" + user.Id + "; Role=" + user.Role);
             }
             finally
             {
@@ -215,8 +222,25 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Delete admin account",
+                    ex,
+                    "Không thể xóa tài khoản",
+                    "UserId=" + user.Id);
             }
+        }
+
+        private void SetLoggedError(
+            string operation,
+            Exception exception,
+            string message,
+            string context = null)
+        {
+            var errorId = LoggerService.LogException(
+                operation,
+                exception,
+                context);
+            ErrorMessage = message + ". Mã lỗi: " + errorId;
         }
 
         private void OpenCreateEditor(RoleType role)

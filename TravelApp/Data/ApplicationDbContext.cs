@@ -22,6 +22,9 @@ namespace TravelApp.Data
         public DbSet<HotelModel> Hotels { get; set; }
         public DbSet<DestinationModel> Destinations { get; set; }
         public DbSet<GuideAvailabilityModel> GuideAvailabilities { get; set; }
+        public DbSet<FavoriteModel> Favorites { get; set; }
+        public DbSet<ReviewModel> Reviews { get; set; }
+        public DbSet<PaymentModel> Payments { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -30,6 +33,9 @@ namespace TravelApp.Data
             ConfigureHotels(modelBuilder);
             ConfigureBookings(modelBuilder);
             ConfigureGuideAvailabilities(modelBuilder);
+            ConfigureFavorites(modelBuilder);
+            ConfigureReviews(modelBuilder);
+            ConfigurePayments(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -140,6 +146,77 @@ namespace TravelApp.Data
             availability.HasRequired(x => x.Guide)
                 .WithMany(x => x.Availabilities)
                 .HasForeignKey(x => x.GuideId)
+                .WillCascadeOnDelete(false);
+        }
+
+        private static void ConfigureFavorites(DbModelBuilder modelBuilder)
+        {
+            var favorite = modelBuilder.Entity<FavoriteModel>();
+
+            favorite.ToTable("Favorites");
+            favorite.HasKey(x => x.Id);
+            favorite.HasRequired(x => x.User)
+                .WithMany(x => x.Favorites)
+                .HasForeignKey(x => x.UserId)
+                .WillCascadeOnDelete(false);
+            favorite.HasOptional(x => x.Hotel)
+                .WithMany(x => x.Favorites)
+                .HasForeignKey(x => x.HotelId)
+                .WillCascadeOnDelete(false);
+            favorite.HasOptional(x => x.Guide)
+                .WithMany(x => x.GuideFavorites)
+                .HasForeignKey(x => x.GuideId)
+                .WillCascadeOnDelete(false);
+        }
+
+        private static void ConfigureReviews(DbModelBuilder modelBuilder)
+        {
+            var review = modelBuilder.Entity<ReviewModel>();
+
+            review.ToTable("Reviews");
+            review.HasKey(x => x.Id);
+            review.Property(x => x.Comment).IsOptional().HasMaxLength(1000);
+            review.HasRequired(x => x.User)
+                .WithMany(x => x.Reviews)
+                .HasForeignKey(x => x.UserId)
+                .WillCascadeOnDelete(false);
+            review.HasOptional(x => x.Hotel)
+                .WithMany(x => x.Reviews)
+                .HasForeignKey(x => x.HotelId)
+                .WillCascadeOnDelete(false);
+            review.HasOptional(x => x.Guide)
+                .WithMany(x => x.GuideReviews)
+                .HasForeignKey(x => x.GuideId)
+                .WillCascadeOnDelete(false);
+        }
+
+        private static void ConfigurePayments(DbModelBuilder modelBuilder)
+        {
+            var payment = modelBuilder.Entity<PaymentModel>();
+
+            payment.ToTable("Payments");
+            payment.HasKey(x => x.Id);
+            payment.Property(x => x.Amount).HasPrecision(18, 2);
+            payment.Property(x => x.TransactionCode)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(
+                        new IndexAttribute("UX_Payments_TransactionCode")
+                        {
+                            IsUnique = true
+                        }));
+            payment.Property(x => x.ReferenceCode)
+                .IsOptional()
+                .HasMaxLength(100);
+            payment.HasRequired(x => x.Booking)
+                .WithMany(x => x.Payments)
+                .HasForeignKey(x => x.BookingId)
+                .WillCascadeOnDelete(false);
+            payment.HasRequired(x => x.User)
+                .WithMany(x => x.Payments)
+                .HasForeignKey(x => x.UserId)
                 .WillCascadeOnDelete(false);
         }
     }

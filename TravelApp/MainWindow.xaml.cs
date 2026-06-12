@@ -7,6 +7,7 @@ using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services;
 using TravelApp.Services.Contracts;
+using TravelApp.Services.NotificationQueue;
 using TravelApp.Views.Admin;
 using TravelApp.Views.Authentication;
 using TravelApp.Views.TourGuide;
@@ -20,18 +21,22 @@ namespace TravelApp
         private readonly IServiceProvider _services;
         private readonly IRoleNavigationService _roleNavigationService;
         private readonly IUserSessionService _sessionService;
+        private readonly NotificationManager _notificationManager;
 
         public MainWindow(
             DatabaseConnectionService databaseConnectionService,
             IServiceProvider services,
             IRoleNavigationService roleNavigationService,
-            IUserSessionService sessionService)
+            IUserSessionService sessionService,
+            NotificationManager notificationManager)
         {
             _databaseConnectionService = databaseConnectionService;
             _services = services;
             _roleNavigationService = roleNavigationService;
             _sessionService = sessionService;
+            _notificationManager = notificationManager;
             InitializeComponent();
+            NotificationPopup.DataContext = notificationManager;
             ShowHome();
             UpdateSessionDisplay();
             Loaded += MainWindow_Loaded;
@@ -49,6 +54,9 @@ namespace TravelApp
             {
                 DatabaseStatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(76, 175, 80));
                 DatabaseStatusText.Text = result.Message;
+                _notificationManager.ShowNotification(
+                    "Database",
+                    result.Message);
                 return;
             }
 
@@ -59,6 +67,10 @@ namespace TravelApp
                 ? "Database schema error"
                 : "Database error";
             DatabaseStatusText.ToolTip = result.Message;
+            _notificationManager.ShowNotification(
+                "Lỗi cơ sở dữ liệu",
+                result.Message,
+                true);
         }
 
         private void NavigationButton_Click(object sender, RoutedEventArgs e)

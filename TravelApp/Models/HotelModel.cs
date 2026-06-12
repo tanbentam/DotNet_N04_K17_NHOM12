@@ -8,6 +8,8 @@ namespace TravelApp.Models
         public HotelModel()
         {
             Bookings = new HashSet<BookingModel>();
+            Favorites = new HashSet<FavoriteModel>();
+            Reviews = new HashSet<ReviewModel>();
         }
 
         public int Id { get; set; }
@@ -24,5 +26,7 @@ namespace TravelApp.Models
         public virtual DestinationModel Destination { get; set; }
         public virtual UserModel CreatedByGuide { get; set; }
         public virtual ICollection<BookingModel> Bookings { get; set; }
+        public virtual ICollection<FavoriteModel> Favorites { get; set; }
+        public virtual ICollection<ReviewModel> Reviews { get; set; }
     }
 }

@@ -1,46 +1,118 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace TravelApp.Services.NotificationQueue
 {
-    // Cần đăng ký class này dưới dạng Singleton trong App.xaml.cs
     public partial class NotificationManager : ObservableObject
     {
-        private readonly Queue<NotificationMessage> _queue = new Queue<NotificationMessage>();
+        private readonly Queue<NotificationMessage> _queue =
+            new Queue<NotificationMessage>();
+        private readonly object _syncRoot = new object();
         private bool _isDisplaying;
+        private CancellationTokenSource _displayCancellation;
 
-        [ObservableProperty]
-        private NotificationMessage _currentNotification;
+        [ObservableProperty] private NotificationMessage _currentNotification;
+        [ObservableProperty] private bool _isOpen;
 
-        [ObservableProperty]
-        private bool _isOpen;
-
-     //   [cite_start]// Phương thức để thêm thông báo vào hàng đợi 
-        public void ShowNotification(string title, string message, bool isError = false)
+        public void ShowNotification(
+            string title,
+            string message,
+            bool isError = false)
         {
-            _queue.Enqueue(new NotificationMessage { Title = title, Message = message, IsError = isError });
-            ProcessQueueAsync();
+            var notification = new NotificationMessage
+            {
+                Title = string.IsNullOrWhiteSpace(title)
+                    ? "Thông báo"
+                    : title.Trim(),
+                Message = message?.Trim() ?? string.Empty,
+                IsError = isError
+            };
+
+            lock (_syncRoot)
+            {
+                _queue.Enqueue(notification);
+            }
+
+            RunOnUiThread(() => _ = ProcessQueueAsync());
         }
 
-        private async void ProcessQueueAsync()
+        [RelayCommand]
+        private void Dismiss()
         {
-            if (_isDisplaying || _queue.Count == 0)
+            _displayCancellation?.Cancel();
+        }
+
+        private async Task ProcessQueueAsync()
+        {
+            if (_isDisplaying)
+            {
                 return;
+            }
 
             _isDisplaying = true;
-            CurrentNotification = _queue.Dequeue();
-            IsOpen = true;
+            try
+            {
+                while (TryDequeue(out var notification))
+                {
+                    CurrentNotification = notification;
+                    IsOpen = true;
+                    _displayCancellation = new CancellationTokenSource();
 
-            // Hiển thị popup trong 3 giây
-            await Task.Delay(3000);
+                    try
+                    {
+                        await Task.Delay(
+                            notification.IsError ? 5000 : 3500,
+                            _displayCancellation.Token);
+                    }
+                    catch (TaskCanceledException)
+                    {
+                    }
+                    finally
+                    {
+                        _displayCancellation.Dispose();
+                        _displayCancellation = null;
+                    }
 
-            IsOpen = false;
-            _isDisplaying = false;
+                    IsOpen = false;
+                    await Task.Delay(250);
+                }
+            }
+            finally
+            {
+                _isDisplaying = false;
+            }
+        }
 
-            // Chờ animation đóng (giả lập 0.5s) trước khi hiện popup tiếp theo
-            await Task.Delay(500);
-            ProcessQueueAsync();
+        private bool TryDequeue(out NotificationMessage notification)
+        {
+            lock (_syncRoot)
+            {
+                if (_queue.Count == 0)
+                {
+                    notification = null;
+                    return false;
+                }
+
+                notification = _queue.Dequeue();
+                return true;
+            }
+        }
+
+        private static void RunOnUiThread(Action action)
+        {
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher == null || dispatcher.CheckAccess())
+            {
+                action();
+                return;
+            }
+
+            dispatcher.BeginInvoke(action);
         }
     }
 }

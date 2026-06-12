@@ -106,21 +106,21 @@ Ký hiệu:
 - [x] Tạo Advanced Search ViewModel
 - [x] Tạo Tour Booking ViewModel
 - [x] Tạo Payment Simulation ViewModel
-- [~] Nối search, booking và payment vào User Dashboard
-- [ ] Tìm kiếm Destination, Hotel và Guide từ database
-- [ ] Tạo và hủy Booking bằng dữ liệu thật
-- [ ] Hoàn thiện hồ sơ người dùng
-- [ ] Hoàn thiện yêu thích và đánh giá
-- [ ] Hoàn thiện quy trình thanh toán mô phỏng
+- [x] Nối search, booking và payment vào User Dashboard
+- [x] Tìm kiếm Destination, Hotel và Guide từ database
+- [x] Tạo và hủy Booking bằng dữ liệu thật
+- [x] Hoàn thiện hồ sơ người dùng
+- [x] Hoàn thiện yêu thích và đánh giá
+- [x] Hoàn thiện quy trình thanh toán mô phỏng
 
 ## 9. Supporting Services
 
 - [x] Tạo local Notification Queue
 - [x] Tạo file Logger Service
-- [~] Hiển thị Popup Notification trong application shell
-- [~] Kết nối logging vào các luồng lỗi thực tế
-- [~] Hoàn thiện Image Upload Service
-- [ ] Lưu ảnh cục bộ hoặc trên storage thật
+- [x] Hiển thị Popup Notification trong application shell
+- [x] Kết nối logging vào các luồng lỗi thực tế
+- [x] Hoàn thiện Image Upload Service
+- [x] Lưu ảnh cục bộ hoặc trên storage thật
 - [ ] Hoàn thiện Booking Service và pricing rules
 
 ## 10. Quality And Delivery

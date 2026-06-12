@@ -99,10 +99,25 @@
                                      materialDesign:HintAssist.Hint="Description"
                                      AcceptsReturn="True" Height="70"
                                      TextWrapping="Wrap" Margin="0,0,0,10"/>
-                            <TextBox Text="{Binding DestinationImageUrl, UpdateSourceTrigger=PropertyChanged}"
-                                     materialDesign:HintAssist.Hint="Image URL"
-                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                     Margin="0,0,0,10"/>
+                            <Border Height="90" Background="#FFF2F2F2"
+                                    BorderBrush="#FFDDDDDD" BorderThickness="1"
+                                    CornerRadius="4" Margin="0,0,0,8">
+                                <Image Source="{Binding DestinationImageUrl}"
+                                       Stretch="Uniform"/>
+                            </Border>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="{Binding DestinationImageUrl, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Image URL or local path"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         Margin="0,0,8,0"/>
+                                <Button Grid.Column="1" Content="Choose"
+                                        Command="{Binding SelectDestinationImageCommand}"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                            </Grid>
                             <TextBox Text="{Binding DestinationRating, UpdateSourceTrigger=PropertyChanged}"
                                      materialDesign:HintAssist.Hint="Rating (0 - 9.99)"
                                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
@@ -216,10 +231,25 @@
                                      materialDesign:HintAssist.Hint="Rating (0 - 5)"
                                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                      Margin="0,0,0,10"/>
-                            <TextBox Text="{Binding HotelImageUrl, UpdateSourceTrigger=PropertyChanged}"
-                                     materialDesign:HintAssist.Hint="Image URL"
-                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                     Margin="0,0,0,16"/>
+                            <Border Height="90" Background="#FFF2F2F2"
+                                    BorderBrush="#FFDDDDDD" BorderThickness="1"
+                                    CornerRadius="4" Margin="0,0,0,8">
+                                <Image Source="{Binding HotelImageUrl}"
+                                       Stretch="Uniform"/>
+                            </Border>
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="{Binding HotelImageUrl, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Image URL or local path"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         Margin="0,0,8,0"/>
+                                <Button Grid.Column="1" Content="Choose"
+                                        Command="{Binding SelectHotelImageCommand}"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                            </Grid>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Button Content="Cancel"
                                         Command="{Binding CancelHotelEditCommand}"

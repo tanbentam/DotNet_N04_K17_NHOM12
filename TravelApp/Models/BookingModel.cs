@@ -1,10 +1,16 @@
 using System;
+using System.Collections.Generic;
 using TravelApp.Models.Enums;
 
 namespace TravelApp.Models
 {
     public class BookingModel
     {
+        public BookingModel()
+        {
+            Payments = new HashSet<PaymentModel>();
+        }
+
         public int Id { get; set; }
         public int UserId { get; set; }
         public int GuideId { get; set; }
@@ -22,5 +28,6 @@ namespace TravelApp.Models
         public virtual UserModel Guide { get; set; }
         public virtual HotelModel Hotel { get; set; }
         public virtual DestinationModel Destination { get; set; }
+        public virtual ICollection<PaymentModel> Payments { get; set; }
     }
 }

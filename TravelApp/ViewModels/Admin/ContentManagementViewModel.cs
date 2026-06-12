@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 using TravelApp.Data.Repositories;
 using TravelApp.Models;
 using TravelApp.Models.Enums;
+using TravelApp.Services.ImageManagement;
+using TravelApp.Services.Logging;
 
 namespace TravelApp.ViewModels.Admin
 {
     public partial class ContentManagementViewModel : ObservableObject
     {
         private readonly ITravelContentRepository _contentRepository;
+        private readonly ImageUploadService _imageUploadService;
 
         [ObservableProperty] private ObservableCollection<DestinationModel> _destinations;
         [ObservableProperty] private ObservableCollection<HotelModel> _hotels;
@@ -49,9 +52,11 @@ namespace TravelApp.ViewModels.Admin
             (BookingStatus[])Enum.GetValues(typeof(BookingStatus));
 
         public ContentManagementViewModel(
-            ITravelContentRepository contentRepository)
+            ITravelContentRepository contentRepository,
+            ImageUploadService imageUploadService)
         {
             _contentRepository = contentRepository;
+            _imageUploadService = imageUploadService;
             Destinations = new ObservableCollection<DestinationModel>();
             Hotels = new ObservableCollection<HotelModel>();
             Bookings = new ObservableCollection<BookingModel>();
@@ -141,7 +146,11 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Save destination",
+                    ex,
+                    "Không thể lưu điểm đến",
+                    "DestinationId=" + destination.Id);
             }
             finally
             {
@@ -280,7 +289,11 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Save hotel",
+                    ex,
+                    "Không thể lưu khách sạn",
+                    "HotelId=" + hotel.Id);
             }
             finally
             {
@@ -373,7 +386,11 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Update admin booking status",
+                    ex,
+                    "Không thể cập nhật trạng thái booking",
+                    "BookingId=" + SelectedBooking?.Id);
             }
             finally
             {
@@ -400,8 +417,10 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = "Không thể tải dữ liệu nội dung: " +
-                    ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Load admin content",
+                    ex,
+                    "Không thể tải dữ liệu nội dung");
             }
             finally
             {
@@ -437,7 +456,12 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Update destination approval",
+                    ex,
+                    "Không thể cập nhật trạng thái duyệt điểm đến",
+                    "DestinationId=" + destination.Id +
+                    "; Status=" + status);
             }
             finally
             {
@@ -473,7 +497,12 @@ namespace TravelApp.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.GetBaseException().Message;
+                SetLoggedError(
+                    "Update hotel approval",
+                    ex,
+                    "Không thể cập nhật trạng thái duyệt khách sạn",
+                    "HotelId=" + hotel.Id +
+                    "; Status=" + status);
             }
             finally
             {
@@ -550,6 +579,64 @@ namespace TravelApp.ViewModels.Admin
         {
             ErrorMessage = string.Empty;
             SuccessMessage = string.Empty;
+        }
+
+        [RelayCommand]
+        private async Task SelectDestinationImageAsync()
+        {
+            await SelectImageAsync(
+                "Destination",
+                value => DestinationImageUrl = value);
+        }
+
+        [RelayCommand]
+        private async Task SelectHotelImageAsync()
+        {
+            await SelectImageAsync(
+                "Hotel",
+                value => HotelImageUrl = value);
+        }
+
+        private async Task SelectImageAsync(
+            string targetType,
+            Action<string> applyImage)
+        {
+            ClearMessages();
+            var selectedFile = _imageUploadService.SelectImageFile();
+            if (string.IsNullOrWhiteSpace(selectedFile))
+            {
+                return;
+            }
+
+            IsLoading = true;
+            try
+            {
+                applyImage(await _imageUploadService.UploadImageAsync(
+                    selectedFile,
+                    targetType));
+                SuccessMessage = "Đã chọn ảnh hợp lệ.";
+            }
+            catch (ImageUploadException ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private void SetLoggedError(
+            string operation,
+            Exception exception,
+            string message,
+            string context = null)
+        {
+            var errorId = LoggerService.LogException(
+                operation,
+                exception,
+                context);
+            ErrorMessage = message + ". Mã lỗi: " + errorId;
         }
     }
 }
