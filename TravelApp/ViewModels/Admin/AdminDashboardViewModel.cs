@@ -14,15 +14,11 @@ namespace TravelApp.ViewModels.Admin
 {
     public partial class AdminDashboardViewModel : ObservableObject
     {
-        private readonly AccountManagementViewModel _accountManagementVM;
-        private readonly ContentManagementViewModel _contentManagementVM;
         private readonly IUserRepository _userRepository;
         private readonly ITravelContentRepository _contentRepository;
         private readonly IUserSessionService _sessionService;
+        private readonly IRoleNavigationService _navigationService;
 
-        [ObservableProperty] private ObservableObject _currentAdminContent;
-        [ObservableProperty] private bool _isOverviewVisible = true;
-        [ObservableProperty] private bool _isSectionVisible;
         [ObservableProperty] private bool _isLoading;
         [ObservableProperty] private string _errorMessage;
         [ObservableProperty] private string _adminName;
@@ -40,17 +36,15 @@ namespace TravelApp.ViewModels.Admin
             new ObservableCollection<BookingModel>();
 
         public AdminDashboardViewModel(
-            AccountManagementViewModel accountManagementVM,
-            ContentManagementViewModel contentManagementVM,
             IUserRepository userRepository,
             ITravelContentRepository contentRepository,
-            IUserSessionService sessionService)
+            IUserSessionService sessionService,
+            IRoleNavigationService navigationService)
         {
-            _accountManagementVM = accountManagementVM;
-            _contentManagementVM = contentManagementVM;
             _userRepository = userRepository;
             _contentRepository = contentRepository;
             _sessionService = sessionService;
+            _navigationService = navigationService;
             AdminName = _sessionService.CurrentUser?.FullName ?? "Admin";
             _ = LoadDashboardAsync();
         }
@@ -138,36 +132,19 @@ namespace TravelApp.ViewModels.Admin
         [RelayCommand]
         private void NavigateToAccounts()
         {
-            CurrentAdminContent = _accountManagementVM;
-            ShowSection();
+            _navigationService.NavigateToAdminSection("accounts");
         }
 
         [RelayCommand]
         private void NavigateToContent()
         {
-            CurrentAdminContent = _contentManagementVM;
-            ShowSection();
-        }
-
-        [RelayCommand]
-        private async Task ShowOverviewAsync()
-        {
-            CurrentAdminContent = null;
-            IsSectionVisible = false;
-            IsOverviewVisible = true;
-            await LoadDashboardAsync();
+            _navigationService.NavigateToAdminSection("content");
         }
 
         [RelayCommand]
         private void Logout()
         {
             _sessionService.SignOut();
-        }
-
-        private void ShowSection()
-        {
-            IsOverviewVisible = false;
-            IsSectionVisible = true;
         }
 
         private static int GetStatusPriority(BookingStatus status)

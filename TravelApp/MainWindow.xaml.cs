@@ -42,6 +42,8 @@ namespace TravelApp
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
             _roleNavigationService.DashboardRequested += ShowDashboardForUser;
+            _roleNavigationService.AdminSectionRequested +=
+                ShowAdminSection;
             _sessionService.SessionChanged += HandleSessionChanged;
         }
 
@@ -178,7 +180,35 @@ namespace TravelApp
         private void MainWindow_Closed(object sender, EventArgs e)
         {
             _roleNavigationService.DashboardRequested -= ShowDashboardForUser;
+            _roleNavigationService.AdminSectionRequested -=
+                ShowAdminSection;
             _sessionService.SessionChanged -= HandleSessionChanged;
+        }
+
+        private void ShowAdminSection(string section)
+        {
+            switch (section)
+            {
+                case "accounts":
+                    ShowRoleView(
+                        RoleType.Admin,
+                        "Account Management",
+                        () => _services.GetRequiredService<AccountManagementView>(),
+                        AccountManagementNavButton);
+                    break;
+                case "content":
+                    ShowRoleView(
+                        RoleType.Admin,
+                        "Content Management",
+                        () => _services.GetRequiredService<ContentManagementView>(),
+                        ContentManagementNavButton);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(
+                        nameof(section),
+                        section,
+                        "Unsupported Admin section.");
+            }
         }
 
         private void HandleSessionChanged(UserModel user)

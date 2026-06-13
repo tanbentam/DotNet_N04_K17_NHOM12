@@ -189,9 +189,11 @@ Lưu ý hiện trạng: giá trị `Tỉnh/Thành phố` đang được lưu và
 - [ ] Bảng `Booking cần chú ý` ưu tiên yêu cầu hủy đang chờ, sau đó hiển thị
   booking `Pending` và `Paid`.
 - [ ] Nút `Làm mới` tải lại KPI và cập nhật thời gian.
-- [ ] Trong Admin Dashboard, nút Account Management mở đúng nội dung account.
-- [ ] Nút Content Management mở đúng nội dung quản lý content.
-- [ ] Nút `Quay lại tổng quan` trở về dashboard và tải lại dữ liệu mới nhất.
+- [ ] Trong Admin Dashboard, nút Account Management chuyển sang đúng màn hình,
+  cập nhật tiêu đề và highlight menu Account Management.
+- [ ] Nút Content Management chuyển sang đúng màn hình, cập nhật tiêu đề và
+  highlight menu Content Management.
+- [ ] Bấm menu Admin Dashboard để quay lại tổng quan và tải dữ liệu mới nhất.
 - [ ] Nút Logout kết thúc phiên và quay về Login. Đăng nhập lại Admin để tiếp tục.
 - [ ] Mở Account Management.
 - [ ] Danh sách tài khoản và tổng số account tải thành công.

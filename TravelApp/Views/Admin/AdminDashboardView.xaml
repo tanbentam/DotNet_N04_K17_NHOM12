@@ -4,8 +4,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              Background="{DynamicResource MaterialDesignPaper}">
     <Grid Margin="24">
-        <Grid Visibility="{Binding IsOverviewVisible,
-                                  Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -214,19 +213,6 @@
                     </Grid>
                 </Grid>
             </materialDesign:Card>
-        </Grid>
-
-        <Grid Visibility="{Binding IsSectionVisible,
-                                  Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button Content="← Quay lại tổng quan"
-                    Command="{Binding ShowOverviewCommand}"
-                    Style="{StaticResource MaterialDesignFlatButton}"
-                    HorizontalAlignment="Left" Margin="0,0,0,8"/>
-            <ContentControl Grid.Row="1" Content="{Binding CurrentAdminContent}"/>
         </Grid>
     </Grid>
 </UserControl>
