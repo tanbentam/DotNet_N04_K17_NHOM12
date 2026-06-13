@@ -136,7 +136,7 @@ Ký hiệu:
 
 - [x] Project build thành công
 - [ ] Xử lý toàn bộ compiler warnings
-- [ ] Viết Unit Tests cho validation, authentication và booking
+- [x] Viết Unit Tests cho validation, authentication và booking
 - [ ] Viết Integration Tests cho EF6/MySQL
 - [ ] Viết smoke test cho các luồng UI chính
 - [x] Bổ sung README với hướng dẫn setup, build, database, migration và test

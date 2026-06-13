@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="TravelApp/TravelApp.csproj" Id="6121f280-8dd7-41e4-888a-fd80b59853ba" />
+  <Project Path="TravelApp.Tests/TravelApp.Tests.csproj" />
 </Solution>

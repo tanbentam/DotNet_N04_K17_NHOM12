@@ -413,6 +413,26 @@ Không bật automatic destructive migration trên database có dữ liệu quan
 4. Đăng nhập lần lượt User, Guide và Admin.
 5. Kiểm tra navigation đúng role và logout.
 
+### Unit test tự động
+
+Project `TravelApp.Tests` dùng MSTest và kiểm tra các phần logic không cần UI hoặc
+MySQL:
+
+- Validation email và số điện thoại.
+- Hash/verify mật khẩu PBKDF2.
+- Đăng nhập và đăng ký với repository giả.
+- Quy tắc tính giá và chuyển trạng thái booking.
+- Ngày hoàn thành và điều kiện Guide gửi yêu cầu hủy.
+
+Chạy toàn bộ unit test:
+
+```powershell
+.\Run-UnitTests.ps1
+```
+
+Script dùng Visual Studio MSBuild và VSTest vì `dotnet test` không resolve ổn định
+các dependency của WPF project format cũ.
+
 ### Full regression
 
 Tài liệu test đầy đủ:
@@ -431,8 +451,7 @@ Flow regression bao gồm hơn 200 checkpoint cho:
 - Profile, favorites, reviews.
 - Persistence, logs và image storage.
 
-Project hiện chưa có automated test project. Unit test, integration test và UI
-smoke test tự động vẫn nằm trong backlog.
+Integration test EF6/MySQL và UI smoke test tự động vẫn nằm trong backlog.
 
 ## Dữ liệu và file cục bộ
 
