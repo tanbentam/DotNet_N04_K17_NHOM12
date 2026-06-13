@@ -115,6 +115,9 @@ namespace TravelApp.Data
             booking.Property(x => x.Price).HasPrecision(18, 2);
             booking.Property(x => x.DestinationName).IsOptional().HasMaxLength(150);
             booking.Property(x => x.UserName).IsOptional().HasMaxLength(100);
+            booking.Property(x => x.GuideCancellationReason)
+                .IsOptional()
+                .HasMaxLength(500);
 
             booking.HasRequired(x => x.User)
                 .WithMany(x => x.Bookings)

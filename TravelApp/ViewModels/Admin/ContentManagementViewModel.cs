@@ -393,6 +393,64 @@ namespace TravelApp.ViewModels.Admin
             }
         }
 
+        [RelayCommand]
+        private Task ApproveGuideCancellationAsync()
+        {
+            return ResolveGuideCancellationAsync(true);
+        }
+
+        [RelayCommand]
+        private Task RejectGuideCancellationAsync()
+        {
+            return ResolveGuideCancellationAsync(false);
+        }
+
+        private async Task ResolveGuideCancellationAsync(bool approve)
+        {
+            ClearMessages();
+            if (SelectedBooking == null ||
+                !SelectedBooking.HasPendingGuideCancellation)
+            {
+                ErrorMessage =
+                    "Hãy chọn booking có yêu cầu hủy đang chờ xử lý.";
+                return;
+            }
+
+            IsLoading = true;
+            try
+            {
+                var bookingCode = SelectedBooking.BookingId;
+                var result =
+                    await _bookingService.ResolveGuideCancellationRequestAsync(
+                        SelectedBooking.Id,
+                        approve);
+                if (!result.Succeeded)
+                {
+                    ErrorMessage = result.Message;
+                    return;
+                }
+
+                await RefreshDataAsync();
+                SelectedBooking = null;
+                SuccessMessage = approve
+                    ? "Đã duyệt hủy booking " + bookingCode + "."
+                    : "Đã từ chối yêu cầu hủy booking " + bookingCode + ".";
+            }
+            catch (Exception ex)
+            {
+                SetLoggedError(
+                    "Resolve guide cancellation request",
+                    ex,
+                    "Không thể xử lý yêu cầu hủy",
+                    "BookingId=" + SelectedBooking?.Id +
+                    "; Approve=" + approve);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
         private async Task RefreshDataAsync()
         {
             IsLoading = true;

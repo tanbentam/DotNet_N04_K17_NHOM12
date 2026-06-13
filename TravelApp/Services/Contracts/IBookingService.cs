@@ -16,6 +16,13 @@ namespace TravelApp.Services.Contracts
             int bookingId,
             int guideId,
             BookingStatus status);
+        Task<BookingOperationResult> RequestCancellationByGuideAsync(
+            int bookingId,
+            int guideId,
+            string reason);
+        Task<BookingOperationResult> ResolveGuideCancellationRequestAsync(
+            int bookingId,
+            bool approve);
         Task<BookingOperationResult> UpdateByAdminAsync(
             int bookingId,
             BookingStatus status);

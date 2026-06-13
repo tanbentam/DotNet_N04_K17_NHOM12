@@ -100,6 +100,8 @@ Ký hiệu:
 - [x] Tạo và chỉnh sửa Hotel
 - [x] Chấp nhận hoặc từ chối Booking bằng dữ liệu thật
 - [x] Chức năng lịch mới: xem lịch trình làm việc khi đã chấp nhận booking của user
+- [x] Hiển thị lịch làm việc trực quan với ngày bắt đầu, ngày hoàn thành và tiến độ tour
+- [x] Guide gửi yêu cầu hủy booking đã chấp nhận để Admin duyệt hoặc từ chối
 
 ## 8. User Features
 

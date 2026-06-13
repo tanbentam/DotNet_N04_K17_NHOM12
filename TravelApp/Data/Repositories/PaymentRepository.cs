@@ -30,7 +30,9 @@ namespace TravelApp.Data.Repositories
                     .Include(booking => booking.Hotel)
                     .Where(booking =>
                         booking.UserId == userId &&
-                        booking.Status == BookingStatus.Accepted)
+                        booking.Status == BookingStatus.Accepted &&
+                        (!booking.GuideCancellationRequestedAt.HasValue ||
+                         booking.GuideCancellationResolvedAt.HasValue))
                     .OrderBy(booking => booking.StartDate)
                     .ToListAsync();
             }
@@ -93,6 +95,13 @@ namespace TravelApp.Data.Repositories
                     {
                         return PaymentProcessResult.Rejected(
                             "Chỉ booking đã được Guide chấp nhận mới có thể thanh toán.");
+                    }
+
+                    if (booking.GuideCancellationRequestedAt.HasValue &&
+                        !booking.GuideCancellationResolvedAt.HasValue)
+                    {
+                        return PaymentProcessResult.Rejected(
+                            "Booking đang có yêu cầu hủy chờ Admin xử lý.");
                     }
 
                     var hasSuccessfulPayment =

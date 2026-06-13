@@ -93,6 +93,10 @@
     <Compile Include="Data\Migrations\202606090917135_AddPayments.Designer.cs">
       <DependentUpon>202606090917135_AddPayments.cs</DependentUpon>
     </Compile>
+    <Compile Include="Data\Migrations\202606121648265_AddGuideCancellationRequests.cs" />
+    <Compile Include="Data\Migrations\202606121648265_AddGuideCancellationRequests.Designer.cs">
+      <DependentUpon>202606121648265_AddGuideCancellationRequests.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\FavoriteModel.cs" />
     <Compile Include="Models\ReviewModel.cs" />
@@ -242,6 +246,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Migrations\202606090917135_AddPayments.resx">
       <DependentUpon>202606090917135_AddPayments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Migrations\202606121648265_AddGuideCancellationRequests.resx">
+      <DependentUpon>202606121648265_AddGuideCancellationRequests.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

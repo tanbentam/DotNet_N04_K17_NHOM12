@@ -179,6 +179,13 @@ namespace TravelApp.Services.Booking
                 }
 
                 booking.Status = BookingStatus.Cancelled;
+                if (booking.GuideCancellationRequestedAt.HasValue &&
+                    !booking.GuideCancellationResolvedAt.HasValue)
+                {
+                    booking.GuideCancellationResolvedAt = DateTime.Now;
+                    booking.GuideCancellationApproved = true;
+                }
+
                 await context.SaveChangesAsync();
                 return BookingOperationResult.Success("Đã hủy booking.");
             }
@@ -246,6 +253,19 @@ namespace TravelApp.Services.Booking
                         "Không thể chuyển booking từ trạng thái hiện tại.");
                 }
 
+                if (booking.GuideCancellationRequestedAt.HasValue &&
+                    !booking.GuideCancellationResolvedAt.HasValue)
+                {
+                    if (status != BookingStatus.Cancelled)
+                    {
+                        return BookingOperationResult.Failure(
+                            "Hãy duyệt hoặc từ chối yêu cầu hủy của Guide trước.");
+                    }
+
+                    booking.GuideCancellationResolvedAt = DateTime.Now;
+                    booking.GuideCancellationApproved = true;
+                }
+
                 if (status == BookingStatus.Accepted &&
                     (!await IsGuideAvailableAsync(
                         context,
@@ -268,6 +288,99 @@ namespace TravelApp.Services.Booking
                 await context.SaveChangesAsync();
                 return BookingOperationResult.Success(
                     "Đã cập nhật trạng thái booking.");
+            }
+        }
+
+        public async Task<BookingOperationResult>
+            RequestCancellationByGuideAsync(
+                int bookingId,
+                int guideId,
+                string reason)
+        {
+            var normalizedReason = reason?.Trim();
+            if (string.IsNullOrWhiteSpace(normalizedReason) ||
+                normalizedReason.Length < 10 ||
+                normalizedReason.Length > 500)
+            {
+                return BookingOperationResult.Failure(
+                    "Lý do hủy phải từ 10 đến 500 ký tự.");
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                var booking = await context.Bookings.FirstOrDefaultAsync(item =>
+                    item.Id == bookingId &&
+                    item.GuideId == guideId);
+                if (booking == null)
+                {
+                    return BookingOperationResult.Failure(
+                        "Booking không thuộc Guide hiện tại.");
+                }
+
+                if (booking.Status != BookingStatus.Accepted)
+                {
+                    return BookingOperationResult.Failure(
+                        "Chỉ có thể gửi yêu cầu hủy booking đã chấp nhận và chưa thanh toán.");
+                }
+
+                if (booking.StartDate.Date <= DateTime.Today)
+                {
+                    return BookingOperationResult.Failure(
+                        "Không thể gửi yêu cầu hủy khi tour đã hoặc đang bắt đầu.");
+                }
+
+                if (booking.GuideCancellationRequestedAt.HasValue &&
+                    !booking.GuideCancellationResolvedAt.HasValue)
+                {
+                    return BookingOperationResult.Failure(
+                        "Booking này đã có yêu cầu hủy đang chờ Admin xử lý.");
+                }
+
+                booking.GuideCancellationRequestedAt = DateTime.Now;
+                booking.GuideCancellationReason = normalizedReason;
+                booking.GuideCancellationResolvedAt = null;
+                booking.GuideCancellationApproved = null;
+                await context.SaveChangesAsync();
+
+                return BookingOperationResult.Success(
+                    "Đã gửi yêu cầu hủy booking đến Admin.");
+            }
+        }
+
+        public async Task<BookingOperationResult>
+            ResolveGuideCancellationRequestAsync(
+                int bookingId,
+                bool approve)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var booking = await context.Bookings.FindAsync(bookingId);
+                if (booking == null ||
+                    !booking.GuideCancellationRequestedAt.HasValue ||
+                    booking.GuideCancellationResolvedAt.HasValue)
+                {
+                    return BookingOperationResult.Failure(
+                        "Booking không có yêu cầu hủy đang chờ xử lý.");
+                }
+
+                if (approve && booking.Status != BookingStatus.Accepted)
+                {
+                    return BookingOperationResult.Failure(
+                        "Booking không còn ở trạng thái có thể hủy.");
+                }
+
+                booking.GuideCancellationResolvedAt = DateTime.Now;
+                booking.GuideCancellationApproved = approve;
+                if (approve)
+                {
+                    booking.Status = BookingStatus.Cancelled;
+                }
+
+                await context.SaveChangesAsync();
+                return BookingOperationResult.Success(
+                    approve
+                        ? "Đã duyệt yêu cầu hủy booking."
+                        : "Đã từ chối yêu cầu hủy booking.");
             }
         }
 

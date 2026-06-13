@@ -598,30 +598,121 @@
                                    Foreground="#FFD32F2F"
                                    TextWrapping="Wrap"
                                    Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                        <TextBlock Text="{Binding SuccessMessage}"
+                                   Foreground="#FF2E7D32"
+                                   TextWrapping="Wrap"
+                                   Visibility="{Binding SuccessMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
                         <ProgressBar IsIndeterminate="True"
                                      Height="3"
                                      Margin="0,8,0,0"
                                      Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </StackPanel>
 
-                    <DataGrid Grid.Row="2"
-                              ItemsSource="{Binding WorkSchedule}"
-                              AutoGenerateColumns="False"
-                              CanUserAddRows="False"
-                              IsReadOnly="True"
-                              HeadersVisibility="Column"
-                              GridLinesVisibility="Horizontal"
-                              materialDesign:DataGridAssist.CellPadding="12">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Mã booking" Binding="{Binding BookingId}" Width="120"/>
-                            <DataGridTextColumn Header="Ngày bắt đầu" Binding="{Binding StartDate, StringFormat=dd/MM/yyyy}" Width="120"/>
-                            <DataGridTextColumn Header="Số ngày" Binding="{Binding Nights}" Width="80"/>
-                            <DataGridTextColumn Header="Khách hàng" Binding="{Binding UserName}" Width="*"/>
-                            <DataGridTextColumn Header="Điểm đến" Binding="{Binding DestinationName}" Width="*"/>
-                            <DataGridTextColumn Header="Khách sạn" Binding="{Binding Hotel.Name}" Width="*"/>
-                            <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" Width="110"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="340"/>
+                        </Grid.ColumnDefinitions>
+
+                        <DataGrid ItemsSource="{Binding WorkSchedule}"
+                                  SelectedItem="{Binding SelectedBooking}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  IsReadOnly="True"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal"
+                                  RowHeight="54"
+                                  materialDesign:DataGridAssist.CellPadding="12">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Tour"
+                                                    Binding="{Binding BookingId}"
+                                                    Width="115"/>
+                                <DataGridTextColumn Header="Điểm đến"
+                                                    Binding="{Binding DestinationName}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Bắt đầu"
+                                                    Binding="{Binding StartDate, StringFormat=dd/MM/yyyy}"
+                                                    Width="105"/>
+                                <DataGridTextColumn Header="Hoàn thành"
+                                                    Binding="{Binding CompletionDate, StringFormat=dd/MM/yyyy}"
+                                                    Width="105"/>
+                                <DataGridTextColumn Header="Tiến độ"
+                                                    Binding="{Binding WorkScheduleStatus}"
+                                                    Width="145"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <materialDesign:Card Grid.Column="1"
+                                             Padding="18"
+                                             Margin="16,0,0,0"
+                                             VerticalAlignment="Top">
+                            <StackPanel>
+                                <TextBlock Text="Chi tiết lịch trình"
+                                           FontSize="19"
+                                           FontWeight="SemiBold"/>
+                                <TextBlock Text="Chọn một tour trong danh sách để xem và thao tác."
+                                           Foreground="Gray"
+                                           TextWrapping="Wrap"
+                                           Margin="0,4,0,16"/>
+
+                                <TextBlock Text="{Binding SelectedBooking.BookingId}"
+                                           FontSize="18"
+                                           FontWeight="Bold"/>
+                                <TextBlock Text="{Binding SelectedBooking.DestinationName}"
+                                           FontSize="15"
+                                           Margin="0,4,0,12"/>
+
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel>
+                                        <TextBlock Text="Bắt đầu" Foreground="Gray"/>
+                                        <TextBlock Text="{Binding SelectedBooking.StartDate, StringFormat=dd/MM/yyyy}"
+                                                   FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="Hoàn thành" Foreground="Gray"/>
+                                        <TextBlock Text="{Binding SelectedBooking.CompletionDate, StringFormat=dd/MM/yyyy}"
+                                                   FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <TextBlock Text="{Binding SelectedBooking.UserName, StringFormat=Khách hàng: {0}}"
+                                           Margin="0,0,0,4"/>
+                                <TextBlock Text="{Binding SelectedBooking.Hotel.Name, StringFormat=Khách sạn: {0}, TargetNullValue=Khách sạn: Không chọn}"
+                                           Margin="0,0,0,4"/>
+                                <TextBlock Text="{Binding SelectedBooking.WorkScheduleStatus, StringFormat=Tiến độ: {0}}"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,16"/>
+
+                                <Separator Margin="0,0,0,14"/>
+                                <TextBlock Text="Yêu cầu hủy booking"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"/>
+                                <TextBlock Text="Chỉ áp dụng cho booking đã chấp nhận, chưa thanh toán và tour chưa bắt đầu."
+                                           Foreground="Gray"
+                                           TextWrapping="Wrap"
+                                           Margin="0,4,0,10"/>
+                                <TextBlock Text="{Binding SelectedBooking.GuideCancellationReason, StringFormat=Đang chờ Admin: {0}}"
+                                           Foreground="#FFE65100"
+                                           TextWrapping="Wrap"
+                                           Margin="0,0,0,8"
+                                           Visibility="{Binding SelectedBooking.HasPendingGuideCancellation, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <TextBox Text="{Binding CancellationReason, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Lý do hủy (10 - 500 ký tự)"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         Height="85"
+                                         Margin="0,0,0,10"/>
+                                <Button Content="Gửi yêu cầu hủy"
+                                        Command="{Binding RequestCancellationCommand}"
+                                        IsEnabled="{Binding SelectedBooking.CanGuideRequestCancellation}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"/>
+                            </StackPanel>
+                        </materialDesign:Card>
+                    </Grid>
                 </Grid>
             </TabItem>
         </TabControl>
