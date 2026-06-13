@@ -22,6 +22,7 @@
             <controls:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <local:EnumNotEqualConverter x:Key="EnumNotEqualConverter" />
         </ResourceDictionary>
     </Application.Resources>
 

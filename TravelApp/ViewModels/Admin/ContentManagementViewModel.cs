@@ -10,6 +10,7 @@ using TravelApp.Models.Enums;
 using TravelApp.Services.ImageManagement;
 using TravelApp.Services.Logging;
 using TravelApp.Services.Contracts;
+using TravelApp.Services.NotificationQueue;
 
 namespace TravelApp.ViewModels.Admin
 {
@@ -18,6 +19,7 @@ namespace TravelApp.ViewModels.Admin
         private readonly ITravelContentRepository _contentRepository;
         private readonly ImageUploadService _imageUploadService;
         private readonly IBookingService _bookingService;
+        private readonly NotificationManager _notificationManager;
 
         [ObservableProperty] private ObservableCollection<DestinationModel> _destinations;
         [ObservableProperty] private ObservableCollection<HotelModel> _hotels;
@@ -56,11 +58,13 @@ namespace TravelApp.ViewModels.Admin
         public ContentManagementViewModel(
             ITravelContentRepository contentRepository,
             ImageUploadService imageUploadService,
-            IBookingService bookingService)
+            IBookingService bookingService,
+            NotificationManager notificationManager)
         {
             _contentRepository = contentRepository;
             _imageUploadService = imageUploadService;
             _bookingService = bookingService;
+            _notificationManager = notificationManager;
             Destinations = new ObservableCollection<DestinationModel>();
             Hotels = new ObservableCollection<HotelModel>();
             Bookings = new ObservableCollection<BookingModel>();
@@ -147,6 +151,7 @@ namespace TravelApp.ViewModels.Admin
                 SuccessMessage = wasEditing
                     ? "Cập nhật điểm đến thành công."
                     : "Tạo điểm đến thành công.";
+                NotifySuccess(SuccessMessage);
             }
             catch (Exception ex)
             {
@@ -180,6 +185,7 @@ namespace TravelApp.ViewModels.Admin
 
             await RefreshDataAsync();
             SuccessMessage = "Xóa điểm đến thành công.";
+            NotifySuccess(SuccessMessage);
         }
 
         [RelayCommand]
@@ -290,6 +296,7 @@ namespace TravelApp.ViewModels.Admin
                 SuccessMessage = wasEditing
                     ? "Cập nhật khách sạn thành công."
                     : "Tạo khách sạn thành công.";
+                NotifySuccess(SuccessMessage);
             }
             catch (Exception ex)
             {
@@ -322,6 +329,7 @@ namespace TravelApp.ViewModels.Admin
 
             await RefreshDataAsync();
             SuccessMessage = "Xóa khách sạn thành công.";
+            NotifySuccess(SuccessMessage);
         }
 
         [RelayCommand]
@@ -378,6 +386,7 @@ namespace TravelApp.ViewModels.Admin
                 SelectedBooking = null;
                 SuccessMessage =
                     "Đã cập nhật booking " + bookingCode + " thành công.";
+                NotifySuccess(SuccessMessage);
             }
             catch (Exception ex)
             {
@@ -435,6 +444,7 @@ namespace TravelApp.ViewModels.Admin
                 SuccessMessage = approve
                     ? "Đã duyệt hủy booking " + bookingCode + "."
                     : "Đã từ chối yêu cầu hủy booking " + bookingCode + ".";
+                NotifySuccess(SuccessMessage);
             }
             catch (Exception ex)
             {
@@ -506,6 +516,7 @@ namespace TravelApp.ViewModels.Admin
                 SuccessMessage = status == ContentApprovalStatus.Approved
                     ? "Đã duyệt điểm đến."
                     : "Đã từ chối điểm đến.";
+                NotifySuccess(SuccessMessage);
             }
             catch (Exception ex)
             {
@@ -547,6 +558,7 @@ namespace TravelApp.ViewModels.Admin
                 SuccessMessage = status == ContentApprovalStatus.Approved
                     ? "Đã duyệt khách sạn."
                     : "Đã từ chối khách sạn.";
+                NotifySuccess(SuccessMessage);
             }
             catch (Exception ex)
             {
@@ -642,6 +654,7 @@ namespace TravelApp.ViewModels.Admin
                     selectedFile,
                     targetType));
                 SuccessMessage = "Đã chọn ảnh hợp lệ.";
+                NotifySuccess(SuccessMessage);
             }
             catch (ImageUploadException ex)
             {
@@ -664,6 +677,22 @@ namespace TravelApp.ViewModels.Admin
                 exception,
                 context);
             ErrorMessage = message + ". Mã lỗi: " + errorId;
+            NotifyError(ErrorMessage);
+        }
+
+        private void NotifySuccess(string message)
+        {
+            _notificationManager.ShowNotification(
+                "Content Management",
+                message);
+        }
+
+        private void NotifyError(string message)
+        {
+            _notificationManager.ShowNotification(
+                "Content Management",
+                message,
+                true);
         }
     }
 }

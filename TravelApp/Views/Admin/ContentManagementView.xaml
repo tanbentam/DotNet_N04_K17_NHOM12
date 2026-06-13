@@ -60,11 +60,17 @@
                                                 <Button Content="Approve"
                                                         Command="{Binding DataContext.ApproveDestinationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                         CommandParameter="{Binding}"
+                                                        IsEnabled="{Binding ApprovalStatus,
+                                                            Converter={StaticResource EnumNotEqualConverter},
+                                                            ConverterParameter=Approved}"
                                                         Style="{StaticResource MaterialDesignFlatButton}"
                                                         Foreground="Green" Padding="0" Margin="8,0,0,0"/>
                                                 <Button Content="Reject"
                                                         Command="{Binding DataContext.RejectDestinationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                         CommandParameter="{Binding}"
+                                                        IsEnabled="{Binding ApprovalStatus,
+                                                            Converter={StaticResource EnumNotEqualConverter},
+                                                            ConverterParameter=Rejected}"
                                                         Style="{StaticResource MaterialDesignFlatButton}"
                                                         Foreground="DarkOrange" Padding="0" Margin="8,0,0,0"/>
                                                 <Button Content="Delete"
@@ -178,11 +184,17 @@
                                                 <Button Content="Approve"
                                                         Command="{Binding DataContext.ApproveHotelCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                         CommandParameter="{Binding}"
+                                                        IsEnabled="{Binding ApprovalStatus,
+                                                            Converter={StaticResource EnumNotEqualConverter},
+                                                            ConverterParameter=Approved}"
                                                         Style="{StaticResource MaterialDesignFlatButton}"
                                                         Foreground="Green" Padding="0" Margin="8,0,0,0"/>
                                                 <Button Content="Reject"
                                                         Command="{Binding DataContext.RejectHotelCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                         CommandParameter="{Binding}"
+                                                        IsEnabled="{Binding ApprovalStatus,
+                                                            Converter={StaticResource EnumNotEqualConverter},
+                                                            ConverterParameter=Rejected}"
                                                         Style="{StaticResource MaterialDesignFlatButton}"
                                                         Foreground="DarkOrange" Padding="0" Margin="8,0,0,0"/>
                                                 <Button Content="Delete"

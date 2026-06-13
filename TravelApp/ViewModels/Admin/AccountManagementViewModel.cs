@@ -8,6 +8,7 @@ using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services.Contracts;
 using TravelApp.Services.Logging;
+using TravelApp.Services.NotificationQueue;
 using TravelApp.Utils;
 
 namespace TravelApp.ViewModels.Admin
@@ -17,6 +18,7 @@ namespace TravelApp.ViewModels.Admin
         private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
         private readonly IUserSessionService _sessionService;
+        private readonly NotificationManager _notificationManager;
 
         [ObservableProperty] private ObservableCollection<UserModel> _usersList;
         [ObservableProperty] private bool _isLoading;
@@ -39,11 +41,13 @@ namespace TravelApp.ViewModels.Admin
         public AccountManagementViewModel(
             IUserRepository userRepository,
             IAuthService authService,
-            IUserSessionService sessionService)
+            IUserSessionService sessionService,
+            NotificationManager notificationManager)
         {
             _userRepository = userRepository;
             _authService = authService;
             _sessionService = sessionService;
+            _notificationManager = notificationManager;
             UsersList = new ObservableCollection<UserModel>();
             _ = LoadAccountsAsync();
         }
@@ -152,17 +156,17 @@ namespace TravelApp.ViewModels.Admin
                 {
                     ErrorMessage =
                         "Không thể lưu tài khoản. Email hoặc số điện thoại có thể đã tồn tại.";
+                    NotifyError(ErrorMessage);
                     return;
                 }
 
-                SuccessMessage = IsEditing
+                var successMessage = IsEditing
                     ? "Cập nhật tài khoản thành công."
                     : "Tạo tài khoản thành công.";
                 CloseEditor();
                 await LoadAccountsAsync();
-                SuccessMessage = IsEditing
-                    ? "Cập nhật tài khoản thành công."
-                    : "Tạo tài khoản thành công.";
+                SuccessMessage = successMessage;
+                NotifySuccess(successMessage);
             }
             catch (Exception ex)
             {
@@ -198,12 +202,14 @@ namespace TravelApp.ViewModels.Admin
             if (_sessionService.CurrentUser?.Id == user.Id)
             {
                 ErrorMessage = "Không thể xóa tài khoản đang đăng nhập.";
+                NotifyError(ErrorMessage);
                 return;
             }
 
             if (user.Role == RoleType.Admin)
             {
                 ErrorMessage = "Không thể xóa tài khoản Admin tại màn hình này.";
+                NotifyError(ErrorMessage);
                 return;
             }
 
@@ -213,12 +219,14 @@ namespace TravelApp.ViewModels.Admin
                 {
                     ErrorMessage =
                         "Không thể xóa tài khoản. Tài khoản có thể đang được sử dụng.";
+                    NotifyError(ErrorMessage);
                     return;
                 }
 
                 UsersList.Remove(user);
                 UpdateSummary();
                 SuccessMessage = "Xóa tài khoản thành công.";
+                NotifySuccess(SuccessMessage);
             }
             catch (Exception ex)
             {
@@ -241,6 +249,7 @@ namespace TravelApp.ViewModels.Admin
                 exception,
                 context);
             ErrorMessage = message + ". Mã lỗi: " + errorId;
+            NotifyError(ErrorMessage);
         }
 
         private void OpenCreateEditor(RoleType role)
@@ -312,6 +321,21 @@ namespace TravelApp.ViewModels.Admin
             UserCount = UsersList.Count;
             IsEmpty = UserCount == 0;
             HasUsers = UserCount > 0;
+        }
+
+        private void NotifySuccess(string message)
+        {
+            _notificationManager.ShowNotification(
+                "Account Management",
+                message);
+        }
+
+        private void NotifyError(string message)
+        {
+            _notificationManager.ShowNotification(
+                "Account Management",
+                message,
+                true);
         }
     }
 }
