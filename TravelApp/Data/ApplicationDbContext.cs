@@ -9,8 +9,7 @@ namespace TravelApp.Data
     {
         static ApplicationDbContext()
         {
-            Database.SetInitializer(
-                new MigrateDatabaseToLatestVersion<ApplicationDbContext, Migrations.Configuration>());
+            Database.SetInitializer(new ApplicationDbInitializer());
         }
 
         public ApplicationDbContext() : base("DefaultConnection")
