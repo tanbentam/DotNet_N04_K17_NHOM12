@@ -88,6 +88,8 @@ Ký hiệu:
 - [x] Quản lý Destination và Hotel
 - [x] Duyệt Hotel và nội dung do Guide tạo
 - [x] Theo dõi và quản lý Booking
+- [ ] Tự động chuyển Booking sang `Completed` khi tour đã qua ngày hoàn thành
+- [ ] Quản lý yêu cầu hủy và hoàn tiền cho Booking đã thanh toán
 
 ## 7. Guide Features
 
@@ -115,6 +117,8 @@ Ký hiệu:
 - [x] Hoàn thiện hồ sơ người dùng
 - [x] Hoàn thiện yêu thích và đánh giá
 - [x] Hoàn thiện quy trình thanh toán mô phỏng
+- [ ] Chỉ cho phép đánh giá Guide hoặc Hotel sau khi User hoàn thành tour tương ứng
+- [ ] Hiển thị trạng thái và lịch sử hoàn tiền của Booking đã thanh toán
 
 ## 9. Supporting Services
 
@@ -125,6 +129,8 @@ Ký hiệu:
 - [x] Hoàn thiện Image Upload Service
 - [x] Lưu ảnh cục bộ hoặc trên storage thật
 - [x] Hoàn thiện Booking Service và pricing rules
+- [ ] Hoàn thiện quy trình hủy Booking đã thanh toán và nghiệp vụ hoàn tiền mô phỏng
+- [ ] Gửi thông báo cho User, Guide và Admin khi trạng thái hủy hoặc hoàn tiền thay đổi
 
 ## 10. Quality And Delivery
 
@@ -133,7 +139,7 @@ Ký hiệu:
 - [ ] Viết Unit Tests cho validation, authentication và booking
 - [ ] Viết Integration Tests cho EF6/MySQL
 - [ ] Viết smoke test cho các luồng UI chính
-- [ ] Bổ sung README với hướng dẫn setup và build
+- [x] Bổ sung README với hướng dẫn setup, build, database, migration và test
 - [x] Di chuyển database credentials khỏi `App.config`
 - [ ] Thêm cấu hình theo environment
 - [ ] Thực hiện security review
