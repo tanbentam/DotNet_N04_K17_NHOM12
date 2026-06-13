@@ -81,6 +81,7 @@ Ký hiệu:
 ## 6. Admin Features
 
 - [x] Tạo Admin Dashboard
+- [x] Hoàn thiện Admin Dashboard với KPI, cảnh báo và truy cập nhanh
 - [x] Tạo Account Management UI và ViewModel
 - [x] Tạo Content Management UI và ViewModel
 - [x] Hiển thị danh sách tài khoản bằng dữ liệu thật

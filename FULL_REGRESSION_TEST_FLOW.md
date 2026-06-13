@@ -181,8 +181,17 @@ Lưu ý hiện trạng: giá trị `Tỉnh/Thành phố` đang được lưu và
 
 - [ ] Tự chuyển đến Admin Dashboard.
 - [ ] Chỉ thấy menu Admin Dashboard, Account Management và Content Management.
+- [ ] Dashboard hiển thị tên Admin và thời điểm cập nhật gần nhất.
+- [ ] Các KPI tài khoản, User, Guide, nội dung chờ duyệt, booking chờ,
+  yêu cầu hủy, tour đã thanh toán và doanh thu mô phỏng tải thành công.
+- [ ] Đối chiếu nhanh KPI với dữ liệu hiện có trong Account Management và
+  Content Management.
+- [ ] Bảng `Booking cần chú ý` ưu tiên yêu cầu hủy đang chờ, sau đó hiển thị
+  booking `Pending` và `Paid`.
+- [ ] Nút `Làm mới` tải lại KPI và cập nhật thời gian.
 - [ ] Trong Admin Dashboard, nút Account Management mở đúng nội dung account.
 - [ ] Nút Content Management mở đúng nội dung quản lý content.
+- [ ] Nút `Quay lại tổng quan` trở về dashboard và tải lại dữ liệu mới nhất.
 - [ ] Nút Logout kết thúc phiên và quay về Login. Đăng nhập lại Admin để tiếp tục.
 - [ ] Mở Account Management.
 - [ ] Danh sách tài khoản và tổng số account tải thành công.

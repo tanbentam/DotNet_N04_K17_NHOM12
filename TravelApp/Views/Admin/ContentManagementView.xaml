@@ -291,7 +291,8 @@
                                 <DataGridTextColumn Header="Nights" Binding="{Binding Nights}" Width="60"/>
                                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="90"/>
                                 <DataGridTextColumn Header="Cancel request"
-                                                    Binding="{Binding HasPendingGuideCancellation}"
+                                                    Binding="{Binding HasPendingGuideCancellation,
+                                                        Mode=OneWay}"
                                                     Width="100"/>
                                 <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=N0}" Width="90"/>
                             </DataGrid.Columns>

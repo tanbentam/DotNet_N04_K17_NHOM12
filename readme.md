@@ -59,6 +59,9 @@ trong một project monolith.
 
 ### Admin
 
+- Xem dashboard tổng quan tài khoản, nội dung chờ duyệt và trạng thái booking.
+- Theo dõi yêu cầu hủy đang chờ, tour đã thanh toán và doanh thu mô phỏng.
+- Xem danh sách booking cần chú ý và mở nhanh màn hình quản lý tương ứng.
 - Tạo, sửa và xóa tài khoản User/TourGuide.
 - Quản lý Destination và Hotel.
 - Duyệt hoặc từ chối nội dung do Guide tạo.
