@@ -117,6 +117,9 @@ namespace TravelApp.Data
             booking.Property(x => x.GuideCancellationReason)
                 .IsOptional()
                 .HasMaxLength(500);
+            booking.Property(x => x.RefundReason)
+                .IsOptional()
+                .HasMaxLength(500);
 
             booking.HasRequired(x => x.User)
                 .WithMany(x => x.Bookings)

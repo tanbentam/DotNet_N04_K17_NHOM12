@@ -306,6 +306,9 @@
                                                     Binding="{Binding HasPendingGuideCancellation,
                                                         Mode=OneWay}"
                                                     Width="100"/>
+                                <DataGridTextColumn Header="Refund"
+                                                    Binding="{Binding RefundStatusDisplay}"
+                                                    Width="100"/>
                                 <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=N0}" Width="90"/>
                             </DataGrid.Columns>
                         </DataGrid>
@@ -347,6 +350,32 @@
                                                 Margin="0,0,8,0"/>
                                         <Button Content="Reject request"
                                                 Command="{Binding RejectGuideCancellationCommand}"
+                                                Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="#FFE8F5E9"
+                                    CornerRadius="5"
+                                    Padding="10"
+                                    Margin="0,0,0,14"
+                                    Visibility="{Binding SelectedBooking.HasPendingRefundRequest, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <StackPanel>
+                                    <TextBlock Text="User requests refund"
+                                               FontWeight="SemiBold"
+                                               Foreground="#FF2E7D32"/>
+                                    <TextBlock Text="{Binding SelectedBooking.RefundReason}"
+                                               TextWrapping="Wrap"
+                                               Margin="0,4,0,4"/>
+                                    <TextBlock Text="{Binding SelectedBooking.RefundRequestedAt, StringFormat=Request time: {0:dd/MM/yyyy HH:mm}}"
+                                               Foreground="Gray"/>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,10,0,0">
+                                        <Button Content="Approve refund"
+                                                Command="{Binding ApproveRefundCommand}"
+                                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                                Margin="0,0,8,0"/>
+                                        <Button Content="Reject request"
+                                                Command="{Binding RejectRefundCommand}"
                                                 Style="{StaticResource MaterialDesignOutlinedButton}"/>
                                     </StackPanel>
                                 </StackPanel>

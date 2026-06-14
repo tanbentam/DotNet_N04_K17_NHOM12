@@ -157,7 +157,8 @@ namespace TravelApp.Services.Booking
 
         public async Task<BookingOperationResult> CancelByUserAsync(
             int bookingId,
-            int userId)
+            int userId,
+            string reason)
         {
             using (var context = new ApplicationDbContext())
             {
@@ -167,6 +168,38 @@ namespace TravelApp.Services.Booking
                 {
                     return BookingOperationResult.Failure(
                         "Không tìm thấy booking của User hiện tại.");
+                }
+
+                if (booking.Status == BookingStatus.Paid)
+                {
+                    var normalizedReason = reason?.Trim();
+                    if (string.IsNullOrWhiteSpace(normalizedReason) ||
+                        normalizedReason.Length < 10 ||
+                        normalizedReason.Length > 500)
+                    {
+                        return BookingOperationResult.Failure(
+                            "Lý do hoàn tiền phải từ 10 đến 500 ký tự.");
+                    }
+
+                    if (booking.StartDate.Date <= DateTime.Today)
+                    {
+                        return BookingOperationResult.Failure(
+                            "Không thể yêu cầu hoàn tiền khi tour đã hoặc đang bắt đầu.");
+                    }
+
+                    if (booking.HasPendingRefundRequest)
+                    {
+                        return BookingOperationResult.Failure(
+                            "Booking đã có yêu cầu hoàn tiền đang chờ Admin xử lý.");
+                    }
+
+                    booking.RefundRequestedAt = DateTime.Now;
+                    booking.RefundReason = normalizedReason;
+                    booking.RefundResolvedAt = null;
+                    booking.RefundApproved = null;
+                    await context.SaveChangesAsync();
+                    return BookingOperationResult.Success(
+                        "Đã gửi yêu cầu hủy và hoàn tiền đến Admin.");
                 }
 
                 if (!CanChangeStatus(
@@ -188,6 +221,55 @@ namespace TravelApp.Services.Booking
 
                 await context.SaveChangesAsync();
                 return BookingOperationResult.Success("Đã hủy booking.");
+            }
+        }
+
+        public async Task<BookingOperationResult> ResolveRefundRequestAsync(
+            int bookingId,
+            bool approve)
+        {
+            using (var context = new ApplicationDbContext())
+            using (var transaction = context.Database.BeginTransaction())
+            {
+                var booking = await context.Bookings.FindAsync(bookingId);
+                if (booking == null || !booking.HasPendingRefundRequest)
+                {
+                    return BookingOperationResult.Failure(
+                        "Booking không có yêu cầu hoàn tiền đang chờ xử lý.");
+                }
+
+                if (booking.Status != BookingStatus.Paid)
+                {
+                    return BookingOperationResult.Failure(
+                        "Booking không còn ở trạng thái có thể hoàn tiền.");
+                }
+
+                booking.RefundResolvedAt = DateTime.Now;
+                booking.RefundApproved = approve;
+                if (approve)
+                {
+                    var payment = await context.Payments
+                        .Where(item =>
+                            item.BookingId == booking.Id &&
+                            item.Status == PaymentStatus.Successful)
+                        .OrderByDescending(item => item.CreatedAt)
+                        .FirstOrDefaultAsync();
+                    if (payment == null)
+                    {
+                        return BookingOperationResult.Failure(
+                            "Không tìm thấy giao dịch thành công để hoàn tiền.");
+                    }
+
+                    payment.Status = PaymentStatus.Refunded;
+                    booking.Status = BookingStatus.Cancelled;
+                }
+
+                await context.SaveChangesAsync();
+                transaction.Commit();
+                return BookingOperationResult.Success(
+                    approve
+                        ? "Đã duyệt hủy booking và hoàn tiền mô phỏng."
+                        : "Đã từ chối yêu cầu hoàn tiền.");
             }
         }
 
@@ -264,6 +346,12 @@ namespace TravelApp.Services.Booking
 
                     booking.GuideCancellationResolvedAt = DateTime.Now;
                     booking.GuideCancellationApproved = true;
+                }
+
+                if (booking.HasPendingRefundRequest)
+                {
+                    return BookingOperationResult.Failure(
+                        "Hãy duyệt hoặc từ chối yêu cầu hoàn tiền trước.");
                 }
 
                 if (status == BookingStatus.Accepted &&

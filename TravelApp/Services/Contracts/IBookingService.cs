@@ -11,7 +11,8 @@ namespace TravelApp.Services.Contracts
         Task<BookingOperationResult> CreateBookingAsync(BookingModel booking);
         Task<BookingOperationResult> CancelByUserAsync(
             int bookingId,
-            int userId);
+            int userId,
+            string reason);
         Task<BookingOperationResult> UpdateByGuideAsync(
             int bookingId,
             int guideId,
@@ -21,6 +22,9 @@ namespace TravelApp.Services.Contracts
             int guideId,
             string reason);
         Task<BookingOperationResult> ResolveGuideCancellationRequestAsync(
+            int bookingId,
+            bool approve);
+        Task<BookingOperationResult> ResolveRefundRequestAsync(
             int bookingId,
             bool approve);
         Task<BookingOperationResult> UpdateByAdminAsync(

@@ -89,7 +89,8 @@ namespace TravelApp.ViewModels.Admin
                 PendingBookings = bookings.Count(
                     item => item.Status == BookingStatus.Pending);
                 PendingCancellations = bookings.Count(
-                    item => item.HasPendingGuideCancellation);
+                    item => item.HasPendingGuideCancellation ||
+                        item.HasPendingRefundRequest);
                 PaidTours = bookings.Count(item =>
                     item.Status == BookingStatus.Paid ||
                     item.Status == BookingStatus.Completed);
@@ -103,6 +104,7 @@ namespace TravelApp.ViewModels.Admin
                     bookings
                         .Where(item =>
                             item.HasPendingGuideCancellation ||
+                            item.HasPendingRefundRequest ||
                             item.Status == BookingStatus.Pending ||
                             item.Status == BookingStatus.Paid)
                         .OrderByDescending(item =>

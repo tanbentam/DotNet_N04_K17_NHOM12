@@ -29,6 +29,7 @@ namespace TravelApp.ViewModels.User
         [ObservableProperty] private BookingModel _selectedBooking;
         [ObservableProperty] private bool _isBusy;
         [ObservableProperty] private string _bookingMessage;
+        [ObservableProperty] private string _refundReason;
         [ObservableProperty] private decimal _estimatedPrice;
         [ObservableProperty] private string _pricingSummary;
 
@@ -165,7 +166,8 @@ namespace TravelApp.ViewModels.User
                 var result =
                     await _bookingService.CancelByUserAsync(
                         booking.Id,
-                        user.Id);
+                        user.Id,
+                        RefundReason);
                 if (!result.Succeeded)
                 {
                     LoggerService.LogBookingFailure(
@@ -177,11 +179,18 @@ namespace TravelApp.ViewModels.User
                 }
 
                 await LoadBookingsAsync();
-                BookingMessage = "Đã hủy booking " + booking.BookingId + ".";
+                var requestedRefund = booking.Status == BookingStatus.Paid;
+                BookingMessage = requestedRefund
+                    ? "Đã gửi yêu cầu hoàn tiền cho booking " +
+                        booking.BookingId + "."
+                    : "Đã hủy booking " + booking.BookingId + ".";
+                RefundReason = string.Empty;
                 _notificationManager.ShowNotification(
-                    "Đã hủy",
-                    "Đã hủy tour " + booking.BookingId + ".",
-                    true);
+                    requestedRefund ? "Đã gửi yêu cầu" : "Đã hủy",
+                    requestedRefund
+                        ? "Admin sẽ xem xét yêu cầu hoàn tiền của bạn."
+                        : "Đã hủy tour " + booking.BookingId + ".",
+                    !requestedRefund);
             }
             catch (Exception ex)
             {

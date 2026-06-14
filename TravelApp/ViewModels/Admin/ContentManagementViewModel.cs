@@ -414,6 +414,64 @@ namespace TravelApp.ViewModels.Admin
             return ResolveGuideCancellationAsync(false);
         }
 
+        [RelayCommand]
+        private Task ApproveRefundAsync()
+        {
+            return ResolveRefundAsync(true);
+        }
+
+        [RelayCommand]
+        private Task RejectRefundAsync()
+        {
+            return ResolveRefundAsync(false);
+        }
+
+        private async Task ResolveRefundAsync(bool approve)
+        {
+            ClearMessages();
+            if (SelectedBooking == null ||
+                !SelectedBooking.HasPendingRefundRequest)
+            {
+                ErrorMessage =
+                    "Hãy chọn booking có yêu cầu hoàn tiền đang chờ xử lý.";
+                return;
+            }
+
+            IsLoading = true;
+            try
+            {
+                var bookingCode = SelectedBooking.BookingId;
+                var result = await _bookingService.ResolveRefundRequestAsync(
+                    SelectedBooking.Id,
+                    approve);
+                if (!result.Succeeded)
+                {
+                    ErrorMessage = result.Message;
+                    return;
+                }
+
+                await RefreshDataAsync();
+                SelectedBooking = null;
+                SuccessMessage = approve
+                    ? "Đã hoàn tiền booking " + bookingCode + "."
+                    : "Đã từ chối hoàn tiền booking " + bookingCode + ".";
+                NotifySuccess(SuccessMessage);
+            }
+            catch (Exception ex)
+            {
+                SetLoggedError(
+                    "Resolve refund request",
+                    ex,
+                    "Không thể xử lý yêu cầu hoàn tiền",
+                    "BookingId=" + SelectedBooking?.Id +
+                    "; Approve=" + approve);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
         private async Task ResolveGuideCancellationAsync(bool approve)
         {
             ClearMessages();

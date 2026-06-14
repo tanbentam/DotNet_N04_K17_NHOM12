@@ -245,6 +245,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <DockPanel Grid.Row="0"
@@ -293,11 +294,15 @@
                             <DataGridTextColumn Header="Trạng thái"
                                                 Binding="{Binding Status}"
                                                 Width="90"/>
+                            <DataGridTextColumn Header="Hoàn tiền"
+                                                Binding="{Binding RefundStatusDisplay}"
+                                                Width="110"/>
                             <DataGridTemplateColumn Header="Thao tác"
-                                                    Width="90">
+                                                    Width="145">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="Hủy"
+                                        <Button Content="{Binding UserCancellationAction}"
+                                                IsEnabled="{Binding CanUserCancel}"
                                                 Command="{Binding DataContext.CancelBookingCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource MaterialDesignOutlinedButton}"/>
@@ -306,6 +311,13 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+
+                    <TextBox Grid.Row="2"
+                             Text="{Binding RefundReason, UpdateSourceTrigger=PropertyChanged}"
+                             materialDesign:HintAssist.Hint="Lý do hoàn tiền cho booking đã thanh toán (10-500 ký tự)"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             MaxLength="500"
+                             Margin="0,10,0,0"/>
 
                     <ProgressBar Grid.Row="1"
                                  IsIndeterminate="True"

@@ -17,9 +17,9 @@ Flow này kiểm tra:
 - User cập nhật hồ sơ, yêu thích và đánh giá.
 - Upload ảnh, popup notification, validation và các nhánh lỗi quan trọng.
 
-Các mục chưa triển khai trong `CHECKLIST.md` như tự động hoàn thành tour,
-hoàn tiền booking đã thanh toán và giới hạn đánh giá sau tour không được xem
-là lỗi regression của phiên bản hiện tại.
+Các mục chưa triển khai trong `CHECKLIST.md` như tự động hoàn thành tour và
+giới hạn đánh giá sau tour không được xem là lỗi regression của phiên bản hiện
+tại.
 
 ## 2. Quy ước kết quả
 
@@ -111,6 +111,7 @@ Tạo các booking sau để mỗi booking phục vụ một nhánh riêng:
 | BK-D | D3 | 2 | Guide request hủy, Admin từ chối | Accepted |
 | BK-E | D3 + 5 ngày | 2 | Guide request hủy, Admin duyệt | Cancelled |
 | BK-F | Trùng D1 | 2 | Kiểm tra trùng lịch Guide | Pending hoặc Rejected |
+| BK-G | Sau D3 ít nhất 10 ngày | 2 | Hủy sau thanh toán và hoàn tiền | Cancelled |
 
 Ghi lại mã booking thật sau khi tạo:
 
@@ -122,6 +123,7 @@ Ghi lại mã booking thật sau khi tạo:
 | BK-D | |
 | BK-E | |
 | BK-F | |
+| BK-G | |
 
 ## 5. Startup, navigation và database
 
@@ -394,6 +396,7 @@ Chọn Destination chính, Hotel chính và Guide test.
 - [ ] Tạo BK-D tại D3, 2 ngày.
 - [ ] Tạo BK-E tại D3 + 5 ngày, 2 ngày.
 - [ ] Tạo BK-F trùng thời gian BK-A.
+- [ ] Tạo BK-G ở ngày không trùng các booking khác.
 - [ ] Ghi lại toàn bộ Booking ID.
 
 ### 13.4 User hủy BK-C
@@ -414,7 +417,7 @@ Logout User, đăng nhập Guide, mở tab `BOOKING`.
   - Kỳ vọng: thành công và xuất hiện trong `LỊCH LÀM VIỆC`.
 - [ ] Accept BK-F đang trùng BK-A.
   - Kỳ vọng: bị từ chối do trùng lịch.
-- [ ] Accept BK-D và BK-E.
+- [ ] Accept BK-D, BK-E và BK-G.
   - Kỳ vọng: thành công nếu không trùng các tour khác.
 - [ ] Trong lịch làm việc, kiểm tra:
   - Có BK-A, BK-D và BK-E.
@@ -456,8 +459,16 @@ Logout Guide, đăng nhập User.
   - BK-A biến mất khỏi danh sách có thể thanh toán.
   - Popup thanh toán thành công xuất hiện.
 - [ ] Làm mới Booking của tôi và xác nhận BK-A là `Paid`.
-- [ ] Thử hủy BK-A.
-  - Kỳ vọng: bị từ chối vì User chỉ hủy được Pending/Accepted.
+
+### 15.3 Thanh toán và yêu cầu hoàn tiền BK-G
+
+- [ ] Thanh toán thành công BK-G để booking chuyển sang `Paid`.
+- [ ] Trong `BOOKING CỦA TÔI`, để trống lý do và nhấn `Yêu cầu hoàn tiền`.
+  - Kỳ vọng: bị từ chối vì lý do phải từ 10 đến 500 ký tự.
+- [ ] Nhập lý do hợp lệ và gửi lại.
+  - Kỳ vọng: trạng thái hoàn tiền là `Đang chờ duyệt`; booking vẫn `Paid`.
+- [ ] Gửi lại khi request đang chờ.
+  - Kỳ vọng: bị từ chối vì request chưa được Admin xử lý.
 
 ## 16. Guide cancellation request
 
@@ -516,6 +527,10 @@ Logout Guide, đăng nhập User:
 
 Đăng nhập Admin, mở Content Management → Bookings.
 
+- [ ] Chọn BK-G có yêu cầu hoàn tiền đang chờ.
+- [ ] Kiểm tra lý do và thời gian gửi request hiển thị đúng.
+- [ ] Nhấn `Approve refund`.
+  - Kỳ vọng: BK-G chuyển sang `Cancelled`, trạng thái hoàn tiền là `Đã hoàn tiền`.
 - [ ] Chọn BK-A đang `Paid`.
 - [ ] Chuyển sang `Completed`.
   - Kỳ vọng: cập nhật thành công.
@@ -533,6 +548,11 @@ thủ công trong bước này.
 ## 18. User - yêu thích và đánh giá
 
 Logout Admin, đăng nhập User, mở `YÊU THÍCH & ĐÁNH GIÁ`.
+
+- [ ] Mở tab `THANH TOÁN` sau khi đăng nhập lại.
+  - Kỳ vọng: giao dịch của BK-G có trạng thái `Refunded`.
+- [ ] Mở `BOOKING CỦA TÔI`.
+  - Kỳ vọng: BK-G là `Cancelled` và hiển thị `Đã hoàn tiền`.
 
 ### 18.1 Yêu thích
 
@@ -654,6 +674,9 @@ Chạy phần này khi sửa validation hoặc booking service:
 - [ ] Guide request hủy booking Paid.
 - [ ] Guide request hủy với lý do dưới 10 hoặc trên 500 ký tự.
 - [ ] User thanh toán khi request hủy đang chờ.
+- [ ] User yêu cầu hoàn tiền booking `Paid` với lý do dưới 10 hoặc trên 500 ký tự.
+- [ ] User yêu cầu hoàn tiền khi tour đã bắt đầu.
+- [ ] Admin cập nhật trạng thái booking khi request hoàn tiền đang chờ.
 - [ ] Admin cập nhật trạng thái không hợp lệ.
 - [ ] Upload file không phải ảnh hoặc ảnh trên 5 MB.
 - [ ] Rating Hotel ngoài 0-5.

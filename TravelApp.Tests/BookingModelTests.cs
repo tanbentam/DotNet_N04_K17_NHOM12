@@ -72,5 +72,63 @@ namespace TravelApp.Tests
 
             Assert.IsFalse(booking.CanGuideRequestCancellation);
         }
+
+        [TestMethod]
+        public void RefundStatusDisplay_WhenRequestPending_ReturnsWaiting()
+        {
+            var booking = new BookingModel
+            {
+                RefundRequestedAt = DateTime.Now
+            };
+
+            Assert.IsTrue(booking.HasPendingRefundRequest);
+            Assert.AreEqual("Đang chờ duyệt", booking.RefundStatusDisplay);
+        }
+
+        [DataTestMethod]
+        [DataRow(true, "Đã hoàn tiền")]
+        [DataRow(false, "Đã từ chối")]
+        public void RefundStatusDisplay_WhenResolved_ReturnsExpected(
+            bool approved,
+            string expected)
+        {
+            var booking = new BookingModel
+            {
+                RefundRequestedAt = DateTime.Now.AddHours(-1),
+                RefundResolvedAt = DateTime.Now,
+                RefundApproved = approved
+            };
+
+            Assert.IsFalse(booking.HasPendingRefundRequest);
+            Assert.AreEqual(expected, booking.RefundStatusDisplay);
+        }
+
+        [TestMethod]
+        public void CanUserCancel_PaidFutureBookingWithoutRequest_ReturnsTrue()
+        {
+            var booking = new BookingModel
+            {
+                Status = BookingStatus.Paid,
+                StartDate = DateTime.Today.AddDays(1)
+            };
+
+            Assert.IsTrue(booking.CanUserCancel);
+            Assert.AreEqual(
+                "Yêu cầu hoàn tiền",
+                booking.UserCancellationAction);
+        }
+
+        [TestMethod]
+        public void CanUserCancel_WhenRefundPending_ReturnsFalse()
+        {
+            var booking = new BookingModel
+            {
+                Status = BookingStatus.Paid,
+                StartDate = DateTime.Today.AddDays(1),
+                RefundRequestedAt = DateTime.Now
+            };
+
+            Assert.IsFalse(booking.CanUserCancel);
+        }
     }
 }

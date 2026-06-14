@@ -28,6 +28,10 @@ namespace TravelApp.Models
         public string GuideCancellationReason { get; set; }
         public DateTime? GuideCancellationResolvedAt { get; set; }
         public bool? GuideCancellationApproved { get; set; }
+        public DateTime? RefundRequestedAt { get; set; }
+        public string RefundReason { get; set; }
+        public DateTime? RefundResolvedAt { get; set; }
+        public bool? RefundApproved { get; set; }
 
         [NotMapped]
         public DateTime CompletionDate =>
@@ -43,6 +47,49 @@ namespace TravelApp.Models
             Status == BookingStatus.Accepted &&
             StartDate.Date > DateTime.Today &&
             !HasPendingGuideCancellation;
+
+        [NotMapped]
+        public bool HasPendingRefundRequest =>
+            RefundRequestedAt.HasValue &&
+            !RefundResolvedAt.HasValue;
+
+        [NotMapped]
+        public string RefundStatusDisplay
+        {
+            get
+            {
+                if (HasPendingRefundRequest)
+                {
+                    return "Đang chờ duyệt";
+                }
+
+                if (RefundApproved == true)
+                {
+                    return "Đã hoàn tiền";
+                }
+
+                if (RefundApproved == false)
+                {
+                    return "Đã từ chối";
+                }
+
+                return "-";
+            }
+        }
+
+        [NotMapped]
+        public string UserCancellationAction =>
+            Status == BookingStatus.Paid
+                ? "Yêu cầu hoàn tiền"
+                : "Hủy";
+
+        [NotMapped]
+        public bool CanUserCancel =>
+            (Status == BookingStatus.Pending ||
+             Status == BookingStatus.Accepted ||
+             (Status == BookingStatus.Paid &&
+              StartDate.Date > DateTime.Today)) &&
+            !HasPendingRefundRequest;
 
         [NotMapped]
         public string WorkScheduleStatus

@@ -42,7 +42,7 @@ trong một project monolith.
 - Chọn Destination, Hotel, Guide, ngày khởi hành và số ngày.
 - Tính giá tour, phí dịch vụ và giảm giá chuyến dài.
 - Tạo và theo dõi booking.
-- Hủy booking đang `Pending` hoặc `Accepted`.
+- Hủy trực tiếp booking `Pending`/`Accepted` hoặc gửi yêu cầu hoàn tiền cho booking `Paid`.
 - Thanh toán mô phỏng bằng QR hoặc chuyển khoản.
 - Xem lịch sử giao dịch thành công/thất bại.
 - Cập nhật hồ sơ cá nhân.
@@ -68,6 +68,7 @@ trong một project monolith.
 - Duyệt hoặc từ chối nội dung do Guide tạo.
 - Theo dõi và cập nhật trạng thái booking.
 - Xem, duyệt hoặc từ chối yêu cầu hủy của Guide.
+- Duyệt hoặc từ chối yêu cầu hoàn tiền của User.
 - Chuyển booking `Paid` sang `Completed`.
 
 ## Công nghệ
@@ -358,6 +359,7 @@ Migration hiện có:
 | `AddFavoritesAndReviews` | Favorites và Reviews |
 | `AddPayments` | Payment history |
 | `AddGuideCancellationRequests` | Yêu cầu hủy booking của Guide |
+| `AddRefundRequests` | Yêu cầu hủy và hoàn tiền booking đã thanh toán |
 
 ### Áp dụng migration
 
@@ -514,6 +516,9 @@ Accepted -> Cancelled
 - Guide chỉ được xử lý booking `Pending`.
 - Guide có thể `Accept` hoặc `Reject`.
 - User có thể hủy `Pending` hoặc `Accepted`.
+- Với booking `Paid` chưa bắt đầu, User gửi yêu cầu hoàn tiền kèm lý do 10-500 ký tự.
+- Admin duyệt hoàn tiền sẽ chuyển booking sang `Cancelled` và payment sang `Refunded`.
+- Admin từ chối hoàn tiền sẽ giữ booking ở trạng thái `Paid`.
 - Chỉ booking `Accepted` mới được thanh toán.
 - Admin chuyển booking `Paid` sang `Completed`.
 - Booking `Rejected`, `Cancelled` hoặc `Completed` không chuyển tiếp.
@@ -569,8 +574,6 @@ Backlog chính:
 
 - Tự động chuyển tour đã kết thúc sang `Completed`.
 - Chỉ cho đánh giá Guide/Hotel sau khi hoàn thành tour tương ứng.
-- Hủy và hoàn tiền booking đã thanh toán.
-- Lịch sử hoàn tiền.
 - Thông báo đa vai trò cho hủy/hoàn tiền.
 - Chuẩn hóa toàn bộ text tiếng Việt.
 - Unit, integration và UI tests tự động.
