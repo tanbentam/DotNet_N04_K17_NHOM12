@@ -65,13 +65,13 @@ namespace TravelApp.ViewModels.User
             var user = _sessionService.CurrentUser;
             if (user == null || user.Role != RoleType.User)
             {
-                BookingMessage = "Phiên đăng nhập User không hợp lệ.";
+                BookingMessage = "Phiên đăng nhập người dùng không hợp lệ.";
                 return;
             }
 
             if (SelectedDestination == null || SelectedGuide == null)
             {
-                BookingMessage = "Hãy chọn điểm đến và Guide.";
+                BookingMessage = "Hãy chọn điểm đến và hướng dẫn viên.";
                 return;
             }
 
@@ -126,10 +126,10 @@ namespace TravelApp.ViewModels.User
 
                 await LoadBookingsAsync();
                 BookingMessage =
-                    "Đã tạo booking " + booking.BookingId + " thành công.";
+                    "Đã tạo đặt tour " + booking.BookingId + " thành công.";
                 _notificationManager.ShowNotification(
                     "Thành công",
-                    "Yêu cầu đặt tour đã được gửi tới Guide.",
+                    "Yêu cầu đặt tour đã được gửi tới hướng dẫn viên.",
                     false);
             }
             catch (Exception ex)
@@ -139,7 +139,7 @@ namespace TravelApp.ViewModels.User
                     ex,
                     "UserId=" + user.Id +
                     "; BookingCode=" + booking.BookingId);
-                BookingMessage = "Không thể tạo booking: " +
+                BookingMessage = "Không thể tạo đặt tour: " +
                     ex.GetBaseException().Message +
                     " [" + errorId + "]";
             }
@@ -156,7 +156,7 @@ namespace TravelApp.ViewModels.User
             var user = _sessionService.CurrentUser;
             if (booking == null || user == null || user.Role != RoleType.User)
             {
-                BookingMessage = "Hãy chọn booking cần hủy.";
+                BookingMessage = "Hãy chọn đặt tour cần hủy.";
                 return;
             }
 
@@ -181,14 +181,14 @@ namespace TravelApp.ViewModels.User
                 await LoadBookingsAsync();
                 var requestedRefund = booking.Status == BookingStatus.Paid;
                 BookingMessage = requestedRefund
-                    ? "Đã gửi yêu cầu hoàn tiền cho booking " +
+                    ? "Đã gửi yêu cầu hoàn tiền cho đặt tour " +
                         booking.BookingId + "."
-                    : "Đã hủy booking " + booking.BookingId + ".";
+                    : "Đã hủy đặt tour " + booking.BookingId + ".";
                 RefundReason = string.Empty;
                 _notificationManager.ShowNotification(
                     requestedRefund ? "Đã gửi yêu cầu" : "Đã hủy",
                     requestedRefund
-                        ? "Admin sẽ xem xét yêu cầu hoàn tiền của bạn."
+                        ? "Quản trị viên sẽ xem xét yêu cầu hoàn tiền của bạn."
                         : "Đã hủy tour " + booking.BookingId + ".",
                     !requestedRefund);
             }
@@ -199,7 +199,7 @@ namespace TravelApp.ViewModels.User
                     ex,
                     "UserId=" + user.Id +
                     "; BookingId=" + booking.Id);
-                BookingMessage = "Không thể hủy booking: " +
+                BookingMessage = "Không thể hủy đặt tour: " +
                     ex.GetBaseException().Message +
                     " [" + errorId + "]";
             }
@@ -231,7 +231,7 @@ namespace TravelApp.ViewModels.User
                     "Load user bookings",
                     ex,
                     "UserId=" + user.Id);
-                BookingMessage = "Không thể tải booking: " +
+                BookingMessage = "Không thể tải danh sách đặt tour: " +
                     ex.GetBaseException().Message +
                     " [" + errorId + "]";
             }
@@ -259,7 +259,7 @@ namespace TravelApp.ViewModels.User
                 TripDurationDays);
             EstimatedPrice = quote.Total;
             PricingSummary = string.Format(
-                "Guide: {0:N0} | Phòng: {1:N0} | Giảm: {2:N0} | Phí DV: {3:N0}",
+                "Hướng dẫn viên: {0:N0} | Phòng: {1:N0} | Giảm: {2:N0} | Phí dịch vụ: {3:N0}",
                 quote.GuideFee,
                 quote.HotelFee,
                 quote.Discount,

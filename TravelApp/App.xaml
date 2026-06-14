@@ -23,6 +23,7 @@
             <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
             <local:EnumNotEqualConverter x:Key="EnumNotEqualConverter" />
+            <local:EnumToVietnameseConverter x:Key="EnumToVietnameseConverter" />
         </ResourceDictionary>
     </Application.Resources>
 

@@ -56,7 +56,7 @@ namespace TravelApp.ViewModels.TourGuide
             {
                 _notificationManager.ShowNotification(
                     "Không thể lưu lịch",
-                    "Bạn cần đăng nhập bằng tài khoản Guide.",
+                    "Bạn cần đăng nhập bằng tài khoản hướng dẫn viên.",
                     true);
                 return;
             }
@@ -86,8 +86,8 @@ namespace TravelApp.ViewModels.TourGuide
                 _notificationManager.ShowNotification(
                     saved ? "Đã lưu lịch" : "Không thể lưu lịch",
                     saved
-                        ? "Lịch trống của bạn đã được cập nhật trong database."
-                        : "Vui lòng kiểm tra kết nối database và thử lại.",
+                ? "Lịch trống của bạn đã được cập nhật trong cơ sở dữ liệu."
+                : "Vui lòng kiểm tra kết nối cơ sở dữ liệu và thử lại.",
                     !saved);
             }
             catch (Exception ex)

@@ -270,7 +270,7 @@ MigrateDatabaseToLatestVersion<ApplicationDbContext, Migrations.Configuration>
 ```
 
 Khi khởi động, EF6 sẽ áp dụng các migration còn thiếu. Thanh trạng thái phía
-trái hiển thị `Database ready` khi kết nối, migration và truy vấn health check
+trái hiển thị `Cơ sở dữ liệu sẵn sàng` khi kết nối, migration và truy vấn health check
 đều thành công.
 
 ## Khởi tạo tài khoản Admin
@@ -415,7 +415,7 @@ Không bật automatic destructive migration trên database có dữ liệu quan
 
 1. Build Debug.
 2. Chạy ứng dụng.
-3. Kiểm tra `Database ready`.
+3. Kiểm tra `Cơ sở dữ liệu sẵn sàng`.
 4. Đăng nhập lần lượt User, Guide và Admin.
 5. Kiểm tra navigation đúng role và logout.
 
@@ -581,7 +581,6 @@ Backlog chính:
 
 - Chỉ cho đánh giá Guide/Hotel sau khi hoàn thành tour tương ứng.
 - Thông báo đa vai trò cho hủy/hoàn tiền.
-- Chuẩn hóa toàn bộ text tiếng Việt.
 - Integration test EF6/MySQL và UI smoke test tự động.
 - Environment-specific configuration.
 - Security review và release package.

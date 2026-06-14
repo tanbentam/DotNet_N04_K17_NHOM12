@@ -115,7 +115,7 @@ namespace TravelApp.ViewModels.TourGuide
             var guide = _sessionService.CurrentUser;
             if (guide == null || guide.Role != RoleType.TourGuide)
             {
-                ErrorMessage = "Phiên đăng nhập Guide không hợp lệ.";
+                ErrorMessage = "Phiên đăng nhập hướng dẫn viên không hợp lệ.";
                 return;
             }
 
@@ -152,7 +152,7 @@ namespace TravelApp.ViewModels.TourGuide
             if (!Destinations.Any())
             {
                 ErrorMessage =
-                    "Cần có ít nhất một điểm đến đã được Admin duyệt trước khi thêm khách sạn.";
+                    "Cần có ít nhất một điểm đến đã được quản trị viên duyệt trước khi thêm khách sạn.";
                 return;
             }
 
@@ -203,7 +203,7 @@ namespace TravelApp.ViewModels.TourGuide
             var guide = _sessionService.CurrentUser;
             if (guide == null || guide.Role != RoleType.TourGuide)
             {
-                ErrorMessage = "Phiên đăng nhập Guide không hợp lệ.";
+                ErrorMessage = "Phiên đăng nhập hướng dẫn viên không hợp lệ.";
                 return;
             }
 
@@ -240,8 +240,8 @@ namespace TravelApp.ViewModels.TourGuide
                 IsEditorOpen = false;
                 await LoadHotelsAsync();
                 SuccessMessage = wasEditing
-                    ? "Đã cập nhật và gửi lại khách sạn để Admin duyệt."
-                    : "Đã tạo khách sạn và gửi Admin duyệt.";
+                    ? "Đã cập nhật và gửi lại khách sạn để quản trị viên duyệt."
+                    : "Đã tạo khách sạn và gửi quản trị viên duyệt.";
             }
             catch (Exception ex)
             {

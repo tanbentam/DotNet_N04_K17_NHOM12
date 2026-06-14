@@ -19,7 +19,8 @@ namespace TravelApp.Models
         public virtual UserModel Guide { get; set; }
 
         [NotMapped]
-        public string TargetType => HotelId.HasValue ? "Khách sạn" : "Guide";
+        public string TargetType =>
+            HotelId.HasValue ? "Khách sạn" : "Hướng dẫn viên";
 
         [NotMapped]
         public string TargetName => Hotel?.Name ?? Guide?.FullName;

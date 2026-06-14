@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:components="clr-namespace:TravelApp.Views.Components"
-        Title="Digital Travel Application"
+        Title="Ứng dụng Du lịch Số"
         Height="900" Width="1600" MinHeight="600" MinWidth="960"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -25,47 +25,47 @@
                 <StackPanel>
                     <materialDesign:PackIcon Kind="Airplane" Width="42" Height="42"
                                              Foreground="White" HorizontalAlignment="Center"/>
-                    <TextBlock Text="TRAVEL APP" Foreground="White" FontSize="22"
+                    <TextBlock Text="ỨNG DỤNG DU LỊCH" Foreground="White" FontSize="22"
                                FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,4"/>
-                    <TextBlock Text="Explore your next journey" Foreground="#D1C4E9"
+                    <TextBlock Text="Khám phá hành trình tiếp theo" Foreground="#D1C4E9"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Margin="0,36,0,0">
                     <Button x:Name="HomeNavButton"
-                            Content="Home" Tag="home" Click="NavigationButton_Click"
+                            Content="Trang chủ" Tag="home" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
                     <Button x:Name="LoginNavButton"
-                            Content="Login" Tag="login" Click="NavigationButton_Click"
+                            Content="Đăng nhập" Tag="login" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
                     <Button x:Name="RegisterNavButton"
-                            Content="Register" Tag="register" Click="NavigationButton_Click"
+                            Content="Đăng ký" Tag="register" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
                     <Separator x:Name="RoleSectionSeparator" Margin="0,12" Background="#7E57C2"/>
                     <TextBlock x:Name="RoleSectionTitle"
-                               Text="VIEW COMPONENTS" Foreground="#B39DDB" FontSize="11"
+                               Text="CHỨC NĂNG" Foreground="#B39DDB" FontSize="11"
                                FontWeight="SemiBold" Margin="12,0,0,8"/>
                     <Button x:Name="UserDashboardNavButton"
-                            Content="User Dashboard" Tag="user" Click="NavigationButton_Click"
+                            Content="Bảng điều khiển người dùng" Tag="user" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
                     <Button x:Name="GuideDashboardNavButton"
-                            Content="Tour Guide Dashboard" Tag="guide" Click="NavigationButton_Click"
+                            Content="Bảng điều khiển hướng dẫn viên" Tag="guide" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
                     <Button x:Name="AdminDashboardNavButton"
-                            Content="Admin Dashboard" Tag="admin" Click="NavigationButton_Click"
+                            Content="Bảng điều khiển quản trị" Tag="admin" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
                     <Button x:Name="AccountManagementNavButton"
-                            Content="Account Management" Tag="accounts" Click="NavigationButton_Click"
+                            Content="Quản lý tài khoản" Tag="accounts" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
                     <Button x:Name="ContentManagementNavButton"
-                            Content="Content Management" Tag="content" Click="NavigationButton_Click"
+                            Content="Quản lý nội dung" Tag="content" Click="NavigationButton_Click"
                             Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
                             HorizontalContentAlignment="Left" Height="44"/>
                 </StackPanel>
@@ -73,17 +73,17 @@
                 <StackPanel Grid.Row="2">
                     <Border Background="#352080" CornerRadius="4" Padding="10,8" Margin="0,0,0,12">
                         <StackPanel>
-                            <TextBlock Text="DATABASE" Foreground="#B39DDB" FontSize="10"
+                            <TextBlock Text="CƠ SỞ DỮ LIỆU" Foreground="#B39DDB" FontSize="10"
                                        FontWeight="SemiBold"/>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <Ellipse x:Name="DatabaseStatusIndicator" Width="9" Height="9"
                                          Fill="#FFC107" Margin="0,0,8,0"/>
-                                <TextBlock x:Name="DatabaseStatusText" Text="Checking connection..."
+                                <TextBlock x:Name="DatabaseStatusText" Text="Đang kiểm tra kết nối..."
                                            Foreground="White" FontSize="12"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
-                    <TextBlock Text="Digital Travel Application" Foreground="#D1C4E9"
+                    <TextBlock Text="Ứng dụng Du lịch Số" Foreground="#D1C4E9"
                                FontSize="12" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Grid>
@@ -97,7 +97,7 @@
             <Border Grid.Row="0" Background="White" BorderBrush="#E0E0E0"
                     BorderThickness="0,0,0,1" Padding="28,0">
                 <Grid>
-                    <TextBlock x:Name="PageTitle" Text="Home" FontSize="24" FontWeight="SemiBold"
+                    <TextBlock x:Name="PageTitle" Text="Trang chủ" FontSize="24" FontWeight="SemiBold"
                                VerticalAlignment="Center" Foreground="#212121"/>
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right"
@@ -107,12 +107,12 @@
                                    Margin="0,0,16,0"
                                    Visibility="Collapsed"/>
                         <Button x:Name="LogoutButton"
-                                Content="Logout"
+                                Content="Đăng xuất"
                                 Click="LogoutButton_Click"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Margin="0,0,10,0"
                                 Visibility="Collapsed"/>
-                        <Button Content="Exit" Click="ExitButton_Click"
+                        <Button Content="Thoát" Click="ExitButton_Click"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"/>
                     </StackPanel>
                 </Grid>

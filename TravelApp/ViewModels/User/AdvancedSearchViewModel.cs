@@ -79,7 +79,7 @@ namespace TravelApp.ViewModels.User
                     await guidesTask);
 
                 SearchMessage = string.Format(
-                    "Tìm thấy {0} điểm đến, {1} khách sạn và {2} Guide.",
+                    "Tìm thấy {0} điểm đến, {1} khách sạn và {2} hướng dẫn viên.",
                     DestinationResults.Count,
                     HotelResults.Count,
                     GuideResults.Count);

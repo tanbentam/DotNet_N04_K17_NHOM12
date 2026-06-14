@@ -38,7 +38,7 @@ Ký hiệu:
 - [x] Điều hướng tới Account Management và Content Management
 - [x] Tạo màn hình Home mặc định
 - [x] Thêm code-behind cần thiết cho các WPF `UserControl`
-- [~] Chuẩn hóa toàn bộ text tiếng Việt về UTF-8
+- [x] Chuyển toàn bộ nội dung hiển thị sang tiếng Việt và chuẩn hóa UTF-8
 - [x] Chuẩn hóa giao diện và trạng thái nút navigation
 
 ## 3. MVVM And Dependency Wiring
@@ -57,7 +57,7 @@ Ký hiệu:
 - [x] Tạo enums cho Role và Booking Status
 - [x] Cấu hình connection string MySQL
 - [x] Kiểm tra và hiển thị trạng thái kết nối database khi application khởi động
-- [x] Cập nhật MySQL credentials hợp lệ để startup check trả về `Database ready`
+- [x] Cập nhật MySQL credentials hợp lệ để startup check trả về `Cơ sở dữ liệu sẵn sàng`
 - [x] Hoàn thiện mapping, relationships và constraints cho models
 - [x] Tạo EF6 migrations ban đầu
 - [x] Tạo hoặc cập nhật schema MySQL bằng migrations

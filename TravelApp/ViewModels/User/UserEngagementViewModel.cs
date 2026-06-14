@@ -127,7 +127,7 @@ namespace TravelApp.ViewModels.User
         {
             if (SelectedGuide == null)
             {
-                EngagementMessage = "Hãy chọn Guide cần yêu thích.";
+                EngagementMessage = "Hãy chọn hướng dẫn viên cần yêu thích.";
                 return Task.CompletedTask;
             }
 
@@ -187,7 +187,7 @@ namespace TravelApp.ViewModels.User
         {
             if (SelectedGuide == null)
             {
-                EngagementMessage = "Hãy chọn Guide cần đánh giá.";
+                EngagementMessage = "Hãy chọn hướng dẫn viên cần đánh giá.";
                 return Task.CompletedTask;
             }
 
@@ -326,7 +326,7 @@ namespace TravelApp.ViewModels.User
             var user = _sessionService.CurrentUser;
             if (user == null || user.Role != RoleType.User)
             {
-                EngagementMessage = "Phiên đăng nhập User không hợp lệ.";
+                EngagementMessage = "Phiên đăng nhập người dùng không hợp lệ.";
                 return null;
             }
 

@@ -61,9 +61,9 @@
                                        FontWeight="Bold" Margin="0,8,0,2"/>
                             <TextBlock Foreground="{DynamicResource MaterialDesignBodyLight}">
                                 <Run Text="{Binding TotalUsers}"/>
-                                <Run Text=" User · "/>
+                                <Run Text=" Người dùng · "/>
                                 <Run Text="{Binding TotalGuides}"/>
-                                <Run Text=" Guide"/>
+                                <Run Text=" Hướng dẫn viên"/>
                             </TextBlock>
                         </StackPanel>
                     </materialDesign:Card>
@@ -74,18 +74,18 @@
                                        Foreground="#FFEF6C00" FontWeight="SemiBold"/>
                             <TextBlock Text="{Binding PendingContent}" FontSize="30"
                                        FontWeight="Bold" Margin="0,8,0,2"/>
-                            <TextBlock Text="Destination và Hotel"
+                            <TextBlock Text="Điểm đến và khách sạn"
                                        Foreground="{DynamicResource MaterialDesignBodyLight}"/>
                         </StackPanel>
                     </materialDesign:Card>
 
                     <materialDesign:Card Margin="6" Padding="18">
                         <StackPanel>
-                            <TextBlock Text="BOOKING ĐANG CHỜ"
+                            <TextBlock Text="ĐẶT TOUR ĐANG CHỜ"
                                        Foreground="#FF1565C0" FontWeight="SemiBold"/>
                             <TextBlock Text="{Binding PendingBookings}" FontSize="30"
                                        FontWeight="Bold" Margin="0,8,0,2"/>
-                            <TextBlock Text="Chờ Guide phản hồi"
+                            <TextBlock Text="Chờ hướng dẫn viên phản hồi"
                                        Foreground="{DynamicResource MaterialDesignBodyLight}"/>
                         </StackPanel>
                     </materialDesign:Card>
@@ -97,7 +97,7 @@
                             <TextBlock Text="{Binding PendingCancellations}"
                                        FontSize="30" FontWeight="Bold"
                                        Margin="0,8,0,2"/>
-                            <TextBlock Text="Đang chờ Admin xử lý"
+                            <TextBlock Text="Đang chờ quản trị viên xử lý"
                                        Foreground="{DynamicResource MaterialDesignBodyLight}"/>
                         </StackPanel>
                     </materialDesign:Card>
@@ -121,7 +121,7 @@
                                       StringFormat={}{0:N0} ₫}"
                                        FontSize="25" FontWeight="Bold"
                                        Margin="0,10,0,2"/>
-                            <TextBlock Text="Từ booking Paid/Completed"
+                            <TextBlock Text="Từ tour đã thanh toán/hoàn thành"
                                        Foreground="{DynamicResource MaterialDesignBodyLight}"/>
                         </StackPanel>
                     </materialDesign:Card>
@@ -159,19 +159,19 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel>
-                            <TextBlock Text="Booking cần chú ý" FontSize="18"
+                            <TextBlock Text="Đặt tour cần chú ý" FontSize="18"
                                        FontWeight="SemiBold"/>
-                            <TextBlock Text="Ưu tiên yêu cầu hủy, booking chờ và tour đã thanh toán"
+                            <TextBlock Text="Ưu tiên yêu cầu hủy, đặt tour đang chờ và tour đã thanh toán"
                                        Foreground="{DynamicResource MaterialDesignBodyLight}"
                                        Margin="0,3,0,0"/>
                         </StackPanel>
-                        <Button Grid.Column="1" Content="Mở quản lý booking"
+                        <Button Grid.Column="1" Content="Mở quản lý đặt tour"
                                 Command="{Binding NavigateToContentCommand}"
                                 Style="{StaticResource MaterialDesignFlatButton}"/>
                     </Grid>
 
                     <Grid Grid.Row="1">
-                        <TextBlock Text="Không có booking nào cần xử lý."
+                        <TextBlock Text="Không có đặt tour nào cần xử lý."
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Foreground="{DynamicResource MaterialDesignBodyLight}"
@@ -185,13 +185,13 @@
                                   Visibility="{Binding HasAttentionItems,
                                       Converter={StaticResource BooleanToVisibilityConverter}}">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Mã booking"
+                                <DataGridTextColumn Header="Mã đặt tour"
                                                     Binding="{Binding BookingId}"
                                                     Width="130"/>
-                                <DataGridTextColumn Header="User"
+                                <DataGridTextColumn Header="Người dùng"
                                                     Binding="{Binding User.FullName}"
                                                     Width="*"/>
-                                <DataGridTextColumn Header="Guide"
+                                <DataGridTextColumn Header="Hướng dẫn viên"
                                                     Binding="{Binding Guide.FullName}"
                                                     Width="*"/>
                                 <DataGridTextColumn Header="Điểm đến"
@@ -202,7 +202,7 @@
                                                         StringFormat=dd/MM/yyyy}"
                                                     Width="110"/>
                                 <DataGridTextColumn Header="Trạng thái"
-                                                    Binding="{Binding Status}"
+                                                    Binding="{Binding Status, Converter={StaticResource EnumToVietnameseConverter}}"
                                                     Width="110"/>
                                 <DataGridCheckBoxColumn Header="Chờ hủy"
                                                         Binding="{Binding HasPendingGuideCancellation,

@@ -23,7 +23,7 @@
                             <TextBlock Text="Tìm hành trình"
                                        FontSize="20"
                                        FontWeight="SemiBold"/>
-                            <TextBlock Text="Lọc điểm đến theo khu vực, giá, đánh giá và Guide."
+                        <TextBlock Text="Lọc điểm đến theo khu vực, giá, đánh giá và hướng dẫn viên."
                                        Foreground="Gray"
                                        Margin="0,4,0,12"/>
                         </StackPanel>
@@ -55,7 +55,7 @@
                                      Margin="0,0,10,0"/>
                             <TextBox Grid.Column="3"
                                      Text="{Binding SearchGuideName, UpdateSourceTrigger=PropertyChanged}"
-                                     materialDesign:HintAssist.Hint="Tên Guide"
+                                     materialDesign:HintAssist.Hint="Tên hướng dẫn viên"
                                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                      Margin="0,0,10,0"/>
                             <TextBox Grid.Column="4"
@@ -143,7 +143,7 @@
 
                             <GroupBox Grid.Row="0"
                                       Grid.Column="2"
-                                      Header="Guide"
+                                      Header="Hướng dẫn viên"
                                       Margin="6,0,0,0">
                                 <DataGrid ItemsSource="{Binding GuideResults}"
                                           SelectedItem="{Binding DataContext.BookingVM.SelectedGuide, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -194,7 +194,7 @@
                                        Margin="0,8,0,8"/>
                             <TextBlock Text="{Binding SelectedHotel.Name, StringFormat=Khách sạn đã chọn: {0}, TargetNullValue=Chưa chọn khách sạn}"
                                        Margin="0,0,0,4"/>
-                            <TextBlock Text="{Binding SelectedGuide.FullName, StringFormat=Guide đã chọn: {0}, TargetNullValue=Chưa chọn Guide}"
+                            <TextBlock Text="{Binding SelectedGuide.FullName, StringFormat=Hướng dẫn viên đã chọn: {0}, TargetNullValue=Chưa chọn hướng dẫn viên}"
                                        Margin="0,0,0,8"/>
                             <StackPanel Orientation="Horizontal">
                                 <DatePicker SelectedDate="{Binding StartDate}"
@@ -230,7 +230,7 @@
                             <TextBlock Text="Thanh toán mô phỏng"
                                        FontSize="18"
                                        FontWeight="SemiBold"/>
-                            <TextBlock Text="Sau khi Guide chấp nhận booking, mở tab Thanh toán để mô phỏng QR hoặc chuyển khoản."
+                            <TextBlock Text="Sau khi hướng dẫn viên chấp nhận đặt tour, mở tab Thanh toán để mô phỏng QR hoặc chuyển khoản."
                                        Foreground="Gray"
                                        TextWrapping="Wrap"
                                        Margin="0,8,0,0"/>
@@ -239,7 +239,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="BOOKING CỦA TÔI">
+            <TabItem Header="TOUR CỦA TÔI">
                 <Grid Margin="16"
                       DataContext="{Binding BookingVM}">
                     <Grid.RowDefinitions>
@@ -250,7 +250,7 @@
 
                     <DockPanel Grid.Row="0"
                                Margin="0,0,0,12">
-                        <TextBlock Text="Danh sách booking của tôi"
+                        <TextBlock Text="Danh sách tour của tôi"
                                    FontSize="20"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center"/>
@@ -270,13 +270,13 @@
                               HeadersVisibility="Column"
                               GridLinesVisibility="Horizontal">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Mã booking"
+                            <DataGridTextColumn Header="Mã đặt tour"
                                                 Binding="{Binding BookingId}"
                                                 Width="130"/>
                             <DataGridTextColumn Header="Điểm đến"
                                                 Binding="{Binding Destination.Name}"
                                                 Width="*"/>
-                            <DataGridTextColumn Header="Guide"
+                            <DataGridTextColumn Header="Hướng dẫn viên"
                                                 Binding="{Binding Guide.FullName}"
                                                 Width="*"/>
                             <DataGridTextColumn Header="Khách sạn"
@@ -292,7 +292,7 @@
                                                 Binding="{Binding Price, StringFormat={}{0:N0}}"
                                                 Width="100"/>
                             <DataGridTextColumn Header="Trạng thái"
-                                                Binding="{Binding Status}"
+                                                Binding="{Binding Status, Converter={StaticResource EnumToVietnameseConverter}}"
                                                 Width="90"/>
                             <DataGridTextColumn Header="Hoàn tiền"
                                                 Binding="{Binding RefundStatusDisplay}"
@@ -314,7 +314,7 @@
 
                     <TextBox Grid.Row="2"
                              Text="{Binding RefundReason, UpdateSourceTrigger=PropertyChanged}"
-                             materialDesign:HintAssist.Hint="Lý do hoàn tiền cho booking đã thanh toán (10-500 ký tự)"
+                             materialDesign:HintAssist.Hint="Lý do hoàn tiền cho tour đã thanh toán (10-500 ký tự)"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              MaxLength="500"
                              Margin="0,10,0,0"/>
@@ -347,12 +347,12 @@
                                   ItemsSource="{Binding PayableBookings}"
                                   SelectedItem="{Binding SelectedBooking}"
                                   DisplayMemberPath="BookingId"
-                                  materialDesign:HintAssist.Hint="Booking Accepted cần thanh toán"
+                                  materialDesign:HintAssist.Hint="Tour đã được chấp nhận cần thanh toán"
                                   Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   Margin="0,0,14,0"/>
 
                         <StackPanel Grid.Column="1">
-                            <TextBlock Text="{Binding SelectedBooking.Destination.Name, StringFormat=Điểm đến: {0}, TargetNullValue=Chưa chọn booking}"/>
+                            <TextBlock Text="{Binding SelectedBooking.Destination.Name, StringFormat=Điểm đến: {0}, TargetNullValue=Chưa chọn tour}"/>
                             <TextBlock Text="{Binding SelectedBooking.Price, StringFormat=Tổng tiền: {0:N0}}"
                                        FontWeight="SemiBold"
                                        Margin="0,4,0,0"/>
@@ -438,7 +438,7 @@
                                     <DataGridTextColumn Header="Mã giao dịch"
                                                         Binding="{Binding TransactionCode}"
                                                         Width="170"/>
-                                    <DataGridTextColumn Header="Booking"
+                                    <DataGridTextColumn Header="Mã đặt tour"
                                                         Binding="{Binding Booking.BookingId}"
                                                         Width="140"/>
                                     <DataGridTextColumn Header="Điểm đến"
@@ -448,10 +448,10 @@
                                                         Binding="{Binding Amount, StringFormat={}{0:N0}}"
                                                         Width="110"/>
                                     <DataGridTextColumn Header="Phương thức"
-                                                        Binding="{Binding Method}"
+                                                        Binding="{Binding Method, Converter={StaticResource EnumToVietnameseConverter}}"
                                                         Width="110"/>
                                     <DataGridTextColumn Header="Trạng thái"
-                                                        Binding="{Binding Status}"
+                                                        Binding="{Binding Status, Converter={StaticResource EnumToVietnameseConverter}}"
                                                         Width="100"/>
                                     <DataGridTextColumn Header="Thời gian"
                                                         Binding="{Binding CreatedAt, StringFormat={}{0:dd/MM/yyyy HH:mm}}"
@@ -535,7 +535,7 @@
 
                     <GroupBox Grid.Row="0"
                               Grid.Column="1"
-                              Header="Guide"
+                              Header="Hướng dẫn viên"
                               Margin="8,0,0,12"
                               Padding="12">
                         <Grid>
@@ -554,7 +554,7 @@
                                       ItemsSource="{Binding Guides}"
                                       SelectedItem="{Binding SelectedGuide}"
                                       DisplayMemberPath="FullName"
-                                      materialDesign:HintAssist.Hint="Chọn Guide"
+                                      materialDesign:HintAssist.Hint="Chọn hướng dẫn viên"
                                       Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                       Margin="0,0,0,10"/>
                             <TextBox Grid.Row="1"

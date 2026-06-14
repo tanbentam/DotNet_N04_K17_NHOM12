@@ -45,7 +45,7 @@ namespace TravelApp.ViewModels.User
                 FullName = string.Empty;
                 Email = string.Empty;
                 Phone = string.Empty;
-                ProfileMessage = "Phiên đăng nhập User không hợp lệ.";
+                ProfileMessage = "Phiên đăng nhập người dùng không hợp lệ.";
                 return;
             }
 
@@ -61,7 +61,7 @@ namespace TravelApp.ViewModels.User
             var currentUser = _sessionService.CurrentUser;
             if (currentUser == null || currentUser.Role != RoleType.User)
             {
-                ProfileMessage = "Phiên đăng nhập User không hợp lệ.";
+                ProfileMessage = "Phiên đăng nhập người dùng không hợp lệ.";
                 return;
             }
 

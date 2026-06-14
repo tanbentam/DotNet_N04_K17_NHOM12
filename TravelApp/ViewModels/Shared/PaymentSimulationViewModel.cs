@@ -59,7 +59,7 @@ namespace TravelApp.ViewModels.Shared
             {
                 PayableBookings.Clear();
                 PaymentHistory.Clear();
-                PaymentMessage = "Phiên đăng nhập User không hợp lệ.";
+                PaymentMessage = "Phiên đăng nhập người dùng không hợp lệ.";
                 return;
             }
 
@@ -111,7 +111,7 @@ namespace TravelApp.ViewModels.Shared
             TransactionCode = CreateTransactionCode("QR");
             ReferenceCode = SelectedBooking.BookingId;
             PaymentInstructions = string.Format(
-                "Quét QR mô phỏng | Booking: {0} | Số tiền: {1:N0} | Nội dung: {2}",
+                "Quét QR mô phỏng | Mã đặt tour: {0} | Số tiền: {1:N0} | Nội dung: {2}",
                 SelectedBooking.BookingId,
                 SelectedBooking.Price,
                 TransactionCode);
@@ -153,7 +153,7 @@ namespace TravelApp.ViewModels.Shared
                 !IsPaymentPrepared)
             {
                 PaymentMessage =
-                    "Hãy chọn booking và chuẩn bị phương thức thanh toán.";
+                    "Hãy chọn đặt tour và chuẩn bị phương thức thanh toán.";
                 return;
             }
 
@@ -195,8 +195,8 @@ namespace TravelApp.ViewModels.Shared
                 {
                     _notificationManager.ShowNotification(
                         "Thanh toán thành công",
-                        "Booking " + SelectedBooking.BookingId +
-                            " đã chuyển sang Paid.",
+                        "Đặt tour " + SelectedBooking.BookingId +
+                            " đã chuyển sang trạng thái đã thanh toán.",
                         false);
                     SuccessfulPaymentProcessed?.Invoke();
                 }
@@ -234,14 +234,14 @@ namespace TravelApp.ViewModels.Shared
             if (SelectedBooking == null)
             {
                 PaymentMessage =
-                    "Hãy chọn một booking đã được Guide chấp nhận.";
+                    "Hãy chọn một đặt tour đã được hướng dẫn viên chấp nhận.";
                 return false;
             }
 
             if (SelectedBooking.Status != BookingStatus.Accepted)
             {
                 PaymentMessage =
-                    "Chỉ booking Accepted mới có thể thanh toán.";
+                    "Chỉ đặt tour đã được chấp nhận mới có thể thanh toán.";
                 return false;
             }
 

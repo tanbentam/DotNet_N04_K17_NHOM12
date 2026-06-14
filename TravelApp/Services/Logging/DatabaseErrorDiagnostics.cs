@@ -35,7 +35,7 @@ namespace TravelApp.Services.Logging
                 message.Contains("pending changes") ||
                 message.Contains("automatic migration is disabled"))
             {
-                return "Model EF và migration history trong database không cùng phiên bản.";
+                return "Mô hình EF và lịch sử migration trong cơ sở dữ liệu không cùng phiên bản.";
             }
 
             if (message.Contains("doesn't exist") ||
@@ -61,10 +61,10 @@ namespace TravelApp.Services.Logging
 
             if (exception is DbUpdateException)
             {
-                return "Database từ chối thao tác ghi dữ liệu.";
+                return "Cơ sở dữ liệu từ chối thao tác ghi dữ liệu.";
             }
 
-            return "Thao tác với database thất bại.";
+            return "Thao tác với cơ sở dữ liệu thất bại.";
         }
 
         private static string Sanitize(string value)

@@ -111,7 +111,7 @@ namespace TravelApp.Services.Booking
                 string.IsNullOrWhiteSpace(booking.BookingId))
             {
                 return BookingOperationResult.Failure(
-                    "Thông tin booking không hợp lệ.");
+                    "Thông tin đặt tour không hợp lệ.");
             }
 
             var validation = ValidateDates(booking.StartDate, booking.Nights);
@@ -138,7 +138,7 @@ namespace TravelApp.Services.Booking
                 if (user == null || guide == null || destination == null)
                 {
                     return BookingOperationResult.Failure(
-                        "User, Guide hoặc điểm đến không hợp lệ.");
+                        "Người dùng, hướng dẫn viên hoặc điểm đến không hợp lệ.");
                 }
 
                 decimal hotelPrice = 0;
@@ -167,7 +167,7 @@ namespace TravelApp.Services.Booking
                     null))
                 {
                     return BookingOperationResult.Failure(
-                        "Guide không có lịch trống cho toàn bộ chuyến đi.");
+                        "Hướng dẫn viên không có lịch trống cho toàn bộ chuyến đi.");
                 }
 
                 if (await HasUserConflictAsync(
@@ -191,7 +191,7 @@ namespace TravelApp.Services.Booking
                 context.Bookings.Add(booking);
                 await context.SaveChangesAsync();
                 return BookingOperationResult.Success(
-                    "Đã tạo booking " + booking.BookingId + ".");
+                    "Đã tạo đặt tour " + booking.BookingId + ".");
             }
         }
 
@@ -207,7 +207,7 @@ namespace TravelApp.Services.Booking
                 if (booking == null)
                 {
                     return BookingOperationResult.Failure(
-                        "Không tìm thấy booking của User hiện tại.");
+                        "Không tìm thấy đặt tour của người dùng hiện tại.");
                 }
 
                 if (booking.Status == BookingStatus.Paid)
@@ -230,7 +230,7 @@ namespace TravelApp.Services.Booking
                     if (booking.HasPendingRefundRequest)
                     {
                         return BookingOperationResult.Failure(
-                            "Booking đã có yêu cầu hoàn tiền đang chờ Admin xử lý.");
+                            "Đặt tour đã có yêu cầu hoàn tiền đang chờ quản trị viên xử lý.");
                     }
 
                     booking.RefundRequestedAt = DateTime.Now;
@@ -239,7 +239,7 @@ namespace TravelApp.Services.Booking
                     booking.RefundApproved = null;
                     await context.SaveChangesAsync();
                     return BookingOperationResult.Success(
-                        "Đã gửi yêu cầu hủy và hoàn tiền đến Admin.");
+                        "Đã gửi yêu cầu hủy và hoàn tiền đến quản trị viên.");
                 }
 
                 if (!CanChangeStatus(
@@ -248,7 +248,7 @@ namespace TravelApp.Services.Booking
                     false))
                 {
                     return BookingOperationResult.Failure(
-                        "Chỉ có thể hủy booking đang chờ hoặc đã được chấp nhận.");
+                        "Chỉ có thể hủy đặt tour đang chờ hoặc đã được chấp nhận.");
                 }
 
                 booking.Status = BookingStatus.Cancelled;
@@ -260,7 +260,7 @@ namespace TravelApp.Services.Booking
                 }
 
                 await context.SaveChangesAsync();
-                return BookingOperationResult.Success("Đã hủy booking.");
+                return BookingOperationResult.Success("Đã hủy đặt tour.");
             }
         }
 
@@ -275,13 +275,13 @@ namespace TravelApp.Services.Booking
                 if (booking == null || !booking.HasPendingRefundRequest)
                 {
                     return BookingOperationResult.Failure(
-                        "Booking không có yêu cầu hoàn tiền đang chờ xử lý.");
+                        "Đặt tour không có yêu cầu hoàn tiền đang chờ xử lý.");
                 }
 
                 if (booking.Status != BookingStatus.Paid)
                 {
                     return BookingOperationResult.Failure(
-                        "Booking không còn ở trạng thái có thể hoàn tiền.");
+                        "Đặt tour không còn ở trạng thái có thể hoàn tiền.");
                 }
 
                 booking.RefundResolvedAt = DateTime.Now;
@@ -308,7 +308,7 @@ namespace TravelApp.Services.Booking
                 transaction.Commit();
                 return BookingOperationResult.Success(
                     approve
-                        ? "Đã duyệt hủy booking và hoàn tiền mô phỏng."
+                        ? "Đã duyệt hủy đặt tour và hoàn tiền mô phỏng."
                         : "Đã từ chối yêu cầu hoàn tiền.");
             }
         }
@@ -322,7 +322,7 @@ namespace TravelApp.Services.Booking
                 status != BookingStatus.Rejected)
             {
                 return BookingOperationResult.Failure(
-                    "Guide chỉ có thể chấp nhận hoặc từ chối booking.");
+                    "Hướng dẫn viên chỉ có thể chấp nhận hoặc từ chối đặt tour.");
             }
 
             using (var context = new ApplicationDbContext())
@@ -332,7 +332,7 @@ namespace TravelApp.Services.Booking
                 if (booking == null || booking.Status != BookingStatus.Pending)
                 {
                     return BookingOperationResult.Failure(
-                        "Booking không còn chờ xử lý hoặc không thuộc Guide hiện tại.");
+                        "Đặt tour không còn chờ xử lý hoặc không thuộc hướng dẫn viên hiện tại.");
                 }
 
                 if (status == BookingStatus.Accepted &&
@@ -344,15 +344,15 @@ namespace TravelApp.Services.Booking
                         booking.Id))
                 {
                     return BookingOperationResult.Failure(
-                        "Lịch Guide đã bị trùng hoặc không còn khả dụng.");
+                        "Lịch hướng dẫn viên đã bị trùng hoặc không còn khả dụng.");
                 }
 
                 booking.Status = status;
                 await context.SaveChangesAsync();
                 return BookingOperationResult.Success(
                     status == BookingStatus.Accepted
-                        ? "Đã chấp nhận booking."
-                        : "Đã từ chối booking.");
+                        ? "Đã chấp nhận đặt tour."
+                        : "Đã từ chối đặt tour.");
             }
         }
 
@@ -366,13 +366,13 @@ namespace TravelApp.Services.Booking
                 if (booking == null)
                 {
                     return BookingOperationResult.Failure(
-                        "Không tìm thấy booking.");
+                        "Không tìm thấy đặt tour.");
                 }
 
                 if (!CanChangeStatus(booking.Status, status, true))
                 {
                     return BookingOperationResult.Failure(
-                        "Không thể chuyển booking từ trạng thái hiện tại.");
+                        "Không thể chuyển đặt tour từ trạng thái hiện tại.");
                 }
 
                 if (booking.GuideCancellationRequestedAt.HasValue &&
@@ -381,7 +381,7 @@ namespace TravelApp.Services.Booking
                     if (status != BookingStatus.Cancelled)
                     {
                         return BookingOperationResult.Failure(
-                            "Hãy duyệt hoặc từ chối yêu cầu hủy của Guide trước.");
+                            "Hãy duyệt hoặc từ chối yêu cầu hủy của hướng dẫn viên trước.");
                     }
 
                     booking.GuideCancellationResolvedAt = DateTime.Now;
@@ -409,13 +409,13 @@ namespace TravelApp.Services.Booking
                         booking.Id)))
                 {
                     return BookingOperationResult.Failure(
-                        "Booking bị trùng lịch của User hoặc Guide.");
+                        "Đặt tour bị trùng lịch của người dùng hoặc hướng dẫn viên.");
                 }
 
                 booking.Status = status;
                 await context.SaveChangesAsync();
                 return BookingOperationResult.Success(
-                    "Đã cập nhật trạng thái booking.");
+                    "Đã cập nhật trạng thái đặt tour.");
             }
         }
 
@@ -442,13 +442,13 @@ namespace TravelApp.Services.Booking
                 if (booking == null)
                 {
                     return BookingOperationResult.Failure(
-                        "Booking không thuộc Guide hiện tại.");
+                        "Đặt tour không thuộc hướng dẫn viên hiện tại.");
                 }
 
                 if (booking.Status != BookingStatus.Accepted)
                 {
                     return BookingOperationResult.Failure(
-                        "Chỉ có thể gửi yêu cầu hủy booking đã chấp nhận và chưa thanh toán.");
+                        "Chỉ có thể gửi yêu cầu hủy đặt tour đã chấp nhận và chưa thanh toán.");
                 }
 
                 if (booking.StartDate.Date <= DateTime.Today)
@@ -461,7 +461,7 @@ namespace TravelApp.Services.Booking
                     !booking.GuideCancellationResolvedAt.HasValue)
                 {
                     return BookingOperationResult.Failure(
-                        "Booking này đã có yêu cầu hủy đang chờ Admin xử lý.");
+                        "Đặt tour này đã có yêu cầu hủy đang chờ quản trị viên xử lý.");
                 }
 
                 booking.GuideCancellationRequestedAt = DateTime.Now;
@@ -471,7 +471,7 @@ namespace TravelApp.Services.Booking
                 await context.SaveChangesAsync();
 
                 return BookingOperationResult.Success(
-                    "Đã gửi yêu cầu hủy booking đến Admin.");
+                    "Đã gửi yêu cầu hủy đặt tour đến quản trị viên.");
             }
         }
 
@@ -488,13 +488,13 @@ namespace TravelApp.Services.Booking
                     booking.GuideCancellationResolvedAt.HasValue)
                 {
                     return BookingOperationResult.Failure(
-                        "Booking không có yêu cầu hủy đang chờ xử lý.");
+                        "Đặt tour không có yêu cầu hủy đang chờ xử lý.");
                 }
 
                 if (approve && booking.Status != BookingStatus.Accepted)
                 {
                     return BookingOperationResult.Failure(
-                        "Booking không còn ở trạng thái có thể hủy.");
+                        "Đặt tour không còn ở trạng thái có thể hủy.");
                 }
 
                 booking.GuideCancellationResolvedAt = DateTime.Now;
@@ -507,8 +507,8 @@ namespace TravelApp.Services.Booking
                 await context.SaveChangesAsync();
                 return BookingOperationResult.Success(
                     approve
-                        ? "Đã duyệt yêu cầu hủy booking."
-                        : "Đã từ chối yêu cầu hủy booking.");
+                        ? "Đã duyệt yêu cầu hủy đặt tour."
+                        : "Đã từ chối yêu cầu hủy đặt tour.");
             }
         }
 

@@ -45,7 +45,7 @@ namespace TravelApp.ViewModels.Admin
             _contentRepository = contentRepository;
             _sessionService = sessionService;
             _navigationService = navigationService;
-            AdminName = _sessionService.CurrentUser?.FullName ?? "Admin";
+            AdminName = _sessionService.CurrentUser?.FullName ?? "Quản trị viên";
             _ = LoadDashboardAsync();
         }
 
@@ -115,7 +115,7 @@ namespace TravelApp.ViewModels.Admin
                 OnPropertyChanged(nameof(HasAttentionItems));
                 OnPropertyChanged(nameof(HasNoAttentionItems));
 
-                AdminName = _sessionService.CurrentUser?.FullName ?? "Admin";
+                AdminName = _sessionService.CurrentUser?.FullName ?? "Quản trị viên";
                 LastUpdatedText =
                     "Cập nhật lúc " + DateTime.Now.ToString("HH:mm dd/MM/yyyy");
             }

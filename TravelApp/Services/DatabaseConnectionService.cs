@@ -20,7 +20,9 @@ namespace TravelApp.Services
 
         public static DatabaseConnectionResult Success()
         {
-            return new DatabaseConnectionResult(true, "Database ready");
+            return new DatabaseConnectionResult(
+                true,
+                "Cơ sở dữ liệu sẵn sàng");
         }
 
         public static DatabaseConnectionResult Failure(string message)

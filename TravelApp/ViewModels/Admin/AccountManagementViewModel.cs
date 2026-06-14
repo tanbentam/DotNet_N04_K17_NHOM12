@@ -102,14 +102,14 @@ namespace TravelApp.ViewModels.Admin
             ClearMessages();
             if (user.Role == RoleType.Admin)
             {
-                ErrorMessage = "Không thể chỉnh sửa tài khoản Admin tại màn hình này.";
+                ErrorMessage = "Không thể chỉnh sửa tài khoản quản trị viên tại màn hình này.";
                 return;
             }
 
             IsEditing = true;
             IsEditorOpen = true;
             EditingUserId = user.Id;
-            FormTitle = "Edit Account";
+            FormTitle = "Chỉnh sửa tài khoản";
             FormFullName = user.FullName;
             FormEmail = user.Email;
             FormPhone = user.Phone;
@@ -208,7 +208,7 @@ namespace TravelApp.ViewModels.Admin
 
             if (user.Role == RoleType.Admin)
             {
-                ErrorMessage = "Không thể xóa tài khoản Admin tại màn hình này.";
+                ErrorMessage = "Không thể xóa tài khoản quản trị viên tại màn hình này.";
                 NotifyError(ErrorMessage);
                 return;
             }
@@ -259,8 +259,8 @@ namespace TravelApp.ViewModels.Admin
             IsEditorOpen = true;
             EditingUserId = 0;
             FormTitle = role == RoleType.TourGuide
-                ? "Create Guide Account"
-                : "Create User Account";
+                ? "Tạo tài khoản hướng dẫn viên"
+                : "Tạo tài khoản người dùng";
             FormFullName = string.Empty;
             FormEmail = string.Empty;
             FormPhone = string.Empty;
@@ -296,7 +296,7 @@ namespace TravelApp.ViewModels.Admin
 
             if (FormRole != RoleType.User && FormRole != RoleType.TourGuide)
             {
-                ErrorMessage = "Admin chỉ có thể quản lý tài khoản User hoặc TourGuide.";
+                ErrorMessage = "Quản trị viên chỉ có thể quản lý tài khoản người dùng hoặc hướng dẫn viên.";
                 return false;
             }
 
@@ -326,14 +326,14 @@ namespace TravelApp.ViewModels.Admin
         private void NotifySuccess(string message)
         {
             _notificationManager.ShowNotification(
-                "Account Management",
+                "Quản lý tài khoản",
                 message);
         }
 
         private void NotifyError(string message)
         {
             _notificationManager.ShowNotification(
-                "Account Management",
+                "Quản lý tài khoản",
                 message,
                 true);
         }

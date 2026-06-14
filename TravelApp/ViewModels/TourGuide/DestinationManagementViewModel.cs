@@ -101,7 +101,7 @@ namespace TravelApp.ViewModels.TourGuide
             var guide = _sessionService.CurrentUser;
             if (guide == null || guide.Role != RoleType.TourGuide)
             {
-                ErrorMessage = "Phiên đăng nhập Guide không hợp lệ.";
+                ErrorMessage = "Phiên đăng nhập hướng dẫn viên không hợp lệ.";
                 return;
             }
 
@@ -171,7 +171,7 @@ namespace TravelApp.ViewModels.TourGuide
             var guide = _sessionService.CurrentUser;
             if (guide == null || guide.Role != RoleType.TourGuide)
             {
-                ErrorMessage = "Phiên đăng nhập Guide không hợp lệ.";
+                ErrorMessage = "Phiên đăng nhập hướng dẫn viên không hợp lệ.";
                 return;
             }
 
@@ -207,8 +207,8 @@ namespace TravelApp.ViewModels.TourGuide
                 IsEditorOpen = false;
                 await LoadDestinationsAsync();
                 SuccessMessage = wasEditing
-                    ? "Đã cập nhật và gửi lại điểm đến để Admin duyệt."
-                    : "Đã tạo điểm đến và gửi Admin duyệt.";
+                    ? "Đã cập nhật và gửi lại điểm đến để quản trị viên duyệt."
+                    : "Đã tạo điểm đến và gửi quản trị viên duyệt.";
             }
             catch (Exception ex)
             {

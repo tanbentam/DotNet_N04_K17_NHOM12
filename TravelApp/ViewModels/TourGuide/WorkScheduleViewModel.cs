@@ -59,7 +59,7 @@ namespace TravelApp.ViewModels.TourGuide
             var guide = _sessionService.CurrentUser;
             if (guide == null || guide.Role != RoleType.TourGuide)
             {
-                ErrorMessage = "Phiên đăng nhập Guide không hợp lệ.";
+                ErrorMessage = "Phiên đăng nhập hướng dẫn viên không hợp lệ.";
                 return;
             }
 
@@ -115,10 +115,10 @@ namespace TravelApp.ViewModels.TourGuide
                 await LoadWorkScheduleAsync();
                 SelectedBooking = null;
                 SuccessMessage =
-                    "Đã gửi yêu cầu hủy booking " + bookingCode + ".";
+                    "Đã gửi yêu cầu hủy đặt tour " + bookingCode + ".";
                 _notificationManager.ShowNotification(
                     "Đã gửi yêu cầu",
-                    "Admin sẽ xem xét yêu cầu hủy booking " +
+                    "Quản trị viên sẽ xem xét yêu cầu hủy đặt tour " +
                         bookingCode + ".",
                     false);
             }

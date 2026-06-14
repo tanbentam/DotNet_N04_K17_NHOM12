@@ -51,7 +51,7 @@ namespace TravelApp.ViewModels.TourGuide
             var guide = _sessionService.CurrentUser;
             if (guide == null || guide.Role != RoleType.TourGuide)
             {
-                ErrorMessage = "Phiên đăng nhập Guide không hợp lệ.";
+                ErrorMessage = "Phiên đăng nhập hướng dẫn viên không hợp lệ.";
                 return;
             }
 
@@ -99,7 +99,7 @@ namespace TravelApp.ViewModels.TourGuide
             var guide = _sessionService.CurrentUser;
             if (guide == null || guide.Role != RoleType.TourGuide)
             {
-                ErrorMessage = "Phiên đăng nhập Guide không hợp lệ.";
+                ErrorMessage = "Phiên đăng nhập hướng dẫn viên không hợp lệ.";
                 return;
             }
 
@@ -126,8 +126,8 @@ namespace TravelApp.ViewModels.TourGuide
                 _notificationManager.ShowNotification(
                     accepted ? "Thành công" : "Đã từ chối",
                     (accepted
-                        ? "Đã chấp nhận booking "
-                        : "Đã từ chối booking ") +
+                    ? "Đã chấp nhận đặt tour "
+                    : "Đã từ chối đặt tour ") +
                     booking.BookingId + ".",
                     !accepted);
             }

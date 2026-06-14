@@ -12,19 +12,19 @@
 
         <Grid Grid.Row="0" Margin="0,0,0,16">
             <StackPanel Orientation="Horizontal">
-                <Button Content="+ Create Guide Account"
+                <Button Content="+ Tạo tài khoản hướng dẫn viên"
                         Command="{Binding CreateGuideAccountCommand}"
                         Style="{StaticResource MaterialDesignRaisedButton}"
                         Margin="0,0,10,0"/>
-                <Button Content="+ Create User Account"
+                <Button Content="+ Tạo tài khoản người dùng"
                         Command="{Binding CreateUserAccountCommand}"
                         Style="{StaticResource MaterialDesignOutlinedButton}"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <TextBlock Text="{Binding UserCount, StringFormat='Total: {0} accounts'}"
+                <TextBlock Text="{Binding UserCount, StringFormat='Tổng cộng: {0} tài khoản'}"
                            VerticalAlignment="Center" Margin="0,0,16,0"/>
-                <Button Content="Refresh"
+                <Button Content="Làm mới"
                         Command="{Binding LoadAccountsCommand}"
                         Style="{StaticResource MaterialDesignOutlinedButton}"/>
             </StackPanel>
@@ -51,9 +51,9 @@
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
                             Visibility="{Binding IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock Text="No accounts found." FontSize="18" FontWeight="SemiBold"
+                    <TextBlock Text="Không tìm thấy tài khoản." FontSize="18" FontWeight="SemiBold"
                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="Create an account or press Refresh."
+                    <TextBlock Text="Hãy tạo tài khoản hoặc nhấn Làm mới."
                                Foreground="Gray" Margin="0,6,0,0"/>
                 </StackPanel>
 
@@ -61,20 +61,22 @@
                           CanUserAddRows="False" materialDesign:DataGridAssist.CellPadding="12"
                           Visibility="{Binding HasUsers, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="*"/>
+                        <DataGridTextColumn Header="Họ và tên" Binding="{Binding FullName}" Width="*"/>
                         <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
-                        <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="110"/>
-                        <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" Width="125"/>
-                        <DataGridTemplateColumn Header="Actions" Width="135">
+                        <DataGridTextColumn Header="Vai trò"
+                                            Binding="{Binding Role, Converter={StaticResource EnumToVietnameseConverter}}"
+                                            Width="110"/>
+                        <DataGridTextColumn Header="Số điện thoại" Binding="{Binding Phone}" Width="125"/>
+                        <DataGridTemplateColumn Header="Thao tác" Width="135">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Button Content="Edit"
+                                        <Button Content="Sửa"
                                                 Command="{Binding DataContext.EditAccountCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource MaterialDesignFlatButton}"
                                                 Padding="0"/>
-                                        <Button Content="Delete"
+                                        <Button Content="Xóa"
                                                 Command="{Binding DataContext.DeleteAccountCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource MaterialDesignFlatButton}"
@@ -94,7 +96,7 @@
                     <TextBlock Text="{Binding FormTitle}" FontSize="20"
                                FontWeight="SemiBold" Margin="0,0,0,16"/>
                     <TextBox Text="{Binding FormFullName, UpdateSourceTrigger=PropertyChanged}"
-                             materialDesign:HintAssist.Hint="Full name"
+                             materialDesign:HintAssist.Hint="Họ và tên"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              Margin="0,0,0,12"/>
                     <TextBox Text="{Binding FormEmail, UpdateSourceTrigger=PropertyChanged}"
@@ -102,21 +104,24 @@
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              Margin="0,0,0,12"/>
                     <TextBox Text="{Binding FormPhone, UpdateSourceTrigger=PropertyChanged}"
-                             materialDesign:HintAssist.Hint="Phone (10 digits)"
+                             materialDesign:HintAssist.Hint="Số điện thoại (10 chữ số)"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              Margin="0,0,0,12"/>
                     <PasswordBox utils:PasswordBoxAssistant.BindPassword="True"
                                  utils:PasswordBoxAssistant.BoundPassword="{Binding FormPassword, Mode=TwoWay}"
-                                 materialDesign:HintAssist.Hint="Password (optional when editing)"
+                                 materialDesign:HintAssist.Hint="Mật khẩu (không bắt buộc khi sửa)"
                                  Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
                                  Margin="0,0,0,12"/>
-                    <TextBlock Text="{Binding FormRole, StringFormat='Role: {0}'}"
-                               FontWeight="SemiBold" Margin="0,0,0,16"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <TextBlock Text="Vai trò: " FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding FormRole, Converter={StaticResource EnumToVietnameseConverter}}"
+                                   FontWeight="SemiBold"/>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="Cancel" Command="{Binding CancelEditCommand}"
+                        <Button Content="Hủy" Command="{Binding CancelEditCommand}"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Margin="0,0,8,0"/>
-                        <Button Content="Save" Command="{Binding SaveAccountCommand}"
+                        <Button Content="Lưu" Command="{Binding SaveAccountCommand}"
                                 Style="{StaticResource MaterialDesignRaisedButton}"/>
                     </StackPanel>
                 </StackPanel>

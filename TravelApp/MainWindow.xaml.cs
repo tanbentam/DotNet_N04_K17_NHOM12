@@ -61,7 +61,7 @@ namespace TravelApp
                 DatabaseStatusIndicator.Fill = new SolidColorBrush(Color.FromRgb(76, 175, 80));
                 DatabaseStatusText.Text = result.Message;
                 _notificationManager.ShowNotification(
-                    "Database",
+                    "Cơ sở dữ liệu",
                     result.Message);
                 await CompleteExpiredBookingsAsync();
                 return;
@@ -71,8 +71,8 @@ namespace TravelApp
             DatabaseStatusText.Text = result.Message.IndexOf(
                 "schema",
                 StringComparison.OrdinalIgnoreCase) >= 0
-                ? "Database schema error"
-                : "Database error";
+                ? "Lỗi cấu trúc cơ sở dữ liệu"
+                : "Lỗi cơ sở dữ liệu";
             DatabaseStatusText.ToolTip = result.Message;
             _notificationManager.ShowNotification(
                 "Lỗi cơ sở dữ liệu",
@@ -89,9 +89,9 @@ namespace TravelApp
                 if (completedCount > 0)
                 {
                     _notificationManager.ShowNotification(
-                        "Cập nhật booking",
+                        "Cập nhật đặt tour",
                         completedCount +
-                        " tour đã kết thúc được chuyển sang Completed.");
+                        " tour đã kết thúc được chuyển sang Hoàn thành.");
                 }
             }
             catch (Exception ex)
@@ -113,45 +113,45 @@ namespace TravelApp
             switch (destination)
             {
                 case "login": ShowView(
-                    "Login",
+                    "Đăng nhập",
                     _services.GetRequiredService<LoginView>(),
                     LoginNavButton); break;
                 case "register": ShowView(
-                    "Register",
+                    "Đăng ký",
                     _services.GetRequiredService<RegisterView>(),
                     RegisterNavButton); break;
                 case "user":
                     ShowRoleView(
                         RoleType.User,
-                        "User Dashboard",
+                        "Bảng điều khiển người dùng",
                         () => _services.GetRequiredService<UserDashboardView>(),
                         UserDashboardNavButton);
                     break;
                 case "guide":
                     ShowRoleView(
                         RoleType.TourGuide,
-                        "Tour Guide Dashboard",
+                        "Bảng điều khiển hướng dẫn viên",
                         () => _services.GetRequiredService<GuideDashboardView>(),
                         GuideDashboardNavButton);
                     break;
                 case "admin":
                     ShowRoleView(
                         RoleType.Admin,
-                        "Admin Dashboard",
+                        "Bảng điều khiển quản trị",
                         () => _services.GetRequiredService<AdminDashboardView>(),
                         AdminDashboardNavButton);
                     break;
                 case "accounts":
                     ShowRoleView(
                         RoleType.Admin,
-                        "Account Management",
+                        "Quản lý tài khoản",
                         () => _services.GetRequiredService<AccountManagementView>(),
                         AccountManagementNavButton);
                     break;
                 case "content":
                     ShowRoleView(
                         RoleType.Admin,
-                        "Content Management",
+                        "Quản lý nội dung",
                         () => _services.GetRequiredService<ContentManagementView>(),
                         ContentManagementNavButton);
                     break;
@@ -186,25 +186,25 @@ namespace TravelApp
             {
                 case RoleType.Admin:
                     ShowView(
-                        "Admin Dashboard",
+                        "Bảng điều khiển quản trị",
                         _services.GetRequiredService<AdminDashboardView>(),
                         AdminDashboardNavButton);
                     break;
                 case RoleType.TourGuide:
                     ShowView(
-                        "Tour Guide Dashboard",
+                        "Bảng điều khiển hướng dẫn viên",
                         _services.GetRequiredService<GuideDashboardView>(),
                         GuideDashboardNavButton);
                     break;
                 case RoleType.User:
                     ShowView(
-                        "User Dashboard",
+                        "Bảng điều khiển người dùng",
                         _services.GetRequiredService<UserDashboardView>(),
                         UserDashboardNavButton);
                     break;
                 default:
                     throw new InvalidOperationException(
-                        $"Unsupported user role: {user.Role}");
+                        $"Vai trò người dùng không được hỗ trợ: {user.Role}");
             }
         }
 
@@ -223,14 +223,14 @@ namespace TravelApp
                 case "accounts":
                     ShowRoleView(
                         RoleType.Admin,
-                        "Account Management",
+                        "Quản lý tài khoản",
                         () => _services.GetRequiredService<AccountManagementView>(),
                         AccountManagementNavButton);
                     break;
                 case "content":
                     ShowRoleView(
                         RoleType.Admin,
-                        "Content Management",
+                        "Quản lý nội dung",
                         () => _services.GetRequiredService<ContentManagementView>(),
                         ContentManagementNavButton);
                     break;
@@ -238,7 +238,7 @@ namespace TravelApp
                     throw new ArgumentOutOfRangeException(
                         nameof(section),
                         section,
-                        "Unsupported Admin section.");
+                        "Khu vực quản trị không được hỗ trợ.");
             }
         }
 
@@ -258,7 +258,7 @@ namespace TravelApp
             var isAuthenticated = user != null;
 
             CurrentUserText.Text = isAuthenticated
-                ? $"{user.FullName} ({user.Role})"
+                ? $"{user.FullName} ({GetRoleDisplayName(user.Role)})"
                 : string.Empty;
             CurrentUserText.Visibility = isAuthenticated
                 ? Visibility.Visible
@@ -268,6 +268,19 @@ namespace TravelApp
                 : Visibility.Collapsed;
 
             UpdateNavigationVisibility(user);
+        }
+
+        private static string GetRoleDisplayName(RoleType role)
+        {
+            switch (role)
+            {
+                case RoleType.Admin:
+                    return "Quản trị viên";
+                case RoleType.TourGuide:
+                    return "Hướng dẫn viên";
+                default:
+                    return "Người dùng";
+            }
         }
 
         private void UpdateNavigationVisibility(UserModel user)
@@ -312,12 +325,12 @@ namespace TravelApp
 
         private void ShowLogin()
         {
-            ShowView("Login", _services.GetRequiredService<LoginView>());
+            ShowView("Đăng nhập", _services.GetRequiredService<LoginView>());
         }
 
         private void ShowAccessDenied(RoleType requiredRole)
         {
-            PageTitle.Text = "Access Denied";
+            PageTitle.Text = "Từ chối truy cập";
             MainContent.Content = new TextBlock
             {
                 Text = $"Tài khoản hiện tại không có quyền {requiredRole}.",
@@ -338,7 +351,7 @@ namespace TravelApp
 
         private void ShowHome()
         {
-            PageTitle.Text = "Home";
+            PageTitle.Text = "Trang chủ";
             MainContent.Content = CreateHomeContent();
             SetActiveNavigationButton(HomeNavButton);
         }
@@ -389,14 +402,14 @@ namespace TravelApp
 
             panel.Children.Add(new TextBlock
             {
-                Text = "Welcome to Travel App",
+                Text = "Chào mừng đến với Ứng dụng Du lịch",
                 FontSize = 36,
                 FontWeight = FontWeights.Bold,
                 HorizontalAlignment = HorizontalAlignment.Center
             });
             panel.Children.Add(new TextBlock
             {
-                Text = "Use the menu on the left to open the available view components.",
+                Text = "Sử dụng menu bên trái để mở các chức năng của ứng dụng.",
                 FontSize = 17,
                 TextWrapping = TextWrapping.Wrap,
                 TextAlignment = TextAlignment.Center,

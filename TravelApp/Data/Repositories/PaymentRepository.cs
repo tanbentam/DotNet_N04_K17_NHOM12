@@ -88,20 +88,20 @@ namespace TravelApp.Data.Repositories
                     if (booking == null)
                     {
                         return PaymentProcessResult.Rejected(
-                            "Booking không thuộc User hiện tại.");
+                            "Đặt tour không thuộc người dùng hiện tại.");
                     }
 
                     if (booking.Status != BookingStatus.Accepted)
                     {
                         return PaymentProcessResult.Rejected(
-                            "Chỉ booking đã được Guide chấp nhận mới có thể thanh toán.");
+                            "Chỉ tour đã được hướng dẫn viên chấp nhận mới có thể thanh toán.");
                     }
 
                     if (booking.GuideCancellationRequestedAt.HasValue &&
                         !booking.GuideCancellationResolvedAt.HasValue)
                     {
                         return PaymentProcessResult.Rejected(
-                            "Booking đang có yêu cầu hủy chờ Admin xử lý.");
+                            "Đặt tour đang có yêu cầu hủy chờ quản trị viên xử lý.");
                     }
 
                     var hasSuccessfulPayment =
@@ -111,7 +111,7 @@ namespace TravelApp.Data.Repositories
                     if (hasSuccessfulPayment)
                     {
                         return PaymentProcessResult.Rejected(
-                            "Booking này đã được thanh toán.");
+                            "Đặt tour này đã được thanh toán.");
                     }
 
                     context.Payments.Add(new PaymentModel

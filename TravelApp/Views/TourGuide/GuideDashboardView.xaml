@@ -16,10 +16,10 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel>
-                <TextBlock Text="Bảng điều khiển Guide"
+                <TextBlock Text="Bảng điều khiển hướng dẫn viên"
                            FontSize="26"
                            FontWeight="SemiBold"/>
-                <TextBlock Text="Quản lý nội dung, lịch trống và các yêu cầu booking đang chờ xử lý."
+                <TextBlock Text="Quản lý nội dung, lịch trống và các yêu cầu đặt tour đang chờ xử lý."
                            Foreground="Gray"
                            Margin="0,4,0,0"/>
             </StackPanel>
@@ -35,7 +35,7 @@
                                              Width="20"
                                              Height="20"
                                              Margin="0,0,8,0"/>
-                    <TextBlock Text="Guide"
+                    <TextBlock Text="Hướng dẫn viên"
                                FontWeight="SemiBold"
                                VerticalAlignment="Center"/>
                 </StackPanel>
@@ -62,7 +62,7 @@
                             <TextBlock Text="Điểm đến của tôi"
                                        FontSize="20"
                                        FontWeight="SemiBold"/>
-                            <TextBlock Text="Nội dung mới hoặc vừa chỉnh sửa sẽ chờ Admin duyệt."
+                            <TextBlock Text="Nội dung mới hoặc vừa chỉnh sửa sẽ chờ quản trị viên duyệt."
                                        Foreground="Gray"
                                        Margin="0,4,0,0"/>
                         </StackPanel>
@@ -120,7 +120,7 @@
                                                     Binding="{Binding Country}"
                                                     Width="150"/>
                                 <DataGridTextColumn Header="Trạng thái"
-                                                    Binding="{Binding ApprovalStatus}"
+                                                    Binding="{Binding ApprovalStatus, Converter={StaticResource EnumToVietnameseConverter}}"
                                                     Width="110"/>
                                 <DataGridTemplateColumn Header="Sửa" Width="70">
                                     <DataGridTemplateColumn.CellTemplate>
@@ -216,7 +216,7 @@
                             <TextBlock Text="Khách sạn của tôi"
                                        FontSize="20"
                                        FontWeight="SemiBold"/>
-                            <TextBlock Text="Khách sạn mới hoặc vừa chỉnh sửa sẽ chờ Admin duyệt."
+                            <TextBlock Text="Khách sạn mới hoặc vừa chỉnh sửa sẽ chờ quản trị viên duyệt."
                                        Foreground="Gray"
                                        Margin="0,4,0,0"/>
                         </StackPanel>
@@ -280,7 +280,7 @@
                                                     Binding="{Binding Rating}"
                                                     Width="90"/>
                                 <DataGridTextColumn Header="Trạng thái"
-                                                    Binding="{Binding ApprovalStatus}"
+                                                    Binding="{Binding ApprovalStatus, Converter={StaticResource EnumToVietnameseConverter}}"
                                                     Width="110"/>
                                 <DataGridTemplateColumn Header="Sửa" Width="70">
                                     <DataGridTemplateColumn.CellTemplate>
@@ -439,7 +439,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="BOOKING">
+            <TabItem Header="ĐẶT TOUR">
                 <Grid Margin="0,16,0,0"
                       DataContext="{Binding BookingRequestsVM}">
                     <Grid.RowDefinitions>
@@ -463,7 +463,7 @@
                                                              Width="24"
                                                              Height="24"
                                                              Margin="0,0,10,0"/>
-                                    <TextBlock Text="Yêu cầu booking chờ xác nhận"
+                                    <TextBlock Text="Yêu cầu đặt tour chờ xác nhận"
                                                FontSize="20"
                                                FontWeight="SemiBold"
                                                VerticalAlignment="Center"/>
@@ -487,7 +487,7 @@
                                 </Border>
                                 <Button Command="{Binding LoadPendingBookingsCommand}"
                                         Style="{StaticResource MaterialDesignOutlinedButton}"
-                                        ToolTip="Tải lại yêu cầu booking"
+                                        ToolTip="Tải lại yêu cầu đặt tour"
                                         Margin="8,0,0,0">
                                     <materialDesign:PackIcon Kind="Refresh"/>
                                 </Button>
@@ -515,7 +515,7 @@
                               GridLinesVisibility="Horizontal"
                               materialDesign:DataGridAssist.CellPadding="12">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Mã booking" Binding="{Binding BookingId}" Width="120"/>
+                            <DataGridTextColumn Header="Mã đặt tour" Binding="{Binding BookingId}" Width="120"/>
                             <DataGridTextColumn Header="Khách hàng" Binding="{Binding UserName}" Width="*"/>
                             <DataGridTextColumn Header="Điểm đến" Binding="{Binding DestinationName}" Width="*"/>
                             <DataGridTextColumn Header="Ngày bắt đầu" Binding="{Binding StartDate, StringFormat=d}" Width="120"/>
@@ -576,7 +576,7 @@
                                                FontWeight="SemiBold"
                                                VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <TextBlock Text="Các booking đã chấp nhận hoặc đã thanh toán được sắp xếp theo ngày bắt đầu."
+                                <TextBlock Text="Các tour đã chấp nhận hoặc đã thanh toán được sắp xếp theo ngày bắt đầu."
                                            Foreground="Gray"
                                            TextWrapping="Wrap"
                                            Margin="0,8,0,0"/>
@@ -688,14 +688,14 @@
                                            Margin="0,0,0,16"/>
 
                                 <Separator Margin="0,0,0,14"/>
-                                <TextBlock Text="Yêu cầu hủy booking"
+                                <TextBlock Text="Yêu cầu hủy đặt tour"
                                            FontSize="16"
                                            FontWeight="SemiBold"/>
-                                <TextBlock Text="Chỉ áp dụng cho booking đã chấp nhận, chưa thanh toán và tour chưa bắt đầu."
+                                <TextBlock Text="Chỉ áp dụng cho đặt tour đã chấp nhận, chưa thanh toán và tour chưa bắt đầu."
                                            Foreground="Gray"
                                            TextWrapping="Wrap"
                                            Margin="0,4,0,10"/>
-                                <TextBlock Text="{Binding SelectedBooking.GuideCancellationReason, StringFormat=Đang chờ Admin: {0}}"
+                                <TextBlock Text="{Binding SelectedBooking.GuideCancellationReason, StringFormat=Đang chờ quản trị viên: {0}}"
                                            Foreground="#FFE65100"
                                            TextWrapping="Wrap"
                                            Margin="0,0,0,8"

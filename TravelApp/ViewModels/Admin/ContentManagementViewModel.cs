@@ -85,7 +85,7 @@ namespace TravelApp.ViewModels.Admin
             IsEditingDestination = false;
             IsDestinationEditorOpen = true;
             DestinationId = 0;
-            DestinationFormTitle = "Create Destination";
+            DestinationFormTitle = "Tạo điểm đến";
             DestinationName = string.Empty;
             DestinationCountry = string.Empty;
             DestinationDescription = string.Empty;
@@ -105,7 +105,7 @@ namespace TravelApp.ViewModels.Admin
             IsEditingDestination = true;
             IsDestinationEditorOpen = true;
             DestinationId = destination.Id;
-            DestinationFormTitle = "Edit Destination";
+            DestinationFormTitle = "Chỉnh sửa điểm đến";
             DestinationName = destination.Name;
             DestinationCountry = destination.Country;
             DestinationDescription = destination.Description;
@@ -179,7 +179,7 @@ namespace TravelApp.ViewModels.Admin
             if (!await _contentRepository.DeleteDestinationAsync(destination.Id))
             {
                 ErrorMessage =
-                    "Không thể xóa điểm đến đang có khách sạn hoặc booking.";
+                    "Không thể xóa điểm đến đang có khách sạn hoặc đặt tour.";
                 return;
             }
 
@@ -224,7 +224,7 @@ namespace TravelApp.ViewModels.Admin
             IsEditingHotel = false;
             IsHotelEditorOpen = true;
             HotelId = 0;
-            HotelFormTitle = "Create Hotel";
+            HotelFormTitle = "Tạo khách sạn";
             HotelDestinationId = Destinations[0].Id;
             HotelName = string.Empty;
             HotelAddress = string.Empty;
@@ -246,7 +246,7 @@ namespace TravelApp.ViewModels.Admin
             IsEditingHotel = true;
             IsHotelEditorOpen = true;
             HotelId = hotel.Id;
-            HotelFormTitle = "Edit Hotel";
+            HotelFormTitle = "Chỉnh sửa khách sạn";
             HotelDestinationId = hotel.DestinationId;
             HotelName = hotel.Name;
             HotelAddress = hotel.Address;
@@ -323,7 +323,7 @@ namespace TravelApp.ViewModels.Admin
             ClearMessages();
             if (!await _contentRepository.DeleteHotelAsync(hotel.Id))
             {
-                ErrorMessage = "Không thể xóa khách sạn đang có booking.";
+                ErrorMessage = "Không thể xóa khách sạn đang có đặt tour.";
                 return;
             }
 
@@ -365,7 +365,7 @@ namespace TravelApp.ViewModels.Admin
             ClearMessages();
             if (SelectedBooking == null)
             {
-                ErrorMessage = "Hãy chọn một booking cần quản lý.";
+                ErrorMessage = "Hãy chọn một đặt tour cần quản lý.";
                 return;
             }
 
@@ -385,7 +385,7 @@ namespace TravelApp.ViewModels.Admin
                 await RefreshDataAsync();
                 SelectedBooking = null;
                 SuccessMessage =
-                    "Đã cập nhật booking " + bookingCode + " thành công.";
+                    "Đã cập nhật đặt tour " + bookingCode + " thành công.";
                 NotifySuccess(SuccessMessage);
             }
             catch (Exception ex)
@@ -393,7 +393,7 @@ namespace TravelApp.ViewModels.Admin
                 SetLoggedError(
                     "Update admin booking status",
                     ex,
-                    "Không thể cập nhật trạng thái booking",
+                    "Không thể cập nhật trạng thái đặt tour",
                     "BookingId=" + SelectedBooking?.Id);
             }
             finally
@@ -433,7 +433,7 @@ namespace TravelApp.ViewModels.Admin
                 !SelectedBooking.HasPendingRefundRequest)
             {
                 ErrorMessage =
-                    "Hãy chọn booking có yêu cầu hoàn tiền đang chờ xử lý.";
+                    "Hãy chọn đặt tour có yêu cầu hoàn tiền đang chờ xử lý.";
                 return;
             }
 
@@ -453,8 +453,8 @@ namespace TravelApp.ViewModels.Admin
                 await RefreshDataAsync();
                 SelectedBooking = null;
                 SuccessMessage = approve
-                    ? "Đã hoàn tiền booking " + bookingCode + "."
-                    : "Đã từ chối hoàn tiền booking " + bookingCode + ".";
+                    ? "Đã hoàn tiền đặt tour " + bookingCode + "."
+                    : "Đã từ chối hoàn tiền đặt tour " + bookingCode + ".";
                 NotifySuccess(SuccessMessage);
             }
             catch (Exception ex)
@@ -479,7 +479,7 @@ namespace TravelApp.ViewModels.Admin
                 !SelectedBooking.HasPendingGuideCancellation)
             {
                 ErrorMessage =
-                    "Hãy chọn booking có yêu cầu hủy đang chờ xử lý.";
+                    "Hãy chọn đặt tour có yêu cầu hủy đang chờ xử lý.";
                 return;
             }
 
@@ -500,8 +500,8 @@ namespace TravelApp.ViewModels.Admin
                 await RefreshDataAsync();
                 SelectedBooking = null;
                 SuccessMessage = approve
-                    ? "Đã duyệt hủy booking " + bookingCode + "."
-                    : "Đã từ chối yêu cầu hủy booking " + bookingCode + ".";
+                    ? "Đã duyệt hủy đặt tour " + bookingCode + "."
+                    : "Đã từ chối yêu cầu hủy đặt tour " + bookingCode + ".";
                 NotifySuccess(SuccessMessage);
             }
             catch (Exception ex)
@@ -741,14 +741,14 @@ namespace TravelApp.ViewModels.Admin
         private void NotifySuccess(string message)
         {
             _notificationManager.ShowNotification(
-                "Content Management",
+                "Quản lý nội dung",
                 message);
         }
 
         private void NotifyError(string message)
         {
             _notificationManager.ShowNotification(
-                "Content Management",
+                "Quản lý nội dung",
                 message,
                 true);
         }

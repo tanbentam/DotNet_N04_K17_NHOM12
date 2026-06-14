@@ -129,7 +129,7 @@ Ghi lại mã booking thật sau khi tạo:
 - [ ] Mở ứng dụng.
 - [ ] Màn hình Home xuất hiện và không crash.
 - [ ] Khu vực `DATABASE` chuyển từ `Checking connection...` sang
-  `Database ready`.
+  `Cơ sở dữ liệu sẵn sàng`.
 - [ ] Popup database xuất hiện.
 - [ ] Khi chưa đăng nhập chỉ thấy Home, Login và Register.
 - [ ] Các menu User, Guide, Admin, Account Management và Content Management
@@ -541,7 +541,7 @@ Logout Guide, đăng nhập User:
 - [ ] Thử chuyển sang `Paid` trước khi xử lý request.
   - Kỳ vọng: yêu cầu xử lý request hủy trước.
 
-Ứng dụng tự quét booking sau khi database báo `Database ready`. Booking `Paid`
+Ứng dụng tự quét booking sau khi database báo `Cơ sở dữ liệu sẵn sàng`. Booking `Paid`
 được chuyển sang `Completed` khi ngày hiện tại đã qua ngày hoàn thành tour;
 booking có yêu cầu hoàn tiền đang chờ sẽ được bỏ qua. Luồng trên vẫn chuyển
 BK-A thủ công để regression có thể chạy trong một phiên.
