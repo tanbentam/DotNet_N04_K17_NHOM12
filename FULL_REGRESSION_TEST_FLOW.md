@@ -17,9 +17,8 @@ Flow này kiểm tra:
 - User cập nhật hồ sơ, yêu thích và đánh giá.
 - Upload ảnh, popup notification, validation và các nhánh lỗi quan trọng.
 
-Các mục chưa triển khai trong `CHECKLIST.md` như tự động hoàn thành tour và
-giới hạn đánh giá sau tour không được xem là lỗi regression của phiên bản hiện
-tại.
+Các mục chưa triển khai trong `CHECKLIST.md` như giới hạn đánh giá sau tour
+không được xem là lỗi regression của phiên bản hiện tại.
 
 ## 2. Quy ước kết quả
 
@@ -531,9 +530,9 @@ Logout Guide, đăng nhập User:
 - [ ] Kiểm tra lý do và thời gian gửi request hiển thị đúng.
 - [ ] Nhấn `Approve refund`.
   - Kỳ vọng: BK-G chuyển sang `Cancelled`, trạng thái hoàn tiền là `Đã hoàn tiền`.
-- [ ] Chọn BK-A đang `Paid`.
-- [ ] Chuyển sang `Completed`.
-  - Kỳ vọng: cập nhật thành công.
+- [ ] Chọn BK-A đang `Paid` và chuyển thủ công sang `Completed` để tiếp tục
+  regression mà không phải chờ ngày tour.
+  - Kỳ vọng: cập nhật thành công; thao tác thủ công vẫn được hỗ trợ.
 - [ ] Thử chuyển `Completed` về trạng thái khác.
   - Kỳ vọng: bị từ chối.
 - [ ] Thử chuyển BK-B từ `Rejected` sang trạng thái khác.
@@ -542,8 +541,20 @@ Logout Guide, đăng nhập User:
 - [ ] Thử chuyển sang `Paid` trước khi xử lý request.
   - Kỳ vọng: yêu cầu xử lý request hủy trước.
 
-Lưu ý: phiên bản hiện tại chưa tự chuyển booking sang `Completed`; Admin thực hiện
-thủ công trong bước này.
+Ứng dụng tự quét booking sau khi database báo `Database ready`. Booking `Paid`
+được chuyển sang `Completed` khi ngày hiện tại đã qua ngày hoàn thành tour;
+booking có yêu cầu hoàn tiền đang chờ sẽ được bỏ qua. Luồng trên vẫn chuyển
+BK-A thủ công để regression có thể chạy trong một phiên.
+
+Để kiểm tra riêng auto-complete trên database test:
+
+- [ ] Tạo và thanh toán một booking test để có trạng thái `Paid`.
+- [ ] Đóng ứng dụng, chỉnh `StartDate` của booking test thành ngày quá khứ sao
+  cho ngày hoàn thành nhỏ hơn hôm nay.
+- [ ] Mở lại ứng dụng.
+  - Kỳ vọng: popup báo số tour đã cập nhật và booking tự thành `Completed`.
+- [ ] Lặp lại với booking `Paid` có yêu cầu hoàn tiền đang chờ.
+  - Kỳ vọng: booking vẫn `Paid` để Admin xử lý yêu cầu.
 
 ## 18. User - yêu thích và đánh giá
 

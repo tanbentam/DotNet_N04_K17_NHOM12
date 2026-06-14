@@ -57,7 +57,7 @@ Ký hiệu:
 - [x] Tạo enums cho Role và Booking Status
 - [x] Cấu hình connection string MySQL
 - [x] Kiểm tra và hiển thị trạng thái kết nối database khi application khởi động
-- [x] Cập nhật MySQL credentials hợp lệ để startup check trả về `Database connected`
+- [x] Cập nhật MySQL credentials hợp lệ để startup check trả về `Database ready`
 - [x] Hoàn thiện mapping, relationships và constraints cho models
 - [x] Tạo EF6 migrations ban đầu
 - [x] Tạo hoặc cập nhật schema MySQL bằng migrations
@@ -91,7 +91,7 @@ Ký hiệu:
 - [x] Quản lý Destination và Hotel
 - [x] Duyệt Hotel và nội dung do Guide tạo
 - [x] Theo dõi và quản lý Booking
-- [ ] Tự động chuyển Booking sang `Completed` khi tour đã qua ngày hoàn thành
+- [x] Tự động chuyển Booking `Paid` sang `Completed` khi tour đã qua ngày hoàn thành
 - [x] Quản lý yêu cầu hủy và hoàn tiền cho Booking đã thanh toán
 
 ## 7. Guide Features
@@ -164,7 +164,8 @@ Frontend, Backend, API hoặc Contracts trong solution.
 
 ## Current Milestone
 
-Dự án đã hoàn thành foundation, build configuration, application shell và
-skeleton giao diện theo kiến trúc monolith một project. Giai đoạn hiện tại là
-hoàn thiện MVVM/DI wiring và thay dữ liệu mô phỏng bằng EF6/MySQL data thực
-ngay trong project `TravelApp`.
+Các luồng cốt lõi cho User, TourGuide và Admin đã hoạt động với dữ liệu
+EF6/MySQL thật, gồm booking, thanh toán, hoàn tiền, lịch Guide, quản trị nội
+dung và tự động hoàn thành tour. Giai đoạn hiện tại tập trung vào integration
+test, UI smoke test, chuẩn hóa text, cấu hình theo environment và đóng gói
+release.

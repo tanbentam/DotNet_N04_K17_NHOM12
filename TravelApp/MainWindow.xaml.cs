@@ -7,6 +7,7 @@ using TravelApp.Models;
 using TravelApp.Models.Enums;
 using TravelApp.Services;
 using TravelApp.Services.Contracts;
+using TravelApp.Services.Logging;
 using TravelApp.Services.NotificationQueue;
 using TravelApp.Views.Admin;
 using TravelApp.Views.Authentication;
@@ -22,19 +23,22 @@ namespace TravelApp
         private readonly IRoleNavigationService _roleNavigationService;
         private readonly IUserSessionService _sessionService;
         private readonly NotificationManager _notificationManager;
+        private readonly IBookingService _bookingService;
 
         public MainWindow(
             DatabaseConnectionService databaseConnectionService,
             IServiceProvider services,
             IRoleNavigationService roleNavigationService,
             IUserSessionService sessionService,
-            NotificationManager notificationManager)
+            NotificationManager notificationManager,
+            IBookingService bookingService)
         {
             _databaseConnectionService = databaseConnectionService;
             _services = services;
             _roleNavigationService = roleNavigationService;
             _sessionService = sessionService;
             _notificationManager = notificationManager;
+            _bookingService = bookingService;
             InitializeComponent();
             NotificationPopup.DataContext = notificationManager;
             ShowHome();
@@ -59,6 +63,7 @@ namespace TravelApp
                 _notificationManager.ShowNotification(
                     "Database",
                     result.Message);
+                await CompleteExpiredBookingsAsync();
                 return;
             }
 
@@ -73,6 +78,32 @@ namespace TravelApp
                 "Lỗi cơ sở dữ liệu",
                 result.Message,
                 true);
+        }
+
+        private async System.Threading.Tasks.Task CompleteExpiredBookingsAsync()
+        {
+            try
+            {
+                var completedCount =
+                    await _bookingService.CompleteExpiredBookingsAsync();
+                if (completedCount > 0)
+                {
+                    _notificationManager.ShowNotification(
+                        "Cập nhật booking",
+                        completedCount +
+                        " tour đã kết thúc được chuyển sang Completed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerService.LogException(
+                    "Auto complete expired bookings",
+                    ex);
+                _notificationManager.ShowNotification(
+                    "Cảnh báo",
+                    "Không thể tự động cập nhật tour đã kết thúc.",
+                    true);
+            }
         }
 
         private void NavigationButton_Click(object sender, RoutedEventArgs e)

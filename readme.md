@@ -69,7 +69,7 @@ trong một project monolith.
 - Theo dõi và cập nhật trạng thái booking.
 - Xem, duyệt hoặc từ chối yêu cầu hủy của Guide.
 - Duyệt hoặc từ chối yêu cầu hoàn tiền của User.
-- Chuyển booking `Paid` sang `Completed`.
+- Theo dõi booking `Paid` và tự động chuyển tour đã kết thúc sang `Completed`.
 
 ## Công nghệ
 
@@ -429,6 +429,7 @@ MySQL:
 - Đăng nhập và đăng ký với repository giả.
 - Quy tắc tính giá và chuyển trạng thái booking.
 - Ngày hoàn thành và điều kiện Guide gửi yêu cầu hủy.
+- Điều kiện tự động hoàn thành tour và trạng thái hoàn tiền.
 
 Chạy toàn bộ unit test:
 
@@ -438,6 +439,8 @@ Chạy toàn bộ unit test:
 
 Script dùng Visual Studio MSBuild và VSTest vì `dotnet test` không resolve ổn định
 các dependency của WPF project format cũ.
+
+Bộ test hiện có **60 unit test**.
 
 ### Full regression
 
@@ -520,7 +523,10 @@ Accepted -> Cancelled
 - Admin duyệt hoàn tiền sẽ chuyển booking sang `Cancelled` và payment sang `Refunded`.
 - Admin từ chối hoàn tiền sẽ giữ booking ở trạng thái `Paid`.
 - Chỉ booking `Accepted` mới được thanh toán.
-- Admin chuyển booking `Paid` sang `Completed`.
+- Khi ứng dụng khởi động và database sẵn sàng, booking `Paid` được tự động
+  chuyển sang `Completed` nếu ngày hiện tại đã qua ngày hoàn thành tour.
+- Booking có yêu cầu hoàn tiền đang chờ Admin sẽ chưa tự động hoàn thành.
+- Admin vẫn có thể chuyển `Paid` sang `Completed` thủ công để quản trị hoặc test.
 - Booking `Rejected`, `Cancelled` hoặc `Completed` không chuyển tiếp.
 
 ### Lịch và trùng lịch
@@ -569,14 +575,14 @@ Phần cốt lõi đã hoạt động:
 - Guide work schedule và cancellation request.
 - Profile, favorites, reviews.
 - Notification, logging và image upload.
+- Hủy booking đã thanh toán, hoàn tiền mô phỏng và tự động hoàn thành tour.
 
 Backlog chính:
 
-- Tự động chuyển tour đã kết thúc sang `Completed`.
 - Chỉ cho đánh giá Guide/Hotel sau khi hoàn thành tour tương ứng.
 - Thông báo đa vai trò cho hủy/hoàn tiền.
 - Chuẩn hóa toàn bộ text tiếng Việt.
-- Unit, integration và UI tests tự động.
+- Integration test EF6/MySQL và UI smoke test tự động.
 - Environment-specific configuration.
 - Security review và release package.
 
@@ -585,7 +591,6 @@ Theo dõi chi tiết trong [CHECKLIST.md](CHECKLIST.md).
 Hành vi cần lưu ý của phiên bản hiện tại:
 
 - Payment chỉ là mô phỏng, không kết nối cổng thanh toán thật.
-- Booking chưa tự động chuyển sang `Completed`.
 - Review hiện chưa yêu cầu User phải có tour `Completed`.
 
 ## Xử lý lỗi thường gặp

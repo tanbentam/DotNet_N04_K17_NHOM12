@@ -8,6 +8,7 @@ namespace TravelApp.Services.Contracts
     public interface IBookingService
     {
         BookingPriceQuote CalculatePrice(decimal hotelPricePerNight, int days);
+        Task<int> CompleteExpiredBookingsAsync();
         Task<BookingOperationResult> CreateBookingAsync(BookingModel booking);
         Task<BookingOperationResult> CancelByUserAsync(
             int bookingId,

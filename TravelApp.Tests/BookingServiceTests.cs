@@ -80,5 +80,51 @@ namespace TravelApp.Tests
                     BookingStatus.Cancelled,
                     false));
         }
+
+        [TestMethod]
+        public void ShouldAutoComplete_PaidTourAfterCompletion_ReturnsTrue()
+        {
+            var booking = new Models.BookingModel
+            {
+                Status = BookingStatus.Paid,
+                StartDate = new DateTime(2026, 6, 10),
+                Nights = 3
+            };
+
+            Assert.IsTrue(BookingService.ShouldAutoComplete(
+                booking,
+                new DateTime(2026, 6, 13)));
+        }
+
+        [TestMethod]
+        public void ShouldAutoComplete_OnLastTourDay_ReturnsFalse()
+        {
+            var booking = new Models.BookingModel
+            {
+                Status = BookingStatus.Paid,
+                StartDate = new DateTime(2026, 6, 10),
+                Nights = 3
+            };
+
+            Assert.IsFalse(BookingService.ShouldAutoComplete(
+                booking,
+                new DateTime(2026, 6, 12)));
+        }
+
+        [TestMethod]
+        public void ShouldAutoComplete_WithPendingRefund_ReturnsFalse()
+        {
+            var booking = new Models.BookingModel
+            {
+                Status = BookingStatus.Paid,
+                StartDate = new DateTime(2026, 6, 10),
+                Nights = 1,
+                RefundRequestedAt = new DateTime(2026, 6, 10)
+            };
+
+            Assert.IsFalse(BookingService.ShouldAutoComplete(
+                booking,
+                new DateTime(2026, 6, 12)));
+        }
     }
 }

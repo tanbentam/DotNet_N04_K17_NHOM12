@@ -61,6 +61,46 @@ namespace TravelApp.Services.Booking
             };
         }
 
+        public async Task<int> CompleteExpiredBookingsAsync()
+        {
+            var today = DateTime.Today;
+            using (var context = new ApplicationDbContext())
+            {
+                var candidates = await context.Bookings
+                    .Where(booking =>
+                        booking.Status == BookingStatus.Paid &&
+                        booking.StartDate < today &&
+                        (!booking.RefundRequestedAt.HasValue ||
+                         booking.RefundResolvedAt.HasValue))
+                    .ToListAsync();
+                var expiredBookings = candidates
+                    .Where(booking => ShouldAutoComplete(booking, today))
+                    .ToList();
+
+                foreach (var booking in expiredBookings)
+                {
+                    booking.Status = BookingStatus.Completed;
+                }
+
+                if (expiredBookings.Count > 0)
+                {
+                    await context.SaveChangesAsync();
+                }
+
+                return expiredBookings.Count;
+            }
+        }
+
+        public static bool ShouldAutoComplete(
+            BookingModel booking,
+            DateTime today)
+        {
+            return booking != null &&
+                booking.Status == BookingStatus.Paid &&
+                !booking.HasPendingRefundRequest &&
+                today.Date > booking.CompletionDate;
+        }
+
         public async Task<BookingOperationResult> CreateBookingAsync(
             BookingModel booking)
         {
