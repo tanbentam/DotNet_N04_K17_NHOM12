@@ -144,18 +144,15 @@ Ghi lại mã booking thật sau khi tạo:
   - Kỳ vọng: báo `Email không hợp lệ`.
 - [ ] Nhập số điện thoại không đủ 10 chữ số.
   - Kỳ vọng: báo lỗi số điện thoại.
-- [ ] Bỏ trống mật khẩu hoặc tỉnh/thành phố.
+- [ ] Bỏ trống mật khẩu hoặc họ tên.
   - Kỳ vọng: yêu cầu điền đầy đủ.
 
 ### 6.2 Đăng ký User
 
 - [ ] Nhập email, phone và password của User test.
-- [ ] Trường `Tỉnh/Thành phố` nhập `Test User RUN_ID`.
+- [ ] Trường `Họ và tên` nhập `Test User RUN_ID`.
 - [ ] Nhấn Đăng ký.
   - Kỳ vọng: báo đăng ký thành công và form được xóa.
-
-Lưu ý hiện trạng: giá trị `Tỉnh/Thành phố` đang được lưu vào `FullName`.
-Đây là hành vi hiện tại của code, không phải thao tác nhập nhầm của tester.
 
 - [ ] Đăng ký lại cùng email hoặc phone.
   - Kỳ vọng: bị từ chối vì trùng dữ liệu.

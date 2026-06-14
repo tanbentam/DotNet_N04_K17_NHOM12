@@ -119,6 +119,7 @@
     <Compile Include="Services\Booking\BookingService.cs" />
     <Compile Include="Services\DatabaseConnectionService.cs" />
     <Compile Include="Utils\PasswordHelper.cs" />
+    <Compile Include="Utils\PasswordBoxAssistant.cs" />
     <Compile Include="Services\AuthenticationStrategy\AdminAuthStrategy.cs" />
     <Compile Include="Services\AuthenticationStrategy\AuthContext.cs" />
     <Compile Include="Services\AuthenticationStrategy\GuideAuthStrategy.cs" />

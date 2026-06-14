@@ -23,8 +23,13 @@ namespace TravelApp.ViewModels.Authentication
         [ObservableProperty]
         private string _phoneNumber;
 
-        [ObservableProperty]
-        private string _province;
+        private string _fullName;
+
+        public string FullName
+        {
+            get => _fullName;
+            set => SetProperty(ref _fullName, value);
+        }
 
         [ObservableProperty]
         private string _errorMessage;
@@ -51,9 +56,10 @@ namespace TravelApp.ViewModels.Authentication
                 ErrorMessage = "Số điện thoại phải bao gồm chính xác 10 chữ số.";
                 return;
             }
-            if (string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(Province))
+            if (string.IsNullOrWhiteSpace(Password) ||
+                string.IsNullOrWhiteSpace(FullName))
             {
-                ErrorMessage = "Vui lòng điền đầy đủ mật khẩu và tỉnh/thành phố.";
+                ErrorMessage = "Vui lòng điền đầy đủ mật khẩu và họ tên.";
                 return;
             }
 
@@ -66,7 +72,7 @@ namespace TravelApp.ViewModels.Authentication
                 {
                     Email = Email,
                     Phone = PhoneNumber,
-                    FullName = Province,
+                    FullName = FullName,
                     Role = RoleType.User
                 };
 
@@ -77,7 +83,7 @@ namespace TravelApp.ViewModels.Authentication
                     Email = string.Empty;
                     Password = string.Empty;
                     PhoneNumber = string.Empty;
-                    Province = string.Empty;
+                    FullName = string.Empty;
                 }
                 else
                 {

@@ -69,6 +69,8 @@ Ký hiệu:
 - [x] Tạo `IAuthService` và `AuthService`
 - [x] Tạo Login và Register ViewModel
 - [x] Tạo validation email và số điện thoại
+- [x] Dùng `PasswordBox` để che mật khẩu trên các form đăng nhập và quản trị
+- [x] Form đăng ký lưu đúng họ tên vào `UserModel.FullName`
 - [x] Tạo role navigation strategy cho Admin, Guide và User
 - [x] Kết nối form Login/Register với DI và `AuthService`
 - [x] Ẩn Login/Register sau khi đăng nhập và ẩn navigation không đúng role

@@ -27,6 +27,7 @@ trong một project monolith.
 ### Chung
 
 - Đăng ký và đăng nhập bằng email hoặc số điện thoại.
+- Che nội dung mật khẩu trên các form Login, Register và quản lý tài khoản.
 - Mật khẩu được băm bằng PBKDF2-SHA256 với salt.
 - Quản lý phiên đăng nhập, logout và điều hướng theo role.
 - Ẩn navigation không thuộc quyền của tài khoản hiện tại.
@@ -580,8 +581,6 @@ Theo dõi chi tiết trong [CHECKLIST.md](CHECKLIST.md).
 
 Hành vi cần lưu ý của phiên bản hiện tại:
 
-- Form Register có nhãn `Tỉnh/Thành phố` nhưng giá trị đang được lưu vào
-  `UserModel.FullName`. User có thể sửa lại họ tên trong tab hồ sơ.
 - Payment chỉ là mô phỏng, không kết nối cổng thanh toán thật.
 - Booking chưa tự động chuyển sang `Completed`.
 - Review hiện chưa yêu cầu User phải có tour `Completed`.
